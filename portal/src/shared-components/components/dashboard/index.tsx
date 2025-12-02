@@ -13,15 +13,15 @@ import {
   IconPlugConnected,
   IconTrash,
 } from "@tabler/icons-react";
+import EyeIcn from "../../../assets/svgs/EyeIcn";
+import EditIcn from "../../../assets/svgs/EditIcn";
 
 interface DashboardProps {
   host: string | null;
   isLoading: boolean;
   tenants: any[];
-  pagination: { pageIndex: number; pageSize: number };
   FormStatus: { mode: "view" | "edit" | null; tenant: string | null };
   CurrData: any;
-  customColumns: any[];
   handleCreateTenant: () => void;
   handleViewTenant: (row: any) => void;
   handleEditTenant: (row: any) => void;
@@ -37,39 +37,38 @@ export default function DashboardComponent({
   host,
   isLoading,
   tenants,
-  pagination,
   FormStatus,
   CurrData,
-  customColumns,
   handleCreateTenant,
   handleViewTenant,
   handleEditTenant,
   setFormStatus,
 }: DashboardProps) {
-  const formattedData = tenants.map((t) => ({
-    id: t.id,
-    company: t.company_name,
-    domain: t.domain?.endsWith(".com") ? t.domain : `${t.domain}.com`,
-    status: t.status,
-    contact: t.contactperson,
-    excelLicenses: t.licenses?.excel || 0,
-    rowData: t, // keep original for menu actions
+  const formattedTenants = tenants.map((tenant) => ({
+    id: tenant.id,
+    company: tenant.company_name,
+    domain: tenant.domain,
+    status: tenant.status,
+    excel: tenant.licenses.excel,
+    outlook: tenant.licenses.outlook,
+    powerPoint: tenant.licenses.powerPoint,
+    microsoftTeam: tenant.licenses.microsoftTeam,
   }));
 
   const menuItems = [
     {
-      label: "Duplicate",
-      icon: "*",
+      label: "View",
+      icon: <EyeIcn className="" color="#000" />,
       onClick: (row: any) => {
-        console.log();
+        handleViewTenant(row);
       },
     },
     {
-      label: "Delete",
-      icon: "X",
-      color: "red",
+      label: "Edit",
+      color: "blue",
+      icon: <EditIcn color="#228be6" />,
       onClick: (row: any) => {
-        console.log();
+        handleEditTenant(row);
       },
     },
   ];
@@ -243,18 +242,8 @@ export default function DashboardComponent({
               </div>
               <div className="mt-5">
                 {tenants?.length > 0 && (
-                  // <DynamicMantineTable
-                  //   data={tenants}
-                  //   columns={customColumns}
-                  //   statusColorMap={{
-                  //     active: "green",
-                  //     inactive: "red",
-                  //   }}
-                  //   onView={handleViewTenant}
-                  //   onEdit={handleEditTenant}
-                  // />
                   <TableV2
-                    data={formattedData}
+                    data={formattedTenants}
                     menuItems={menuItems}
                     statusColorMap={statusColorMap}
                     defaultSort={{ key: "company", direction: "asc" }}

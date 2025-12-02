@@ -22,99 +22,9 @@ export default function UserContainer() {
     }
   }, [currentTenantName]);
 
-  const userColumns = [
-    {
-      accessorKey: "name",
-      accessorFn: (row) => row.name ?? "-",
-      header: "NAME",
-      cell: ({ getValue }) => <strong>{getValue()}</strong>,
-    },
-    {
-      accessorKey: "status",
-      accessorFn: (row) => row.status ?? "-",
-      header: "STATUS",
-      cell: ({ getValue }) => {
-        const status = getValue();
-        return (
-          <span className={`badge-parent ${status.toLowerCase()}`}>
-            <span className={`status-badge ${status.toLowerCase()}`}>
-              <span className="status-dot"></span>
-              {status}
-            </span>
-          </span>
-        );
-      },
-    },
-    {
-      accessorKey: "mfaMode",
-      accessorFn: (row) => row.mfaMode ?? "-",
-      header: "MFA MODE",
-    },
-    {
-      accessorKey: "bypassVerification",
-      accessorFn: (row) => row.bypassVerification ?? "-",
-      header: "BYPASS VERIFICATION",
-    },
-    {
-      accessorKey: "assigned_apps",
-      accessorFn: (row) => {
-        if (row.assigned_apps?.length == 0) {
-          return "-";
-        } else {
-          return row.assigned_apps.join();
-        }
-      },
-      header: "ASSIGNED APPS",
-    },
-    {
-      accessorKey: "email",
-      accessorFn: (row) => row.email ?? "-",
-      header: "EMAIL",
-    },
-    {
-      accessorKey: "phonenumber",
-      accessorFn: (row) => row.phonenumber ?? "-",
-      header: "PHONE NUMBER",
-    },
-    {
-      id: "actions",
-      header: "ACTION",
-      cell: () => (
-        <div className="action-buttons">
-          <button className="action-btn mail">
-            <EyeIcon />
-          </button>
-          <button className="action-btn edit">
-            <EditIcon />
-          </button>
-        </div>
-      ),
-    },
-  ];
-
-  const [pagination, setPagination] = useState({
-    pageIndex: 0,
-    pageSize: 10,
-  });
-  const [paginatedData, setPaginatedData] = useState([]);
-
-  useEffect(() => {
-    const start = pagination.pageIndex * pagination.pageSize;
-    const end = start + pagination.pageSize;
-    if (pagination.pageSize < userData?.length) {
-      setPaginatedData(userData.slice(start, end));
-    } else {
-      setPaginatedData(userData);
-    }
-  }, [pagination?.pageIndex, pagination?.pageSize, userData]);
-
   const roleProps = {
     loading,
-    paginatedData,
-    userColumns,
-    pagination,
     userData,
-    setPagination,
   };
   return (
     <div>

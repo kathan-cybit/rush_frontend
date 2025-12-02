@@ -16,10 +16,6 @@ export default function DashboardContainer() {
   );
 
   const [host, setHost] = useState<string | null>(null);
-  const [pagination, setPagination] = useState({
-    pageIndex: 0,
-    pageSize: 10,
-  });
 
   const [FormStatus, setFormStatus] = useState({
     mode: null as "view" | "edit" | null,
@@ -40,14 +36,13 @@ export default function DashboardContainer() {
   useEffect(() => {
     if (
       FormStatus.tenant &&
-      (FormStatus.mode === "view" || FormStatus.mode === "edit")
+      (FormStatus.mode == "view" || FormStatus.mode == "edit")
     ) {
       const data = tenants.find((e: any) => e.id === FormStatus.tenant);
       setCurrData(data);
     }
   }, [FormStatus, tenants]);
 
-  // ── Handlers -----------------------------------------------------------
   const handleCreateTenant = () => {
     navigate(host !== "public" ? "/usermanagement" : "/createtenant");
   };
@@ -60,57 +55,12 @@ export default function DashboardContainer() {
     setFormStatus({ mode: "edit", tenant: row.id });
   };
 
-  // ── Props for the presentational component ----------------------------
   const componentProps = {
     host,
     isLoading,
     tenants,
-    pagination,
     FormStatus,
     CurrData,
-    customColumns: [
-      {
-        key: "company_name",
-        label: "Company",
-        width: 200,
-        render: (value: any) => (
-          <span className="font-fsecondary text-[16px] text-[700] text-textPrimary align-middle leading-[140%]">
-            {value}
-          </span>
-        ),
-      },
-      {
-        key: "domain",
-        label: "Domain",
-        width: 200,
-        render: (value: any, row: any) => {
-          return row.domain.endsWith(".com") ? row.domain : `${row.domain}.com`;
-        },
-      },
-      {
-        key: "status",
-        label: "STATUS",
-        render: (value: any) => (
-          <span className={`badge-parent ${value.toLowerCase()}`}>
-            <span className={`status-badge ${value.toLowerCase()}`}>
-              <span className="status-dot"></span>
-              {value}
-            </span>
-          </span>
-        ),
-      },
-      {
-        key: "contactperson",
-        label: "CONTACT PERSON",
-        width: 200,
-        render: (value: any) => <span>{value}</span>,
-      },
-      {
-        key: "licenses.excel",
-        label: "Excel Licenses",
-        render: (value: any) => <Badge color="blue">{value}</Badge>,
-      },
-    ],
     handleCreateTenant,
     handleViewTenant,
     handleEditTenant,

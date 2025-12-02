@@ -1,41 +1,50 @@
 import React from "react";
 import Loader from "../../../components/loader/Loader";
-// import CustomTable2 from "../../../components/customTable/CustomTable";
+import { TableV2 } from "@eiris/common-ui-react";
+import EditIcn from "../../../assets/svgs/EditIcn";
+import EyeIcn from "../../../assets/svgs/EyeIcn";
 
 interface userProps {
   loading: boolean;
-  paginatedData: Array<any>;
-  userColumns: any;
-  pagination: any;
   userData: any;
-  setPagination: any;
 }
 
-export default function UserComponent({
-  loading,
-  paginatedData,
-  userColumns,
-  pagination,
-  userData,
-  setPagination,
-}: userProps) {
+export default function UserComponent({ loading, userData }: userProps) {
+  const formattedTenants = userData.map((e) => ({
+    username: e.name,
+    status: e.status,
+    email: e.email,
+    phonenumber: e.phonenumber,
+  }));
+
+  const menuItems = [
+    {
+      label: "View",
+      icon: <EyeIcn className="" color="#000" />,
+      onClick: (row: any) => {},
+    },
+    {
+      label: "Edit",
+      color: "blue",
+      icon: <EditIcn color="#228be6" />,
+      onClick: (row: any) => {},
+    },
+  ];
+  const statusColorMap = {
+    active: "green",
+    inactive: "red",
+  };
+
   return (
     <div>
       {loading && <Loader />}
-      {paginatedData?.length > 0 && (
-        <></>
-        // <CustomTable2
-        //   data={paginatedData}
-        //   columns={userColumns}
-        //   staticTable={true}
-        //   isPagination={true}
-        //   paginationObj={pagination}
-        //   totalCount={userData.length}
-        //   onPageChange={(page, size) => {
-        //     setPagination({ pageIndex: page, pageSize: size });
-        //   }}
-        //   // onRowClick={(row) => console.log("Row clicked:", row.original)}
-        // />
+      {userData?.length > 0 && (
+        <TableV2
+          data={formattedTenants}
+          menuItems={menuItems}
+          statusColorMap={statusColorMap}
+          defaultSort={{ key: "name", direction: "asc" }}
+        />
       )}
     </div>
   );

@@ -3,6 +3,8 @@ import { UseFormRegister, FieldErrors } from "react-hook-form";
 
 import { BackIcon, EditIcon } from "../../../assets/svgs";
 import { useNavigate } from "react-router-dom";
+import { CustomBreadCrumbs } from "../../../components/breadCrumbs";
+import { Anchor } from "@mantine/core";
 
 interface TenantFormValues {
   domainname: string;
@@ -37,6 +39,7 @@ interface CreateTenantProps {
   handleLicenseChange: (app: keyof LicensesState, value: number) => void;
   onDiscard: () => void;
   handleSubmit: () => void;
+  BreadCrumbItems: Array<any>;
   handleReset: (e: "view" | "edit" | null, id: number | string | null) => void;
   navigate: ReturnType<typeof useNavigate>;
 }
@@ -52,6 +55,7 @@ const CreateTenantComponent: React.FC<CreateTenantProps> = ({
   navigate,
   handleReset,
   handleSubmit,
+  BreadCrumbItems,
 }) => {
   return (
     <>
@@ -77,9 +81,11 @@ const CreateTenantComponent: React.FC<CreateTenantProps> = ({
                   ? "Create New Tenant"
                   : CurrData?.domain || ""}
               </h1>
-              <span className="font-fsecondary text-[#adadad] text-[14px] text-[500] leading-[140%]">
-                Tenants {">"} New Tenant
-              </span>
+              <CustomBreadCrumbs
+                separator=">"
+                items={BreadCrumbItems}
+                className="font-[500] font-fsecondary text-[#adadad] text-[14px] leading-[140%] tracking-[0.25px]"
+              />
             </div>
           </div>
         </div>
@@ -91,7 +97,7 @@ const CreateTenantComponent: React.FC<CreateTenantProps> = ({
               }}
               className="px-[20px] py-[12px] rounded-[8px] max-w-[200px] primaryc-btn"
             >
-              <div className="d-flex align-items-center justify-content-between gap-2">
+              <div className="flex justify-between items-center gap-2">
                 <div className="mb-1">{<EditIcon />}</div>
                 <span>Edit Details</span>
               </div>
@@ -99,7 +105,7 @@ const CreateTenantComponent: React.FC<CreateTenantProps> = ({
           )}
           {FormStatus?.mode === "edit" && (
             <div className="bg-[#f3f4fc] p-[12px] rounded-[8px] text-bsecondary">
-              <div className="d-flex align-items-center justify-content-between gap-2">
+              <div className="flex justify-between items-center gap-2">
                 <div className="mb-1">{<EditIcon stroke={"#14258F"} />}</div>
                 <span className="text-[16px] text-[500] text-bsecondary leading-[140%]">
                   You’re in Edit mode

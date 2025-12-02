@@ -180,6 +180,25 @@ const CreateTenantContainer: React.FC<CreateTenantProps> = ({
   ) => {
     setFormStatus?.({ tenant: id, mode: e });
   };
+
+  const BreadCrumbItems = [
+    {
+      title: "Tenants",
+      onClick: () => {
+        handleReset(null, null);
+        navigate("/dashboard");
+      },
+    },
+    {
+      title:
+        FormStatus?.mode == "edit"
+          ? "Edit Tenant"
+          : FormStatus?.mode == "view"
+          ? "View Tenant"
+          : "New Tenant",
+    },
+  ];
+
   const componentProps = {
     register,
     errors,
@@ -191,6 +210,7 @@ const CreateTenantContainer: React.FC<CreateTenantProps> = ({
     handleSubmit: handleSubmit(onSubmit),
     navigate: navigate,
     handleReset,
+    BreadCrumbItems,
   };
 
   return <CreateTenantComponent {...(componentProps as any)} />;
