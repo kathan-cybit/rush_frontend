@@ -12,6 +12,7 @@ import Dashboard from "./pages/dashboard/Dashboard";
 import Roles from "./pages/role/Roles";
 import CreateTenant from "./pages/createTenant/CreateTenant";
 import { RootState } from "./store/store";
+import CreateUser from "./pages/usermanagement/components/CreateUser";
 
 function App() {
   const dispatch = useDispatch();
@@ -42,6 +43,7 @@ function App() {
                 <Route path="license" element={<License />} />
                 <Route path="usermanagement" element={<Users />} />
                 <Route path="roles" element={<Roles />} />
+                <Route path="createUser" element={<CreateUser />} />
                 <Route
                   path="*"
                   element={<Navigate to="/dashboard" replace />}

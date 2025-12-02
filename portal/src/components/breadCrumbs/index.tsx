@@ -1,7 +1,11 @@
 import React from "react";
 import { Breadcrumbs, Anchor } from "@mantine/core";
 
-function CustomBreadCrumbs({ items, className, ...props }) {
+function CustomBreadCrumbs({
+  items,
+  className = "font-[500] font-fsecondary text-[#adadad] text-[14px] leading-[140%] tracking-[0.25px]",
+  ...props
+}) {
   return (
     <Breadcrumbs
       separator=">"

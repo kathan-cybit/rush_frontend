@@ -110,6 +110,66 @@ export const fetchTenants = createAsyncThunk<unknown, FetchTenantsParams>(
   }
 );
 
+export const createTenantUser = createAsyncThunk<unknown, any>(
+  "tenant/createTenantUser",
+  async (props: any) => {
+    try {
+      const response: AxiosResponse<ApiResponse<unknown>> =
+        await axiosInstance.post(
+          `http://localhost:8080/api/users?tenant=${props.currentTenant}`,
+          props?.payload
+        );
+      if (response?.data) {
+        success_toast("User created successfully");
+      }
+      return response.data;
+    } catch (err: any) {
+      error_toast(err.response?.data?.error || err.message);
+      return err.response?.data?.error || err.message;
+    }
+  }
+);
+
+export const deleteTenantUser = createAsyncThunk<unknown, any>(
+  "tenant/deleteTenantUser",
+  async (props: any) => {
+    try {
+      const response: AxiosResponse<ApiResponse<unknown>> =
+        await axiosInstance.delete(
+          `http://localhost:8080/api/users?tenant=${props.currentTenant}`,
+          props?.payload
+        );
+      if (response?.data) {
+        success_toast("User deleted successfully");
+      }
+      return response.data;
+    } catch (err: any) {
+      error_toast(err.response?.data?.error || err.message);
+      return err.response?.data?.error || err.message;
+    }
+  }
+);
+
+export const updateTenantUser = createAsyncThunk<unknown, any>(
+  "tenant/updateTenantUser",
+  async (props: any) => {
+    try {
+      const response: AxiosResponse<ApiResponse<unknown>> =
+        await axiosInstance.post(
+          `http://localhost:8080/api/users/update/${props.id}?tenant=${props.currentTenant}`,
+          props?.payload
+        );
+      if (response?.data) {
+        success_toast("User deleted successfully");
+      }
+      return response.data;
+    } catch (err: any) {
+      error_toast(err.response?.data?.error || err.message);
+      return err.response?.data?.error || err.message;
+    }
+  }
+);
+
 interface TenantState {
   users: unknown[];
   tenants: unknown[];
@@ -164,6 +224,33 @@ const tenantSlice = createSlice({
         state.isLoading = false;
       })
       .addCase(updateTenant.rejected, (state) => {
+        state.isLoading = false;
+      })
+      .addCase(createTenantUser.pending, (state) => {
+        state.isLoading = true;
+      })
+      .addCase(createTenantUser.fulfilled, (state) => {
+        state.isLoading = false;
+      })
+      .addCase(createTenantUser.rejected, (state) => {
+        state.isLoading = false;
+      })
+      .addCase(deleteTenantUser.pending, (state) => {
+        state.isLoading = true;
+      })
+      .addCase(deleteTenantUser.fulfilled, (state) => {
+        state.isLoading = false;
+      })
+      .addCase(deleteTenantUser.rejected, (state) => {
+        state.isLoading = false;
+      })
+      .addCase(updateTenantUser.pending, (state) => {
+        state.isLoading = true;
+      })
+      .addCase(updateTenantUser.fulfilled, (state) => {
+        state.isLoading = false;
+      })
+      .addCase(updateTenantUser.rejected, (state) => {
         state.isLoading = false;
       });
   },

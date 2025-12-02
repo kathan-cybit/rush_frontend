@@ -10,7 +10,34 @@ export default function UserContainer() {
   const { users: userData, isLoading: loading } = useSelector(
     (state: RootState) => state.tenant
   );
+
+  const [FormStatus, setFormStatus] = useState({
+    mode: null,
+    userId: null,
+  });
+
+  const [CurrData, setCurrData] = useState<any>(null);
+
   const { currentTenantName } = useSelector((state: RootState) => state.auth);
+
+  useEffect(() => {
+    debugger;
+    if (
+      FormStatus.userId &&
+      (FormStatus.mode == "view" || FormStatus.mode == "edit")
+    ) {
+      const data = userData.find((e: any) => e.id === FormStatus.userId);
+      setCurrData(data);
+    }
+  }, [FormStatus, userData]);
+
+  const handleViewUser = (row: any) => {
+    setFormStatus({ mode: "view", userId: row.id });
+  };
+
+  const handleEditUser = (row: any) => {
+    setFormStatus({ mode: "edit", userId: row.id });
+  };
 
   useEffect(() => {
     if (currentTenantName) {
@@ -25,6 +52,11 @@ export default function UserContainer() {
   const roleProps = {
     loading,
     userData,
+    FormStatus,
+    CurrData,
+    handleViewUser,
+    handleEditUser,
+    setFormStatus,
   };
   return (
     <div>

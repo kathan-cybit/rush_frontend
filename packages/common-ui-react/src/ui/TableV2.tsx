@@ -134,10 +134,6 @@ export const TableV2 = <T extends Record<string, any>>({
     activePage * rowsPerPage
   );
 
-  useEffect(() => {
-    localStorage.setItem("filteredData", JSON.stringify(paginatedData));
-  }, [paginatedData]);
-
   // const headings = data.length > 0 ? Object.keys(data[0]) : [];
 
   const headings =
@@ -272,7 +268,7 @@ export const TableV2 = <T extends Record<string, any>>({
                     }}
                   >
                     <div
-                      className="flex items-center justify-between cursor-pointer"
+                      className="flex justify-between items-center cursor-pointer"
                       onClick={() => requestSort(key)}
                     >
                       <Text size="sm" fw={600} tt="uppercase" c="dimmed">
@@ -300,7 +296,7 @@ export const TableV2 = <T extends Record<string, any>>({
                       className="mt-2"
                     />
                     <div
-                      className="absolute top-0 right-0 h-full w-1 cursor-col-resize"
+                      className="top-0 right-0 absolute w-1 h-full cursor-col-resize"
                       onMouseDown={(e) => handleMouseDown(e, key)}
                     />
                   </TableTh>
@@ -355,7 +351,7 @@ export const TableV2 = <T extends Record<string, any>>({
                               String(content).length * 7 <= columnWidths[key]
                             }
                           >
-                            <div className="overflow-hidden text-ellipsis whitespace-nowrap text-sm text-gray-800">
+                            <div className="overflow-hidden text-gray-800 text-sm text-ellipsis whitespace-nowrap">
                               {key === "status" ? (
                                 <Badge
                                   variant="light"
@@ -379,7 +375,7 @@ export const TableV2 = <T extends Record<string, any>>({
                                     }
                                     size="sm"
                                     c="blue"
-                                    className="hover:underline flex items-center gap-1 hover:underline cursor-pointer"
+                                    className="flex items-center gap-1 hover:underline hover:underline cursor-pointer"
                                     style={{
                                       overflow: "hidden",
                                       textOverflow: "ellipsis",
@@ -471,7 +467,7 @@ export const TableV2 = <T extends Record<string, any>>({
             shadow="xs"
             radius="sm"
             p="md"
-            className="flex flex-col sm:flex-row justify-between items-center gap-4"
+            className="flex sm:flex-row flex-col justify-between items-center gap-4"
           >
             <div className="flex items-center gap-2">
               <Text size="sm" c="dimmed">
