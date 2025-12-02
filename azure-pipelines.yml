@@ -1,0 +1,99 @@
+# =========================================================
+# SLD Sketcher CI Pipeline
+# Based on Classic pipeline configuration
+# Node 18.x / Rush Monorepo Build
+# =========================================================
+trigger:
+  branches:
+    include:
+      - main
+
+pool:
+  vmImage: 'windows-2019'   # You can change to 'ubuntu-latest' if preferred
+
+steps:
+  # ---------------------------------------------------------
+  # 1️⃣ Checkout repository
+  # ---------------------------------------------------------
+  - checkout: self
+    displayName: 'Checkout Repository'
+
+  # ---------------------------------------------------------
+  # 2️⃣ Setup Node.js
+  # ---------------------------------------------------------
+  - task: NodeTool@0
+    displayName: 'Use Node.js 18.x'
+    inputs:
+      versionSpec: '18.x'
+      checkLatest: true
+ # ---------------------------------------------------------
+  # 3️⃣ Authenticate to Azure Artifacts NPM registry
+  # ---------------------------------------------------------
+  - task: npmAuthenticate@0
+    inputs:
+      workingFile: 'common/config/rush/.npmrc'
+    displayName: 'Authenticate with Azure Artifacts NPM feed'
+
+  # ---------------------------------------------------------
+  # 3️⃣ Install dependencies (Rush Install)
+  # ---------------------------------------------------------
+  - script: |
+      echo Running Rush Install...
+      node common/scripts/install-run-rush.js install
+    displayName: 'Rush Install (via Node)'
+
+  # ---------------------------------------------------------
+  # 4️⃣ Optional: Update lockfile if required
+  # ---------------------------------------------------------
+  # - script: |
+  #     echo Running Rush Update (if needed)...
+  #     node common/scripts/install-run-rush.js update --full
+  #   displayName: 'Rush Update (optional)'
+
+  # ---------------------------------------------------------
+  # 5️⃣ Build all projects in the monorepo
+  # ---------------------------------------------------------
+  - script: |
+      echo Running Rush Build...
+      node common/scripts/install-run-rush.js build --verbose
+    displayName: 'Rush Build (via Node)'
+
+  # ---------------------------------------------------------
+  # 6️⃣ Publish build artifacts
+  # ---------------------------------------------------------
+  # - task: PublishBuildArtifacts@1
+  #   displayName: 'Publish Artifacts: drop'
+  #   inputs:
+  #     PathtoPublish: 'common/temp/artifacts'
+  #     ArtifactName: 'drop'
+  #     publishLocation: 'Container'
+
+  # ---------------------------------------------------------
+  # 6️⃣ Publish Common UI library to Azure Artifacts NPM registry
+  # ---------------------------------------------------------
+  - script: |
+      echo "=== Publishing @eiris/common-ui-react to Azure Artifacts ==="
+      cd packages/common-ui-react
+      npm version patch --no-git-tag-version
+      npm publish --registry https://pkgs.dev.azure.com/eiriscs/_packaging/Packages/npm/registry/
+    displayName: 'Publish @eiris/common-ui-react to Azure Artifacts'
+
+  # ---------------------------------------------------------
+  # 6️⃣ Publish CommonUI React Library dist/
+  # ---------------------------------------------------------
+  - task: PublishBuildArtifacts@1
+    displayName: 'Publish Artifact: common-ui-react'
+    inputs:
+      PathtoPublish: 'packages/common-ui-react/dist'
+      ArtifactName: 'common-ui-react'
+      publishLocation: 'Container'
+
+  # ---------------------------------------------------------
+  # 7️⃣ Publish Portal React App build/
+  # ---------------------------------------------------------
+  - task: PublishBuildArtifacts@1
+    displayName: 'Publish Artifact: portal'
+    inputs:
+      PathtoPublish: 'examples/portal/build'
+      ArtifactName: 'portal'
+      publishLocation: 'Container'

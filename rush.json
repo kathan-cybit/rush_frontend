@@ -1,0 +1,17 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/rush/v5/rush.schema.json",
+  "rushVersion": "5.152.0",
+  "pnpmVersion": "8.15.8",
+  "nodeSupportedVersionRange": ">=18.20.3 <19.0.0 || >=20.14.0 <21.0.0",
+  "projects": [
+    {
+      "packageName": "@eiris/common-ui-react",
+      "projectFolder": "packages/common-ui-react",
+      "versionPolicyName": "library"
+    },
+    {
+      "packageName": "portal",
+      "projectFolder": "portal"
+    }
+  ]
+}

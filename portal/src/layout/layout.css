@@ -1,0 +1,26 @@
+/* content */
+.content {
+  min-height: 100vh;
+  padding: 104px 1.5rem 1.5rem 264px !important;
+}
+.admin-content {
+  min-height: 100vh;
+  padding-top: 104px !important;
+  margin: auto;
+  max-width: 1182px;
+}
+
+@media (max-width: 1199px) {
+  .content {
+    margin-left: 0px !important;
+    padding: 1.5rem;
+    padding-top: 104px !important;
+  }
+
+  .overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.4);
+    z-index: 999;
+  }
+}

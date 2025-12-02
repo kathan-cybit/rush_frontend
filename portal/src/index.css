@@ -1,0 +1,26 @@
+@import "./App.css";
+@import "./components/customTable/table.css";
+@import "./layout/layout.css";
+@import "./layout/navbar/navbar.css";
+@import "./layout/sidebar/sidebar.css";
+@import "./layout/sidebar/NavbarSimple.module.css";
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --bg-primary: #273798;
+  --bg-secondary: #14258f;
+  --color-primary: #05081b;
+  --color-secondary: #2d2f39;
+  --font-primary: "Inter", sans-serif;
+  --font-secondary: "Satoshi", sans-serif;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  min-height: 100vh;
+  font-family: var(--font-primary);
+}

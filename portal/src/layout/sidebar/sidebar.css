@@ -1,0 +1,78 @@
+.sidebar {
+  width: 240px;
+  background: white;
+  color: black;
+  height: 100vh;
+  position: fixed;
+  top: 0;
+  left: 0;
+  transition: transform 0.3s ease;
+  border-right: 1px solid #e0e0e0;
+}
+.logo-class {
+  height: 120px;
+}
+.sidebar-parent {
+  height: calc(100vh - 120px);
+  overflow: auto;
+}
+
+.sidebar-eriis-logo {
+  cursor: pointer;
+  width: 125px;
+  height: 55px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.sidebar-eriis-logo img {
+  margin-right: 20px;
+  height: 100%;
+  width: 100%;
+  object-fit: contain;
+}
+.admin-ctrl {
+  font-family: var(--font-secondary);
+  font-weight: 500;
+  font-size: 12px;
+  line-height: 140%;
+  letter-spacing: 2px;
+  vertical-align: middle;
+  text-transform: uppercase;
+  color: #adadad;
+}
+
+.menu-item {
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 12px;
+  text-decoration: none;
+}
+.menu-item:hover,
+.menu-item.active,
+.menu-item:active {
+  background: #ebeefe;
+  border-radius: 8px;
+  box-shadow: 4px 4px 8px 0px #00000005;
+}
+
+.menu-item span {
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 140%;
+  color: var(--color-primary);
+}
+
+@media (max-width: 1199px) {
+  .sidebar {
+    z-index: 9999;
+    transform: translateX(-100%);
+  }
+
+  .sidebar.open {
+    z-index: 9999;
+    transform: translateX(0);
+  }
+}
