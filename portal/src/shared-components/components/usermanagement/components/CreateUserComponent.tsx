@@ -49,7 +49,7 @@ export default function CreateUserComponent({
           {FormStatus?.mode === "view" && (
             <div
               onClick={() => {
-                handleReset("edit", FormStatus?.tenant);
+                handleReset("edit", FormStatus?.userId);
               }}
               className="px-[20px] py-[12px] rounded-[8px] max-w-[200px] primaryc-btn"
             >
@@ -89,6 +89,7 @@ export default function CreateUserComponent({
               </label>
               <input
                 {...register("name")}
+                disabled={FormStatus?.mode == "view"}
                 type="text"
                 className="px-3 py-2 border border-[#ced4da] focus:border-[#86b7fe] rounded-md outline-none w-full transition-all"
                 placeholder="Enter full name"
@@ -105,6 +106,7 @@ export default function CreateUserComponent({
                 Email
               </label>
               <input
+                disabled={FormStatus?.mode == "view"}
                 {...register("email")}
                 type="email"
                 className="px-3 py-2 border border-[#ced4da] focus:border-[#86b7fe] rounded-md outline-none w-full"
@@ -122,6 +124,7 @@ export default function CreateUserComponent({
                 Phone Number
               </label>
               <input
+                disabled={FormStatus?.mode == "view"}
                 {...register("phonenumber")}
                 type="text"
                 className="px-3 py-2 border border-[#ced4da] focus:border-[#86b7fe] rounded-md outline-none w-full"
@@ -139,6 +142,7 @@ export default function CreateUserComponent({
                 Status
               </label>
               <select
+                disabled={FormStatus?.mode == "view"}
                 {...register("status")}
                 className="bg-white px-3 py-2 border border-[#ced4da] focus:border-[#86b7fe] rounded-md outline-none w-full"
               >
@@ -153,6 +157,7 @@ export default function CreateUserComponent({
                   Password
                 </label>
                 <input
+                  disabled={FormStatus?.mode == "view"}
                   {...register("password")}
                   type="password"
                   className="px-3 py-2 border border-[#ced4da] focus:border-[#86b7fe] rounded-md outline-none w-full"
@@ -171,6 +176,7 @@ export default function CreateUserComponent({
               <div key={app} className="mb-[10px] w-[25%]">
                 <label className="flex items-center gap-2 text-[#1f2937] text-[14px]">
                   <input
+                    disabled={FormStatus?.mode == "view"}
                     type="checkbox"
                     checked={assignedApps.includes(app)}
                     onChange={() => {
@@ -187,22 +193,24 @@ export default function CreateUserComponent({
             ))}
           </div>
 
-          <div className="flex justify-end gap-[12px] mt-[30px]">
-            <button
-              type="button"
-              onClick={onDiscard}
-              className="hover:bg-[#f1f1f1] px-[20px] py-[10px] border border-[#ced4da] rounded-md text-[#4b5563] text-[14px]"
-            >
-              Discard
-            </button>
+          {FormStatus?.mode != "view" && (
+            <div className="flex justify-end gap-[12px] mt-[30px]">
+              <button
+                type="button"
+                onClick={onDiscard}
+                className="hover:bg-[#f1f1f1] px-[20px] py-[10px] border border-[#ced4da] rounded-md text-[#4b5563] text-[14px]"
+              >
+                Discard
+              </button>
 
-            <button
-              type="submit"
-              className="inline-flex items-center gap-2 bg-bsecondary hover:opacity-[0.75] px-7 py-3 border-none rounded-lg font-medium text-white text-sm transition-all duration-200 cursor-pointer"
-            >
-              {FormStatus?.mode === "edit" ? "Update User" : "Create User"}
-            </button>
-          </div>
+              <button
+                type="submit"
+                className="inline-flex items-center gap-2 bg-bsecondary hover:opacity-[0.75] px-7 py-3 border-none rounded-lg font-medium text-white text-sm transition-all duration-200 cursor-pointer"
+              >
+                {FormStatus?.mode === "edit" ? "Update User" : "Create User"}
+              </button>
+            </div>
+          )}
         </form>
       </div>
     </>

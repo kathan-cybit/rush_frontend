@@ -160,7 +160,7 @@ export const updateTenantUser = createAsyncThunk<unknown, any>(
           props?.payload
         );
       if (response?.data) {
-        success_toast("User deleted successfully");
+        success_toast("User updated successfully");
       }
       return response.data;
     } catch (err: any) {

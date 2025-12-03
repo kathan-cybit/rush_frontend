@@ -73,11 +73,8 @@ export default function DashboardComponent({
     },
   ];
   const statusColorMap = {
-    waiting: "green",
-    processing: "yellow",
-    inprogress: "blue",
-    completed: "green",
-    queued: "yellow",
+    active: "green",
+    inactive: "red",
   };
   return (
     <>

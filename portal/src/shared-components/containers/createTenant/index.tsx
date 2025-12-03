@@ -5,6 +5,7 @@ import { useNavigate } from "react-router-dom";
 import { AppDispatch } from "../../../store/store";
 import {
   createTenant,
+  fetchTenants,
   updateTenant,
 } from "../../../store/reducers/tenantSlice";
 import { CreateTenantComponent } from "../../components";
@@ -162,6 +163,7 @@ const CreateTenantContainer: React.FC<CreateTenantProps> = ({
             excel: 0,
           });
           setFormStatus?.({ mode: null, tenant: null });
+          dispatch(fetchTenants(host));
           navigate("/dashboard");
         })
         .catch(() => {});

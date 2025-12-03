@@ -6,6 +6,7 @@ import { useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import {
   createTenantUser,
+  fetchUsers,
   updateTenantUser,
 } from "../../../../store/reducers/tenantSlice";
 
@@ -83,26 +84,44 @@ export default function CreateUserContainer({
         .unwrap()
         .then(() => {
           reset();
+          if (setFormStatus) {
+            setFormStatus({ mode: null, userId: null });
+          }
           setAssignedApps([]);
+          dispatch(
+            fetchUsers({
+              url: `http://localhost:8080/api/users?tenant=${host}`,
+            })
+          );
           navigate("/usermanagement");
-        });
+        })
+        .catch(() => {});
     }
   };
 
   const onDiscard = () => {
     reset();
-    setFormStatus({ mode: null, userId: null });
+    if (setFormStatus) {
+      setFormStatus({ mode: null, userId: null });
+    }
     navigate("/usermanagement");
   };
 
   const handleReset = (mode: any, id: any) => {
-    setFormStatus?.({ mode, userId: id });
+    if (setFormStatus) {
+      setFormStatus({ mode, userId: id });
+    }
   };
 
   const BreadCrumbItems = [
     {
       title: "User Management",
-      onClick: () => navigate("/usermanagement"),
+      onClick: () => {
+        if (setFormStatus) {
+          setFormStatus({ userId: null, mode: null });
+        }
+        navigate("/usermanagement");
+      },
     },
     {
       title:

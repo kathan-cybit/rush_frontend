@@ -21,7 +21,6 @@ export default function UserContainer() {
   const { currentTenantName } = useSelector((state: RootState) => state.auth);
 
   useEffect(() => {
-    debugger;
     if (
       FormStatus.userId &&
       (FormStatus.mode == "view" || FormStatus.mode == "edit")

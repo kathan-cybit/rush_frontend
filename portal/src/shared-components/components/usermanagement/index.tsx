@@ -4,6 +4,7 @@ import { TableV2 } from "@eiris/common-ui-react";
 import EditIcn from "../../../assets/svgs/EditIcn";
 import EyeIcn from "../../../assets/svgs/EyeIcn";
 import { CreateUserContainer } from "../../containers";
+import { Navigate, useNavigate } from "react-router-dom";
 
 interface userProps {
   loading: boolean;
@@ -24,6 +25,8 @@ export default function UserComponent({
   handleViewUser,
   handleEditUser,
 }: userProps) {
+  const navigate: any = useNavigate();
+
   const formattedTenants = userData.map((e) => ({
     id: e?.id,
     username: e.name,
@@ -63,6 +66,9 @@ export default function UserComponent({
             <div className="flex flex-col">
               <div className="mb-8">
                 <button
+                  onClick={() => {
+                    navigate("/createUser");
+                  }}
                   type="submit"
                   className="inline-flex float-end items-center gap-2 bg-bsecondary hover:opacity-[0.75] px-7 py-3 border-none rounded-lg font-medium text-white text-sm transition-all duration-200 cursor-pointer"
                 >
