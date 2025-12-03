@@ -91,7 +91,7 @@ export default function CreateUserComponent({
                 {...register("name")}
                 disabled={FormStatus?.mode == "view"}
                 type="text"
-                className="px-3 py-2 border border-[#ced4da] focus:border-[#86b7fe] rounded-md outline-none w-full transition-all"
+                className="disabled:bg-[#ced4da] px-3 py-2 border border-[#ced4da] focus:border-[#86b7fe] rounded-md outline-none w-full transition-all"
                 placeholder="Enter full name"
               />
               {errors.name && (
@@ -109,7 +109,7 @@ export default function CreateUserComponent({
                 disabled={FormStatus?.mode == "view"}
                 {...register("email")}
                 type="email"
-                className="px-3 py-2 border border-[#ced4da] focus:border-[#86b7fe] rounded-md outline-none w-full"
+                className="disabled:bg-[#ced4da] px-3 py-2 border border-[#ced4da] focus:border-[#86b7fe] rounded-md outline-none w-full"
                 placeholder="Enter user email"
               />
               {errors.email && (
@@ -127,7 +127,7 @@ export default function CreateUserComponent({
                 disabled={FormStatus?.mode == "view"}
                 {...register("phonenumber")}
                 type="text"
-                className="px-3 py-2 border border-[#ced4da] focus:border-[#86b7fe] rounded-md outline-none w-full"
+                className="disabled:bg-[#ced4da] px-3 py-2 border border-[#ced4da] focus:border-[#86b7fe] rounded-md outline-none w-full"
                 placeholder="Enter phone number"
               />
               {errors.phonenumber && (
@@ -144,7 +144,7 @@ export default function CreateUserComponent({
               <select
                 disabled={FormStatus?.mode == "view"}
                 {...register("status")}
-                className="bg-white px-3 py-2 border border-[#ced4da] focus:border-[#86b7fe] rounded-md outline-none w-full"
+                className="bg-white disabled:bg-[#ced4da] px-3 py-2 border border-[#ced4da] focus:border-[#86b7fe] rounded-md outline-none w-full"
               >
                 <option value="active">Active</option>
                 <option value="inactive">Inactive</option>
@@ -160,7 +160,7 @@ export default function CreateUserComponent({
                   disabled={FormStatus?.mode == "view"}
                   {...register("password")}
                   type="password"
-                  className="px-3 py-2 border border-[#ced4da] focus:border-[#86b7fe] rounded-md outline-none w-full"
+                  className="disabled:bg-[#ced4da] px-3 py-2 border border-[#ced4da] focus:border-[#86b7fe] rounded-md outline-none w-full"
                   placeholder="Enter password"
                 />
               </div>
@@ -176,6 +176,7 @@ export default function CreateUserComponent({
               <div key={app} className="mb-[10px] w-[25%]">
                 <label className="flex items-center gap-2 text-[#1f2937] text-[14px]">
                   <input
+                    className="disabled:bg-[#ced4da]"
                     disabled={FormStatus?.mode == "view"}
                     type="checkbox"
                     checked={assignedApps.includes(app)}

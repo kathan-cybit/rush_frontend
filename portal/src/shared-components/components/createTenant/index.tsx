@@ -136,7 +136,7 @@ const CreateTenantComponent: React.FC<CreateTenantProps> = ({
               disabled={!!FormStatus?.mode}
               type="text"
               className={` w-full px-3 py-2 border border-[#ced4da] rounded-md 
-         focus:border-[#86b7fe]  focus:outline-none focus:border-[2px]  ${
+         focus:border-[#86b7fe]  focus:outline-none focus:border-[2px] disabled:bg-[#ced4da] ${
            errors.domainname ? "is-invalid" : ""
          }`}
               id="domainname"
@@ -168,7 +168,7 @@ const CreateTenantComponent: React.FC<CreateTenantProps> = ({
                 disabled={FormStatus?.mode === "view"}
                 id="status"
                 className={`w-full px-3 py-2 border border-[#ced4da] rounded-md 
-         focus:border-[#86b7fe]  focus:outline-none focus:border-[2px] ${
+         focus:border-[#86b7fe]  focus:outline-none focus:border-[2px] disabled:bg-[#ced4da] ${
            errors.status ? "is-invalid" : ""
          }`}
                 {...register("status", {
@@ -201,7 +201,7 @@ const CreateTenantComponent: React.FC<CreateTenantProps> = ({
               disabled={FormStatus?.mode === "view"}
               type="text"
               className={` w-full px-3 py-2 border border-[#ced4da] rounded-md 
-         focus:border-[#86b7fe]  focus:outline-none focus:border-[2px]  ${
+         focus:border-[#86b7fe]  focus:outline-none focus:border-[2px] disabled:bg-[#ced4da] ${
            errors.company_name ? "is-invalid" : ""
          }`}
               id="company_name"
@@ -228,7 +228,7 @@ const CreateTenantComponent: React.FC<CreateTenantProps> = ({
               disabled={FormStatus?.mode === "view"}
               type="text"
               className={` w-full px-3 py-2 border border-[#ced4da] rounded-md 
-         focus:border-[#86b7fe]  focus:outline-none focus:border-[2px]  ${
+         focus:border-[#86b7fe]  focus:outline-none focus:border-[2px] disabled:bg-[#ced4da] ${
            errors.gstNumber ? "is-invalid" : ""
          }`}
               id="gstNumber"
@@ -266,7 +266,7 @@ const CreateTenantComponent: React.FC<CreateTenantProps> = ({
                 <input
                   type="text"
                   className={` w-full px-3 py-2 border border-[#ced4da] rounded-md 
-         focus:border-[#86b7fe]  focus:outline-none focus:border-[2px]  ${
+         focus:border-[#86b7fe]  focus:outline-none focus:border-[2px] disabled:bg-[#ced4da] ${
            errors.adminemail ? "is-invalid" : ""
          }`}
                   id="adminemail"
@@ -296,7 +296,7 @@ const CreateTenantComponent: React.FC<CreateTenantProps> = ({
                 <input
                   type="password"
                   className={` w-full px-3 py-2 border border-[#ced4da] rounded-md 
-         focus:border-[#86b7fe]  focus:outline-none focus:border-[2px]  ${
+         focus:border-[#86b7fe]  focus:outline-none focus:border-[2px] disabled:bg-[#ced4da] ${
            errors.password ? "is-invalid" : ""
          }`}
                   id="password"
@@ -337,7 +337,7 @@ const CreateTenantComponent: React.FC<CreateTenantProps> = ({
               disabled={FormStatus?.mode === "view"}
               type="text"
               className={` w-full px-3 py-2 border border-[#ced4da] rounded-md 
-         focus:border-[#86b7fe]  focus:outline-none focus:border-[2px]  ${
+         focus:border-[#86b7fe]  focus:outline-none focus:border-[2px] disabled:bg-[#ced4da] ${
            errors.contactperson ? "is-invalid" : ""
          }`}
               id="contactperson"
@@ -364,7 +364,7 @@ const CreateTenantComponent: React.FC<CreateTenantProps> = ({
               disabled={FormStatus?.mode === "view"}
               type="text"
               className={` w-full px-3 py-2 border border-[#ced4da] rounded-md 
-         focus:border-[#86b7fe]  focus:outline-none focus:border-[2px]  ${
+         focus:border-[#86b7fe]  focus:outline-none focus:border-[2px] disabled:bg-[#ced4da] ${
            errors.contactemail ? "is-invalid" : ""
          }`}
               id="contactemail"
@@ -397,7 +397,7 @@ const CreateTenantComponent: React.FC<CreateTenantProps> = ({
               disabled={FormStatus?.mode === "view"}
               type="tel"
               className={` w-full px-3 py-2 border border-[#ced4da] rounded-md 
-         focus:border-[#86b7fe]  focus:outline-none focus:border-[2px]  ${
+         focus:border-[#86b7fe]  focus:outline-none focus:border-[2px] disabled:bg-[#ced4da] ${
            errors.phoneNumber ? "is-invalid" : ""
          }`}
               id="phoneNumber"
@@ -439,7 +439,7 @@ const CreateTenantComponent: React.FC<CreateTenantProps> = ({
                 <input
                   disabled={FormStatus?.mode === "view"}
                   type="number"
-                  className="license-input"
+                  className="disabled:bg-[#ced4da] license-input"
                   value={licenses.microsoftTeam}
                   onChange={(e) =>
                     handleLicenseChange("microsoftTeam", Number(e.target.value))
@@ -455,7 +455,7 @@ const CreateTenantComponent: React.FC<CreateTenantProps> = ({
                 <input
                   disabled={FormStatus?.mode === "view"}
                   type="number"
-                  className="license-input"
+                  className="disabled:bg-[#ced4da] license-input"
                   value={licenses.powerPoint}
                   onChange={(e) =>
                     handleLicenseChange("powerPoint", Number(e.target.value))
@@ -471,7 +471,7 @@ const CreateTenantComponent: React.FC<CreateTenantProps> = ({
                 <input
                   disabled={FormStatus?.mode === "view"}
                   type="number"
-                  className="license-input"
+                  className="disabled:bg-[#ced4da] license-input"
                   value={licenses.outlook}
                   onChange={(e) =>
                     handleLicenseChange("outlook", Number(e.target.value))
@@ -487,7 +487,7 @@ const CreateTenantComponent: React.FC<CreateTenantProps> = ({
                 <input
                   disabled={FormStatus?.mode === "view"}
                   type="number"
-                  className="license-input"
+                  className="disabled:bg-[#ced4da] license-input"
                   value={licenses.excel}
                   onChange={(e) =>
                     handleLicenseChange("excel", Number(e.target.value))
