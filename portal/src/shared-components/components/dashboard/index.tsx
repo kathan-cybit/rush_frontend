@@ -44,7 +44,7 @@ export default function DashboardComponent({
   handleEditTenant,
   setFormStatus,
 }: DashboardProps) {
-  const formattedTenants = tenants.map((tenant) => ({
+  const formattedTenants = tenants?.map((tenant) => ({
     id: tenant.id,
     company: tenant.company_name,
     domain: tenant.domain,

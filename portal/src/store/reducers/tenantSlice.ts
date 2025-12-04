@@ -170,15 +170,152 @@ export const updateTenantUser = createAsyncThunk<unknown, any>(
   }
 );
 
+export const addRole = createAsyncThunk<unknown, any>(
+  "tenant/addRole",
+  async (props: any) => {
+    try {
+      const response: AxiosResponse<ApiResponse<unknown>> =
+        await axiosInstance.post(
+          props.role != "admin"
+            ? `http://localhost:8080/api/users/addroles`
+            : "http://localhost:8080/api/admin/addroles",
+          props?.payload,
+          {
+            headers: {
+              ...props.headers,
+            },
+          }
+        );
+      if (response?.data) {
+        success_toast(response.data.message || "Role added successfully");
+      }
+      return response.data;
+    } catch (err: any) {
+      error_toast(err.response?.data?.error || err.message);
+      return err.response?.data?.error || err.message;
+    }
+  }
+);
+
+export const addPermssion = createAsyncThunk<unknown, any>(
+  "tenant/addPermssion",
+  async (props: any) => {
+    try {
+      const response: AxiosResponse<ApiResponse<unknown>> =
+        await axiosInstance.post(
+          props.role != "admin"
+            ? `http://localhost:8080/api/users/permissions`
+            : "http://localhost:8080/api/admin/permissions",
+          props?.payload,
+          {
+            headers: {
+              ...props.headers,
+            },
+          }
+        );
+      if (response?.data) {
+        success_toast(
+          response.data.message || "permissions added successfully"
+        );
+      }
+      return response.data;
+    } catch (err: any) {
+      error_toast(err.response?.data?.error || err.message);
+      return err.response?.data?.error || err.message;
+    }
+  }
+);
+
+export const getPermssion = createAsyncThunk<unknown, any>(
+  "tenant/getPermssion",
+  async (props: any) => {
+    try {
+      const response: AxiosResponse<ApiResponse<unknown>> =
+        await axiosInstance.get(
+          props.role != "admin"
+            ? `http://localhost:8080/api/users/permissions`
+            : "http://localhost:8080/api/admin/permissions",
+          {
+            headers: {
+              ...props.headers,
+            },
+          }
+        );
+
+      return response.data;
+    } catch (err: any) {
+      error_toast(err.response?.data?.error || err.message);
+      return err.response?.data?.error || err.message;
+    }
+  }
+);
+
+export const getRoles = createAsyncThunk<unknown, any>(
+  "tenant/getRoles",
+  async (props: any) => {
+    try {
+      const response: AxiosResponse<ApiResponse<unknown>> =
+        await axiosInstance.get(
+          props.role != "admin"
+            ? `http://localhost:8080/api/users/addroles`
+            : "http://localhost:8080/api/admin/addroles",
+          {
+            headers: {
+              ...props.headers,
+            },
+          }
+        );
+
+      return response.data;
+    } catch (err: any) {
+      error_toast(err.response?.data?.error || err.message);
+      return err.response?.data?.error || err.message;
+    }
+  }
+);
+
+export const addPermissonRole = createAsyncThunk<unknown, any>(
+  "tenant/addPermissonRole",
+  async (props: any) => {
+    try {
+      const response: AxiosResponse<ApiResponse<unknown>> =
+        await axiosInstance.post(
+          props.role != "admin"
+            ? `http://localhost:8080/api/users/addpermissionsroles`
+            : "http://localhost:8080/api/admin/addpermissionsroles",
+          props?.payload,
+          {
+            headers: {
+              ...props.headers,
+            },
+          }
+        );
+      if (response?.data) {
+        success_toast(
+          response.data.message || "addpermissionsroles added successfully"
+        );
+      }
+      return response.data;
+    } catch (err: any) {
+      error_toast(err.response?.data?.error || err.message);
+      return err.response?.data?.error || err.message;
+    }
+  }
+);
+
 interface TenantState {
   users: unknown[];
   tenants: unknown[];
   isLoading: boolean;
+  allRoles: unknown[];
+  allpermissions: unknown[];
 }
 
 const initialState: TenantState = {
   users: [],
   tenants: [],
+  allpermissions: [],
+  allRoles: [],
   isLoading: false,
 };
 
@@ -251,6 +388,53 @@ const tenantSlice = createSlice({
         state.isLoading = false;
       })
       .addCase(updateTenantUser.rejected, (state) => {
+        state.isLoading = false;
+      })
+      .addCase(addRole.pending, (state) => {
+        state.isLoading = true;
+      })
+      .addCase(addRole.fulfilled, (state) => {
+        state.isLoading = false;
+      })
+      .addCase(addRole.rejected, (state) => {
+        state.isLoading = false;
+      })
+      .addCase(addPermssion.pending, (state) => {
+        state.isLoading = true;
+      })
+      .addCase(addPermssion.fulfilled, (state) => {
+        state.isLoading = false;
+      })
+      .addCase(addPermssion.rejected, (state) => {
+        state.isLoading = false;
+      })
+      .addCase(addPermissonRole.pending, (state) => {
+        state.isLoading = true;
+      })
+      .addCase(addPermissonRole.fulfilled, (state) => {
+        state.isLoading = false;
+      })
+      .addCase(addPermissonRole.rejected, (state) => {
+        state.isLoading = false;
+      })
+      .addCase(getPermssion.pending, (state) => {
+        state.isLoading = true;
+      })
+      .addCase(getPermssion.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.allpermissions = action.payload as unknown[];
+      })
+      .addCase(getPermssion.rejected, (state) => {
+        state.isLoading = false;
+      })
+      .addCase(getRoles.pending, (state) => {
+        state.isLoading = true;
+      })
+      .addCase(getRoles.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.allRoles = action.payload as unknown[];
+      })
+      .addCase(getRoles.rejected, (state) => {
         state.isLoading = false;
       });
   },

@@ -1,10 +1,15 @@
 import React from "react";
 import { logo } from "../../assets/img";
 import "./navbar.css";
-import { useNavigate } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
+import { RootState } from "../../store/store";
+import { useSelector } from "react-redux";
 
 export default function AdminNavbar({ toggleSidebar }: any) {
+  const { roleType } = useSelector((state: RootState) => state.auth);
+
   const naviagte = useNavigate();
+
   return (
     <nav className="flex items-center p-3 custom-admin-navbar">
       <div className="px-2 sm:px-6 lg:px-6 xl:pl-0 w-full admin-container">
@@ -24,6 +29,22 @@ export default function AdminNavbar({ toggleSidebar }: any) {
             >
               <img src={logo} />
             </div>
+            {roleType == "admin" && (
+              <>
+                <NavLink
+                  to="/"
+                  className="mt-2 px-3 py-2 border rounded-md font-medium text-black-300 hover:text-blue-900 text-lg"
+                >
+                  Home
+                </NavLink>
+                <NavLink
+                  to="/roles"
+                  className="mt-2 px-3 py-2 border rounded-md font-medium text-black-300 hover:text-blue-900 text-lg"
+                >
+                  Roles
+                </NavLink>
+              </>
+            )}
           </div>
           <div>
             <div className="flex gap-2">

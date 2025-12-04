@@ -27,7 +27,7 @@ export default function UserComponent({
 }: userProps) {
   const navigate: any = useNavigate();
 
-  const formattedTenants = userData.map((e) => ({
+  const formattedTenants = userData?.map((e) => ({
     id: e?.id,
     username: e.name,
     status: e.status,

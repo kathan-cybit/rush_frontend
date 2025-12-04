@@ -47,7 +47,8 @@
     "react-bootstrap": "~2.10.10",
     "tanstack": "~1.0.3",
     "@tanstack/react-table": "~8.21.3",
-    "react-paginate": "~8.3.0"
+    "react-paginate": "~8.3.0",
+    "react-select": "~5.10.2"
   },
   "devDependencies": {
     "react-redux": "^9.2.0",

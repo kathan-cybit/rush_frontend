@@ -60,6 +60,7 @@ function App() {
                   />
                   <Route path="dashboard" element={<Dashboard />} />
                   <Route path="createtenant" element={<CreateTenant />} />
+                  <Route path="roles" element={<Roles />} />
                   <Route
                     path="*"
                     element={<Navigate to="/dashboard" replace />}
