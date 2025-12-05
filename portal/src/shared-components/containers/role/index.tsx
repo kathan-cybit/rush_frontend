@@ -5,6 +5,8 @@ import {
   addPermissonRole,
   addPermssion,
   addRole,
+  getAllPermissonRole,
+  getPermissonRole,
   getPermssion,
   getRoles,
 } from "../../../store/reducers/tenantSlice";
@@ -18,10 +20,14 @@ export default function RoleContainer() {
 
   const allPermissions =
     useSelector((state: any) => state.tenant.allpermissions) || [];
-
+  const permissionsRoles =
+    useSelector((state: any) => state.tenant.permissionsRoles) || [];
   const allRoles = useSelector((state: any) => state.tenant.allRoles) || [];
+  const allpermissionsroles =
+    useSelector((state: any) => state.tenant.allpermissionsroles) || [];
 
   const [EditRole, setEditRole] = useState({ open: false, roleId: null });
+  const [OpenCreateRole, setOpenCreateRole] = useState(false);
   const [CurrData, setCurrData] = useState({});
   const handleModalClose = () => {
     setEditRole({ open: false, roleId: null });
@@ -34,14 +40,41 @@ export default function RoleContainer() {
 
   useEffect(() => {
     const subDomain = new URL(window.location.href).hostname.split(".")[0];
+    if (EditRole?.open || OpenCreateRole) {
+      dispatch(
+        getPermssion({
+          role: roleType,
+          headers: {
+            "x-tenant-id": subDomain,
+          },
+        })
+      );
+    }
+
     dispatch(
-      getPermssion({
+      getAllPermissonRole({
         role: roleType,
         headers: {
           "x-tenant-id": subDomain,
         },
       })
     );
+
+    if (EditRole?.open && EditRole?.roleId) {
+      dispatch(
+        getPermissonRole({
+          role: roleType,
+          id: EditRole?.roleId,
+          headers: {
+            "x-tenant-id": subDomain,
+          },
+        })
+      );
+    }
+  }, [EditRole, OpenCreateRole]);
+
+  useEffect(() => {
+    const subDomain = new URL(window.location.href).hostname.split(".")[0];
     dispatch(
       getRoles({
         role: roleType,
@@ -50,8 +83,7 @@ export default function RoleContainer() {
         },
       })
     );
-  }, [EditRole]);
-
+  }, [OpenCreateRole]);
   // handlers
   // const handleAddRole = async (payload: any) => {
   //   const subDomain = new URL(window.location.href).hostname.split(".")[0];
@@ -153,17 +185,17 @@ export default function RoleContainer() {
     <div className="">
       <div className="mx-auto">
         <div className="bg-white shadow p-4 rounded-lg">
-          <div className="flex justify-between items-center mb-4">
-            <h2 className="font-semibold text-2xl">Roles & Permissions</h2>
-          </div>
-
           <RoleComponent
             roles={allRoles}
+            permissionsRoles={permissionsRoles}
+            allpermissionsroles={allpermissionsroles}
             allPermissions={allPermissions}
             handleModalOpen={handleModalOpen}
             handleModalClose={handleModalClose}
             EditRole={EditRole}
             CurrData={CurrData}
+            OpenCreateRole={OpenCreateRole}
+            setOpenCreateRole={setOpenCreateRole}
           />
         </div>
       </div>

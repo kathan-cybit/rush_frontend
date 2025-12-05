@@ -42,263 +42,262 @@ type FetchTenantsParams = string | null;
 
 export const fetchUsers = createAsyncThunk<unknown, FetchUsersParams>(
   "tenant/fetchUsers",
-  async (params) => {
+  async (params, { rejectWithValue }) => {
     try {
-      const response: AxiosResponse<ApiResponse<unknown>> =
-        await axiosInstance.get(params.url);
+      const response = await axiosInstance.get(params.url);
       return response.data;
     } catch (err: any) {
-      error_toast(err.response?.data?.error || err.message);
-      return err.response?.data?.error || err.message;
+      const error = err.response?.data?.error || err.message;
+      error_toast(error);
+      return rejectWithValue({ error, status: err.response?.status });
     }
   }
 );
 
 export const createTenant = createAsyncThunk<unknown, CreateTenantParams>(
   "tenant/createTenant",
-  async (params) => {
+  async (params, { rejectWithValue }) => {
     try {
-      const response: AxiosResponse<ApiResponse<unknown>> =
-        await axiosInstance.post(
-          `http://localhost:8080/api/admin/tenants`,
-          params.payload
-        );
-      if (response?.data) {
-        success_toast(response.data.message || "Tenant created successfully");
-      }
+      const response = await axiosInstance.post(
+        `http://localhost:8080/api/admin/tenants`,
+        params.payload
+      );
+      success_toast(response.data.message || "Tenant created successfully");
       return response.data;
     } catch (err: any) {
-      error_toast(err.response?.data?.error || err.message);
-      return err.response?.data?.error || err.message;
+      const error = err.response?.data?.error || err.message;
+      error_toast(error);
+      return rejectWithValue({ error, status: err.response?.status });
     }
   }
 );
 
 export const updateTenant = createAsyncThunk<unknown, UpdateTenantParams>(
   "tenant/updateTenant",
-  async (params) => {
+  async (params, { rejectWithValue }) => {
     try {
-      const response: AxiosResponse<ApiResponse<unknown>> =
-        await axiosInstance.post(
-          `http://localhost:8080/api/admin/tenants/update`,
-          params
-        );
-      if (response?.data) {
-        success_toast(response.data.message || "Tenant updated successfully");
-      }
+      const response = await axiosInstance.post(
+        `http://localhost:8080/api/admin/tenants/update`,
+        params
+      );
+      success_toast(response.data.message || "Tenant updated successfully");
       return response.data;
     } catch (err: any) {
-      error_toast(err.response?.data?.error || err.message);
-      return err.response?.data?.error || err.message;
+      const error = err.response?.data?.error || err.message;
+      error_toast(error);
+      return rejectWithValue({ error, status: err.response?.status });
     }
   }
 );
 
 export const fetchTenants = createAsyncThunk<unknown, FetchTenantsParams>(
   "tenant/fetchTenants",
-  async (currentTenant = null) => {
+  async (currentTenant = null, { rejectWithValue }) => {
     try {
-      const response: AxiosResponse<ApiResponse<unknown>> =
-        await axiosInstance.get(
-          `http://localhost:8080/api/admin/tenants?tenant=${currentTenant}`
-        );
+      const response = await axiosInstance.get(
+        `http://localhost:8080/api/admin/tenants?tenant=${currentTenant}`
+      );
       return response.data;
     } catch (err: any) {
-      error_toast(err.response?.data?.error || err.message);
-      return err.response?.data?.error || err.message;
+      const error = err.response?.data?.error || err.message;
+      error_toast(error);
+      return rejectWithValue({ error, status: err.response?.status });
     }
   }
 );
 
 export const createTenantUser = createAsyncThunk<unknown, any>(
   "tenant/createTenantUser",
-  async (props: any) => {
+  async (props, { rejectWithValue }) => {
     try {
-      const response: AxiosResponse<ApiResponse<unknown>> =
-        await axiosInstance.post(
-          `http://localhost:8080/api/users?tenant=${props.currentTenant}`,
-          props?.payload
-        );
-      if (response?.data) {
-        success_toast("User created successfully");
-      }
+      const response = await axiosInstance.post(
+        `http://localhost:8080/api/users?tenant=${props.currentTenant}`,
+        props?.payload
+      );
+      success_toast("User created successfully");
       return response.data;
     } catch (err: any) {
-      error_toast(err.response?.data?.error || err.message);
-      return err.response?.data?.error || err.message;
+      const error = err.response?.data?.error || err.message;
+      error_toast(error);
+      return rejectWithValue({ error, status: err.response?.status });
     }
   }
 );
 
 export const deleteTenantUser = createAsyncThunk<unknown, any>(
   "tenant/deleteTenantUser",
-  async (props: any) => {
+  async (props, { rejectWithValue }) => {
     try {
-      const response: AxiosResponse<ApiResponse<unknown>> =
-        await axiosInstance.delete(
-          `http://localhost:8080/api/users?tenant=${props.currentTenant}`,
-          props?.payload
-        );
-      if (response?.data) {
-        success_toast("User deleted successfully");
-      }
+      const response = await axiosInstance.delete(
+        `http://localhost:8080/api/users?tenant=${props.currentTenant}`,
+        props?.payload
+      );
+      success_toast("User deleted successfully");
       return response.data;
     } catch (err: any) {
-      error_toast(err.response?.data?.error || err.message);
-      return err.response?.data?.error || err.message;
+      const error = err.response?.data?.error || err.message;
+      error_toast(error);
+      return rejectWithValue({ error, status: err.response?.status });
     }
   }
 );
 
 export const updateTenantUser = createAsyncThunk<unknown, any>(
   "tenant/updateTenantUser",
-  async (props: any) => {
+  async (props, { rejectWithValue }) => {
     try {
-      const response: AxiosResponse<ApiResponse<unknown>> =
-        await axiosInstance.post(
-          `http://localhost:8080/api/users/update/${props.id}?tenant=${props.currentTenant}`,
-          props?.payload
-        );
-      if (response?.data) {
-        success_toast("User updated successfully");
-      }
+      const response = await axiosInstance.post(
+        `http://localhost:8080/api/users/update/${props.id}?tenant=${props.currentTenant}`,
+        props?.payload
+      );
+      success_toast("User updated successfully");
       return response.data;
     } catch (err: any) {
-      error_toast(err.response?.data?.error || err.message);
-      return err.response?.data?.error || err.message;
+      const error = err.response?.data?.error || err.message;
+      error_toast(error);
+      return rejectWithValue({ error, status: err.response?.status });
     }
   }
 );
 
 export const addRole = createAsyncThunk<unknown, any>(
   "tenant/addRole",
-  async (props: any) => {
+  async (props, { rejectWithValue }) => {
     try {
-      const response: AxiosResponse<ApiResponse<unknown>> =
-        await axiosInstance.post(
-          props.role != "admin"
-            ? `http://localhost:8080/api/users/addroles`
-            : "http://localhost:8080/api/admin/addroles",
-          props?.payload,
-          {
-            headers: {
-              ...props.headers,
-            },
-          }
-        );
-      if (response?.data) {
-        success_toast(response.data.message || "Role added successfully");
-      }
+      const response = await axiosInstance.post(
+        props.role != "admin"
+          ? `http://localhost:8080/api/users/addroles`
+          : "http://localhost:8080/api/admin/addroles",
+        props?.payload,
+        { headers: { ...props.headers } }
+      );
+      success_toast(response.data.message || "Role added successfully");
       return response.data;
     } catch (err: any) {
-      error_toast(err.response?.data?.error || err.message);
-      return err.response?.data?.error || err.message;
+      const error = err.response?.data?.error || err.message;
+      error_toast(error);
+      return rejectWithValue({ error, status: err.response?.status });
     }
   }
 );
 
 export const addPermssion = createAsyncThunk<unknown, any>(
   "tenant/addPermssion",
-  async (props: any) => {
+  async (props, { rejectWithValue }) => {
     try {
-      const response: AxiosResponse<ApiResponse<unknown>> =
-        await axiosInstance.post(
-          props.role != "admin"
-            ? `http://localhost:8080/api/users/permissions`
-            : "http://localhost:8080/api/admin/permissions",
-          props?.payload,
-          {
-            headers: {
-              ...props.headers,
-            },
-          }
-        );
-      if (response?.data) {
-        success_toast(
-          response.data.message || "permissions added successfully"
-        );
-      }
+      const response = await axiosInstance.post(
+        props.role != "admin"
+          ? `http://localhost:8080/api/users/permissions`
+          : "http://localhost:8080/api/admin/permissions",
+        props?.payload,
+        { headers: { ...props.headers } }
+      );
+      success_toast(response.data.message || "permissions added successfully");
       return response.data;
     } catch (err: any) {
-      error_toast(err.response?.data?.error || err.message);
-      return err.response?.data?.error || err.message;
+      const error = err.response?.data?.error || err.message;
+      error_toast(error);
+      return rejectWithValue({ error, status: err.response?.status });
     }
   }
 );
 
 export const getPermssion = createAsyncThunk<unknown, any>(
   "tenant/getPermssion",
-  async (props: any) => {
+  async (props, { rejectWithValue }) => {
     try {
-      const response: AxiosResponse<ApiResponse<unknown>> =
-        await axiosInstance.get(
-          props.role != "admin"
-            ? `http://localhost:8080/api/users/permissions`
-            : "http://localhost:8080/api/admin/permissions",
-          {
-            headers: {
-              ...props.headers,
-            },
-          }
-        );
-
+      const response = await axiosInstance.get(
+        props.role != "admin"
+          ? `http://localhost:8080/api/users/permissions`
+          : "http://localhost:8080/api/admin/permissions",
+        { headers: { ...props.headers } }
+      );
       return response.data;
     } catch (err: any) {
-      error_toast(err.response?.data?.error || err.message);
-      return err.response?.data?.error || err.message;
+      const error = err.response?.data?.error || err.message;
+      error_toast(error);
+      return rejectWithValue({ error, status: err.response?.status });
     }
   }
 );
 
 export const getRoles = createAsyncThunk<unknown, any>(
   "tenant/getRoles",
-  async (props: any) => {
+  async (props, { rejectWithValue }) => {
     try {
-      const response: AxiosResponse<ApiResponse<unknown>> =
-        await axiosInstance.get(
-          props.role != "admin"
-            ? `http://localhost:8080/api/users/addroles`
-            : "http://localhost:8080/api/admin/addroles",
-          {
-            headers: {
-              ...props.headers,
-            },
-          }
-        );
-
+      const response = await axiosInstance.get(
+        props.role != "admin"
+          ? `http://localhost:8080/api/users/addroles`
+          : "http://localhost:8080/api/admin/addroles",
+        { headers: { ...props.headers } }
+      );
       return response.data;
     } catch (err: any) {
-      error_toast(err.response?.data?.error || err.message);
-      return err.response?.data?.error || err.message;
+      const error = err.response?.data?.error || err.message;
+      error_toast(error);
+      return rejectWithValue({ error, status: err.response?.status });
     }
   }
 );
 
 export const addPermissonRole = createAsyncThunk<unknown, any>(
   "tenant/addPermissonRole",
-  async (props: any) => {
+  async (props, { rejectWithValue }) => {
     try {
-      const response: AxiosResponse<ApiResponse<unknown>> =
-        await axiosInstance.post(
-          props.role != "admin"
-            ? `http://localhost:8080/api/users/addpermissionsroles`
-            : "http://localhost:8080/api/admin/addpermissionsroles",
-          props?.payload,
-          {
-            headers: {
-              ...props.headers,
-            },
-          }
-        );
-      if (response?.data) {
-        success_toast(
-          response.data.message || "addpermissionsroles added successfully"
-        );
-      }
+      const response = await axiosInstance.post(
+        props.role != "admin"
+          ? `http://localhost:8080/api/users/addpermissionsroles`
+          : "http://localhost:8080/api/admin/addpermissionsroles",
+        props?.payload,
+        { headers: { ...props.headers } }
+      );
+      success_toast(
+        response.data.message || "addpermissionsroles added successfully"
+      );
       return response.data;
     } catch (err: any) {
-      error_toast(err.response?.data?.error || err.message);
-      return err.response?.data?.error || err.message;
+      const error = err.response?.data?.error || err.message;
+      error_toast(error);
+      return rejectWithValue({ error, status: err.response?.status });
+    }
+  }
+);
+export const getPermissonRole = createAsyncThunk<unknown, any>(
+  "tenant/getPermissonRole",
+  async (props, { rejectWithValue }) => {
+    try {
+      const response = await axiosInstance.get(
+        props.role != "admin"
+          ? `http://localhost:8080/api/users/permissionsroles/${props?.id}`
+          : `http://localhost:8080/api/admin/permissionsroles/${props?.id}`,
+        { headers: { ...props.headers } }
+      );
+
+      return response.data;
+    } catch (err: any) {
+      const error = err.response?.data?.error || err.message;
+      error_toast(error);
+      return rejectWithValue({ error, status: err.response?.status });
+    }
+  }
+);
+
+export const getAllPermissonRole = createAsyncThunk<unknown, any>(
+  "tenant/getAllPermissonRole",
+  async (props, { rejectWithValue }) => {
+    try {
+      const response = await axiosInstance.get(
+        props.role != "admin"
+          ? `http://localhost:8080/api/users/allpermissionsroles`
+          : `http://localhost:8080/api/admin/allpermissionsroles`,
+        { headers: { ...props.headers } }
+      );
+
+      return response.data;
+    } catch (err: any) {
+      const error = err.response?.data?.error || err.message;
+      error_toast(error);
+      return rejectWithValue({ error, status: err.response?.status });
     }
   }
 );
@@ -309,6 +308,8 @@ interface TenantState {
   isLoading: boolean;
   allRoles: unknown[];
   allpermissions: unknown[];
+  permissionsRoles: unknown[];
+  allpermissionsroles: unknown[];
 }
 
 const initialState: TenantState = {
@@ -316,6 +317,8 @@ const initialState: TenantState = {
   tenants: [],
   allpermissions: [],
   allRoles: [],
+  permissionsRoles: [],
+  allpermissionsroles: [],
   isLoading: false,
 };
 
@@ -435,6 +438,26 @@ const tenantSlice = createSlice({
         state.allRoles = action.payload as unknown[];
       })
       .addCase(getRoles.rejected, (state) => {
+        state.isLoading = false;
+      })
+      .addCase(getPermissonRole.pending, (state) => {
+        state.isLoading = true;
+      })
+      .addCase(getPermissonRole.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.permissionsRoles = action.payload as unknown[];
+      })
+      .addCase(getPermissonRole.rejected, (state) => {
+        state.isLoading = false;
+      })
+      .addCase(getAllPermissonRole.pending, (state) => {
+        state.isLoading = true;
+      })
+      .addCase(getAllPermissonRole.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.allpermissionsroles = action.payload as unknown[];
+      })
+      .addCase(getAllPermissonRole.rejected, (state) => {
         state.isLoading = false;
       });
   },
