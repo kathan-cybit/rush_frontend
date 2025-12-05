@@ -4,7 +4,6 @@ import { UseFormRegister, FieldErrors } from "react-hook-form";
 import { BackIcon, EditIcon } from "../../../assets/svgs";
 import { useNavigate } from "react-router-dom";
 import { CustomBreadCrumbs } from "../../../components/breadCrumbs";
-import { Anchor } from "@mantine/core";
 
 interface TenantFormValues {
   domainname: string;

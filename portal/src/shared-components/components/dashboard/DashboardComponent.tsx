@@ -1,5 +1,4 @@
 import React from "react";
-import { Badge } from "@mantine/core";
 
 import { CreateTenantContainer } from "../../containers";
 import { Loader, TableV2 } from "@eiris/common-ui-react";

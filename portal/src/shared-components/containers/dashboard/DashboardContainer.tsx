@@ -2,7 +2,6 @@ import React, { useEffect, useMemo, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 
-import { Badge } from "@mantine/core";
 import { fetchTenants } from "../../../store/reducers/tenantSlice";
 import { AppDispatch, RootState } from "../../../store/store";
 import { DashboardComponent } from "../../components";
