@@ -1,5 +1,5 @@
 @import "./App.css";
-@import "./components/customTable/table.css";
+@import "./assets/css/table.css";
 @import "./layout/layout.css";
 @import "./layout/navbar/navbar.css";
 @import "./layout/sidebar/sidebar.css";

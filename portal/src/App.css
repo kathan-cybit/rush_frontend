@@ -12,7 +12,7 @@
   pointer-events: none;
 }
 
-.loader {
+/* .loader {
   width: 50px;
   --b: 8px;
   aspect-ratio: 1;
@@ -33,7 +33,7 @@
   mask-composite: intersect;
   animation: l4 1s infinite steps(10);
   z-index: 1000;
-}
+} */
 
 .parent-container {
   margin-top: 80px !important;

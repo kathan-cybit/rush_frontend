@@ -1,9 +1,9 @@
-import LoginComponent from "./auth";
-import CreateTenantComponent from "./createTenant";
-import DashboardComponent from "./dashboard";
-import LicenseComponent from "./license";
-import RoleComponent from "./role";
-import UserComponent from "./usermanagement";
+import LoginComponent from "./auth/LoginComponent";
+import CreateTenantComponent from "./createTenant/CreateTenantComponent";
+import DashboardComponent from "./dashboard/DashboardComponent";
+import LicenseComponent from "./license/LicenseComponent";
+import RoleComponent from "./role/RoleComponent";
+import UserComponent from "./usermanagement/UserComponent";
 import CreateUserComponent from "./usermanagement/components/CreateUserComponent";
 
 export {

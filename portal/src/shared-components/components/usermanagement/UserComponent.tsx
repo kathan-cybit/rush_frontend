@@ -1,10 +1,8 @@
 import React from "react";
-import Loader from "../../../components/loader/Loader";
-import { TableV2 } from "@eiris/common-ui-react";
-import EditIcn from "../../../assets/svgs/EditIcn";
-import EyeIcn from "../../../assets/svgs/EyeIcn";
+
+import { Loader, TableV2 } from "@eiris/common-ui-react";
 import { CreateUserContainer } from "../../containers";
-import { Navigate, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 interface userProps {
   loading: boolean;
@@ -24,42 +22,19 @@ export default function UserComponent({
   setFormStatus,
   handleViewUser,
   handleEditUser,
-}: userProps) {
+  formattedTenants,
+  statusColorMap,
+  menuItems,
+}: any) {
   const navigate: any = useNavigate();
-
-  const formattedTenants = userData?.map((e) => ({
-    id: e?.id,
-    username: e.name,
-    status: e.status,
-    email: e.email,
-    phonenumber: e.phonenumber,
-  }));
-
-  const menuItems = [
-    {
-      label: "View",
-      icon: <EyeIcn className="" color="#000" />,
-      onClick: (row: any) => {
-        handleViewUser(row);
-      },
-    },
-    {
-      label: "Edit",
-      color: "blue",
-      icon: <EditIcn color="#228be6" />,
-      onClick: (row: any) => {
-        handleEditUser(row);
-      },
-    },
-  ];
-  const statusColorMap = {
-    active: "green",
-    inactive: "red",
-  };
 
   return (
     <div>
-      {loading && <Loader />}
+      {loading && (
+        <div className="loader-overlay">
+          <Loader />
+        </div>
+      )}
       {!FormStatus.mode && (
         <>
           {userData?.length > 0 && (

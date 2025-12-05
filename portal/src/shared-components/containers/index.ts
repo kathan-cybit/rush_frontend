@@ -1,9 +1,9 @@
-import LoginContainer from "./auth";
-import CreateTenantContainer from "./createTenant";
-import DashboardContainer from "./dashboard";
-import LicenseContainer from "./license";
-import RoleContainer from "./role";
-import UserContainer from "./usermanagement";
+import LoginContainer from "./auth/LoginContainer";
+import CreateTenantContainer from "./createTenant/CreateTenantContainer";
+import DashboardContainer from "./dashboard/DashboardContainer";
+import LicenseContainer from "./license/LicenseContainer";
+import RoleContainer from "./role/RoleContainer";
+import UserContainer from "./usermanagement/UserContainer";
 import CreateUserContainer from "./usermanagement/components/CreateUserContainer";
 
 export {

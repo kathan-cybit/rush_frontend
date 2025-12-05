@@ -2,8 +2,9 @@ import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "../../../store/store";
 import { fetchUsers } from "../../../store/reducers/tenantSlice";
-import Loader from "../../../components/loader/Loader";
+
 import { LicenseComponent } from "../../components";
+import { Loader } from "@eiris/common-ui-react";
 
 export default function LicenseContainer() {
   const dispatch = useDispatch<AppDispatch>();
@@ -24,7 +25,11 @@ export default function LicenseContainer() {
 
   return (
     <div>
-      {loading && <Loader />}
+      {loading && (
+        <div className="loader-overlay">
+          <Loader />
+        </div>
+      )}
       <LicenseComponent users={users} />
     </div>
   );

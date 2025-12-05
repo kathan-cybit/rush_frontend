@@ -2,19 +2,9 @@ import React from "react";
 import { Badge } from "@mantine/core";
 
 import { CreateTenantContainer } from "../../containers";
-import Loader from "../../../components/loader/Loader";
+import { Loader, TableV2 } from "@eiris/common-ui-react";
 import { AuthIcn } from "../../../assets/svgs";
 import { ExcelImg, OutlookImg, PpImg, TeamsImg } from "../../../assets/img";
-// import { DynamicMantineTable } from "../../../components/customTable/DynamicMantineTable";
-import { Button, Group, Stack, TableV2, Title, Text } from "../../ui";
-import {
-  IconCopy,
-  IconPencil,
-  IconPlugConnected,
-  IconTrash,
-} from "@tabler/icons-react";
-import EyeIcn from "../../../assets/svgs/EyeIcn";
-import EditIcn from "../../../assets/svgs/EditIcn";
 
 interface DashboardProps {
   host: string | null;
@@ -43,42 +33,17 @@ export default function DashboardComponent({
   handleViewTenant,
   handleEditTenant,
   setFormStatus,
-}: DashboardProps) {
-  const formattedTenants = tenants?.map((tenant) => ({
-    id: tenant.id,
-    company: tenant.company_name,
-    domain: tenant.domain,
-    status: tenant.status,
-    excel: tenant.licenses.excel,
-    outlook: tenant.licenses.outlook,
-    powerPoint: tenant.licenses.powerPoint,
-    microsoftTeam: tenant.licenses.microsoftTeam,
-  }));
-
-  const menuItems = [
-    {
-      label: "View",
-      icon: <EyeIcn className="" color="#000" />,
-      onClick: (row: any) => {
-        handleViewTenant(row);
-      },
-    },
-    {
-      label: "Edit",
-      color: "blue",
-      icon: <EditIcn color="#228be6" />,
-      onClick: (row: any) => {
-        handleEditTenant(row);
-      },
-    },
-  ];
-  const statusColorMap = {
-    active: "green",
-    inactive: "red",
-  };
+  statusColorMap,
+  menuItems,
+  formattedTenants,
+}: any) {
   return (
     <>
-      {isLoading && <Loader />}
+      {isLoading && (
+        <div className="loader-overlay">
+          <Loader />
+        </div>
+      )}
       <div className="flex justify-between items-center mb-5">
         {host !== "public" ? (
           <div>

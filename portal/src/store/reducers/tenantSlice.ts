@@ -262,6 +262,7 @@ export const addPermissonRole = createAsyncThunk<unknown, any>(
     }
   }
 );
+
 export const getPermissonRole = createAsyncThunk<unknown, any>(
   "tenant/getPermissonRole",
   async (props, { rejectWithValue }) => {

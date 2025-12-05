@@ -1,149 +1,33 @@
-import React, { useEffect, useState } from "react";
-import { useForm, Controller } from "react-hook-form";
+import React from "react";
+import { Controller } from "react-hook-form";
 import Select from "react-select";
-import { error_toast } from "../../../utils/toaster";
-import { Dialog, Modal, TableV2 } from "@eiris/common-ui-react";
-import EditIcn from "../../../assets/svgs/EditIcn";
-import { useDispatch, useSelector } from "react-redux";
-import { AppDispatch, RootState } from "../../../store/store";
-import { addPermissonRole, addRole } from "../../../store/reducers/tenantSlice";
+import { Dialog, Loader, Modal, TableV2 } from "@eiris/common-ui-react";
 
 export default function RoleComponent({
-  roles = [],
-  permissionsRoles = [],
-  allPermissions = [],
-  allpermissionsroles = [],
-  handleModalOpen,
   handleModalClose,
   EditRole,
   CurrData = {},
   setOpenCreateRole,
   OpenCreateRole,
+  controlAssign,
+  handleSubmitAssign,
+  Roleform,
+  submitAssign,
+  handleSubmit,
+  onChangeRoleForm,
+  permissionOptions,
+  formattedRoles,
+  menuItems,
+  statusColorMap,
+  isLoading,
 }: any) {
-  const { roleType } = useSelector((state: RootState) => state.auth);
-  const dispatch = useDispatch<AppDispatch>();
-
-  const {
-    control: controlAssign,
-    handleSubmit: handleSubmitAssign,
-    setValue,
-    reset,
-  } = useForm<any>({
-    defaultValues: {
-      role: null,
-      permission_ids: [],
-    },
-  });
-  const subDomain = new URL(window.location.href).hostname.split(".")[0];
-
-  const [form, setForm] = useState({
-    name: "",
-    description: "",
-    organization_id: 1,
-  });
-
-  const selectedPermissionIds = (permissionsRoles || []).map(
-    (item) => item.Permission?.id
-  );
-
-  const permissionOptions = (allPermissions || []).map((p: any) => ({
-    value: p.id,
-    label: p.name,
-  }));
-  const preSelectedOptions = permissionOptions.filter((opt) =>
-    selectedPermissionIds.includes(opt.value)
-  );
-
-  useEffect(() => {
-    setValue("permission_ids", preSelectedOptions);
-  }, [permissionsRoles, allPermissions]);
-
-  // const formattedRoles = roles?.map((e) => ({
-  //   id: e?.id,
-  //   role: e.name,
-  //   description: e.description,
-  // }));
-  const permissionMap = Object.fromEntries(
-    allpermissionsroles.map((r) => [
-      r.role_id,
-      r.permissions.map((p) => p.name).join(", "),
-    ])
-  );
-
-  const formattedRoles = roles?.map((role) => ({
-    id: role.id,
-    role: role.name,
-    description: role.description,
-    permissions: permissionMap[role.id] || "None",
-  }));
-
-  const menuItems = [
-    {
-      label: "Edit",
-      color: "blue",
-      icon: <EditIcn color="#228be6" />,
-      onClick: (row: any) => {
-        handleModalOpen(row?.id);
-      },
-    },
-  ];
-  const statusColorMap = {};
-  const submitAssign = async (data: any) => {
-    const subDomain = new URL(window.location.href).hostname.split(".")[0];
-    const payload = {
-      role_id: CurrData?.id,
-      organization_id: CurrData.organization_id || 1,
-      permission_id: (data.permission_ids || []).map((p: any) => p.value),
-    };
-
-    await dispatch(
-      addPermissonRole({
-        role: roleType,
-        payload,
-        headers: { "x-tenant-id": subDomain },
-      })
-    )
-      .unwrap()
-      .then(() => {
-        reset();
-        handleModalClose();
-      })
-      .catch(() => {});
-  };
-  const onChange = (e: any) => {
-    setForm({ ...form, [e.target.name]: e.target.value });
-  };
-
-  const handleSubmit = async (e: any) => {
-    e.preventDefault();
-
-    const payload = {
-      name: form.name || "-",
-      description: form.description || "-",
-      organization_id: 1,
-    };
-
-    await dispatch(
-      addRole({
-        role: roleType,
-        payload,
-        headers: { "x-tenant-id": subDomain },
-      })
-    )
-      .unwrap()
-      .then(() => {
-        setForm({
-          name: "",
-          description: "",
-          organization_id: 1,
-        });
-        setOpenCreateRole(false);
-      })
-      .catch(() => {});
-  };
-  console.log(permissionsRoles, "permissionsRoles");
   return (
     <div>
+      {isLoading && (
+        <div className="loader-overlay">
+          <Loader />
+        </div>
+      )}
       <>
         <div className="flex flex-col">
           <div className="mb-8">
@@ -241,8 +125,8 @@ export default function RoleComponent({
                 <input
                   className="px-3 py-2 border rounded"
                   name="name"
-                  value={form.name}
-                  onChange={onChange}
+                  value={Roleform.name}
+                  onChange={onChangeRoleForm}
                   placeholder="Enter role name"
                 />
               </div>
@@ -252,8 +136,8 @@ export default function RoleComponent({
                 <input
                   className="px-3 py-2 border rounded"
                   name="description"
-                  value={form.description}
-                  onChange={onChange}
+                  value={Roleform.description}
+                  onChange={onChangeRoleForm}
                   placeholder="Enter description"
                 />
               </div>

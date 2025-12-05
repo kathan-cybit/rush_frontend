@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 
@@ -6,10 +6,33 @@ import { Badge } from "@mantine/core";
 import { fetchTenants } from "../../../store/reducers/tenantSlice";
 import { AppDispatch, RootState } from "../../../store/store";
 import { DashboardComponent } from "../../components";
+import { EditIcon, EyeIcon } from "../../../assets/svgs";
 
 export default function DashboardContainer() {
   const dispatch = useDispatch<AppDispatch>();
   const navigate = useNavigate();
+
+  const menuItems = [
+    {
+      label: "View",
+      icon: <EyeIcon className="" color="#000" />,
+      onClick: (row: any) => {
+        handleViewTenant(row);
+      },
+    },
+    {
+      label: "Edit",
+      color: "blue",
+      icon: <EditIcon color="#228be6" />,
+      onClick: (row: any) => {
+        handleEditTenant(row);
+      },
+    },
+  ];
+  const statusColorMap = {
+    active: "green",
+    inactive: "red",
+  };
 
   const { tenants, isLoading } = useSelector(
     (state: RootState) => state.tenant
@@ -55,6 +78,19 @@ export default function DashboardContainer() {
     setFormStatus({ mode: "edit", tenant: row.id });
   };
 
+  const formattedTenants = useMemo(() => {
+    return tenants?.map((tenant: any) => ({
+      id: tenant.id,
+      company: tenant.company_name,
+      domain: tenant.domain,
+      status: tenant.status,
+      excel: tenant.licenses.excel,
+      outlook: tenant.licenses.outlook,
+      powerPoint: tenant.licenses.powerPoint,
+      microsoftTeam: tenant.licenses.microsoftTeam,
+    }));
+  }, [tenants]);
+
   const componentProps = {
     host,
     isLoading,
@@ -65,6 +101,9 @@ export default function DashboardContainer() {
     handleViewTenant,
     handleEditTenant,
     setFormStatus,
+    statusColorMap,
+    menuItems,
+    formattedTenants,
   };
 
   return <DashboardComponent {...componentProps} />;

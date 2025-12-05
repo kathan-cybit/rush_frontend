@@ -1,6 +1,7 @@
 import React from "react";
-import Loader from "../../../components/loader/Loader";
+
 import { logo } from "../../../assets/img";
+import { Loader } from "@eiris/common-ui-react";
 
 interface LoginProps {
   email: string;
@@ -26,7 +27,11 @@ export default function LoginComponent({
 }: LoginProps) {
   return (
     <>
-      {loading && <Loader />}
+      {loading && (
+        <div className="loader-overlay">
+          <Loader />
+        </div>
+      )}
       <div className="flex justify-center items-center px-4 w-screen h-screen auth-bg">
         <div className="flex flex-col justify-between bg-white p-[50px] rounded-[16px] w-full max-w-[385px] h-full max-h-[490px]">
           <div>
