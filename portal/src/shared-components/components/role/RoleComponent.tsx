@@ -1,7 +1,7 @@
 import React from "react";
 import { Controller } from "react-hook-form";
 import Select from "react-select";
-import { Dialog, Loader, Modal, TableV2 } from "@eiris/common-ui-react";
+import { Dialog, Loader, Modal, TableV2 } from "../../ui";
 
 export default function RoleComponent({
   handleModalClose,

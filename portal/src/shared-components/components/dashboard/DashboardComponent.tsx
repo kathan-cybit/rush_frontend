@@ -1,7 +1,7 @@
 import React from "react";
 
 import { CreateTenantContainer } from "../../containers";
-import { Loader, TableV2 } from "@eiris/common-ui-react";
+import { Loader, TableV2 } from "../../ui";
 import { AuthIcn } from "../../../assets/svgs";
 import { ExcelImg, OutlookImg, PpImg, TeamsImg } from "../../../assets/img";
 

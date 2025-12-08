@@ -1,7 +1,7 @@
 import React from "react";
 
 import { logo } from "../../../assets/img";
-import { Loader } from "@eiris/common-ui-react";
+import { Loader } from "../../ui";
 
 interface LoginProps {
   email: string;

@@ -1,6 +1,6 @@
 import React from "react";
 
-import { Loader, TableV2 } from "@eiris/common-ui-react";
+import { Loader, TableV2 } from "../../ui";
 import { CreateUserContainer } from "../../containers";
 import { useNavigate } from "react-router-dom";
 

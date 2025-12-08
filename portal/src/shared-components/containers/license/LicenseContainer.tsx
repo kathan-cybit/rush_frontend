@@ -4,7 +4,7 @@ import { AppDispatch, RootState } from "../../../store/store";
 import { fetchUsers } from "../../../store/reducers/tenantSlice";
 
 import { LicenseComponent } from "../../components";
-import { Loader } from "@eiris/common-ui-react";
+import { Loader } from "../../ui";
 
 export default function LicenseContainer() {
   const dispatch = useDispatch<AppDispatch>();
