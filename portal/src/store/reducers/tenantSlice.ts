@@ -303,11 +303,32 @@ export const getAllPermissonRole = createAsyncThunk<unknown, any>(
   }
 );
 
+export const getAllRoleUsers = createAsyncThunk<unknown, any>(
+  "tenant/getAllRoleUsers",
+  async (props, { rejectWithValue }) => {
+    try {
+      const response = await axiosInstance.get(
+        props.role != "admin"
+          ? `http://localhost:8080/api/users/getAllRolesUsers`
+          : `http://localhost:8080/api/admin/getAllRolesUsers`,
+        { headers: { ...props.headers } }
+      );
+
+      return response.data;
+    } catch (err: any) {
+      const error = err.response?.data?.error || err.message;
+      error_toast(error);
+      return rejectWithValue({ error, status: err.response?.status });
+    }
+  }
+);
+
 interface TenantState {
   users: unknown[];
   tenants: unknown[];
   isLoading: boolean;
   allRoles: unknown[];
+  allUsersRoles: unknown[];
   allpermissions: unknown[];
   permissionsRoles: unknown[];
   allpermissionsroles: unknown[];
@@ -319,6 +340,7 @@ const initialState: TenantState = {
   allpermissions: [],
   allRoles: [],
   permissionsRoles: [],
+  allUsersRoles: [],
   allpermissionsroles: [],
   isLoading: false,
 };
@@ -459,6 +481,16 @@ const tenantSlice = createSlice({
         state.allpermissionsroles = action.payload as unknown[];
       })
       .addCase(getAllPermissonRole.rejected, (state) => {
+        state.isLoading = false;
+      })
+      .addCase(getAllRoleUsers.pending, (state) => {
+        state.isLoading = true;
+      })
+      .addCase(getAllRoleUsers.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.allUsersRoles = action.payload as unknown[];
+      })
+      .addCase(getAllRoleUsers.rejected, (state) => {
         state.isLoading = false;
       });
   },

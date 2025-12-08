@@ -1,12 +1,14 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { CreateUserComponent } from "../../../components";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "../../../../store/store";
 import { useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import {
   createTenantUser,
   fetchUsers,
+  getAllRoleUsers,
+  getRoles,
   updateTenantUser,
 } from "../../../../store/reducers/tenantSlice";
 
@@ -17,6 +19,7 @@ interface UserFormValues {
   phonenumber: string;
   status: string;
   assigned_apps: string[];
+  role_ids: string[] | number[];
 }
 
 interface FormStatus {
@@ -31,10 +34,15 @@ export default function CreateUserContainer({
 }: any) {
   const dispatch = useDispatch<AppDispatch>();
   const navigate = useNavigate();
-
+  const { roleType } = useSelector((state: RootState) => state.auth);
   const [assignedApps, setAssignedApps] = useState<string[]>([]);
+  const allRoles = useSelector((state: any) => state.tenant.allRoles) || [];
+  const allUsersRoles =
+    useSelector((state: any) => state.tenant.allUsersRoles) || [];
+  const [defaultUserRoleOptions, setDefaultUserRoleOptions] = useState([]);
 
   const {
+    control,
     register,
     handleSubmit,
     setValue,
@@ -48,6 +56,7 @@ export default function CreateUserContainer({
       phonenumber: CurrData?.phonenumber || "",
       status: CurrData?.status || "active",
       assigned_apps: CurrData?.assigned_apps || [],
+      role_ids: CurrData?.role_ids || [],
     },
   });
 
@@ -133,9 +142,58 @@ export default function CreateUserContainer({
     },
   ];
 
+  useEffect(() => {
+    const host = new URL(window.location.href).hostname.split(".")[0];
+    dispatch(
+      getRoles({
+        role: roleType,
+        headers: {
+          "x-tenant-id": host,
+        },
+      })
+    );
+    dispatch(
+      getAllRoleUsers({
+        role: roleType,
+        headers: {
+          "x-tenant-id": host,
+        },
+      })
+    );
+  }, []);
+
+  useEffect(() => {
+    if (
+      (FormStatus?.mode == "edit" || FormStatus?.mode == "view") &&
+      CurrData?.id &&
+      allUsersRoles.length > 0
+    ) {
+      const found = allUsersRoles.find((u) => u.user_id === CurrData.id);
+
+      if (found) {
+        const formatted = found.roles.map((r) => ({
+          value: r.id,
+          label: r.name,
+        }));
+
+        setDefaultUserRoleOptions(formatted);
+        setValue(
+          "role_ids",
+          formatted.map((x) => x.value)
+        );
+      }
+    }
+  }, [FormStatus?.mode, CurrData, allUsersRoles]);
+  const roleOptions = allRoles.map((r) => ({
+    value: r.id,
+    label: r.name,
+  }));
+
   return (
     <div>
       <CreateUserComponent
+        roleOptions={roleOptions}
+        defaultUserRoleOptions={defaultUserRoleOptions}
         register={register}
         errors={errors}
         navigate={navigate}
@@ -147,6 +205,8 @@ export default function CreateUserContainer({
         BreadCrumbItems={BreadCrumbItems}
         assignedApps={assignedApps}
         setAssignedApps={setAssignedApps}
+        control={control}
+        allRoles={allRoles}
       />
     </div>
   );

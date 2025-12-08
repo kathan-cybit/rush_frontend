@@ -1,6 +1,8 @@
 import React from "react";
 import { BackIcon, EditIcon } from "../../../../assets/svgs";
 import { CustomBreadCrumbs } from "../../../../components/breadCrumbs";
+import { Controller } from "react-hook-form";
+import Select from "react-select";
 
 export default function CreateUserComponent({
   register,
@@ -14,6 +16,10 @@ export default function CreateUserComponent({
   BreadCrumbItems,
   assignedApps,
   setAssignedApps,
+  allRoles,
+  control,
+  roleOptions,
+  defaultUserRoleOptions,
 }) {
   return (
     <>
@@ -165,6 +171,30 @@ export default function CreateUserComponent({
                 />
               </div>
             )}
+            <div className="float-left mt-[2px] px-[12px] w-[50%]">
+              <label className="block mb-[8px] font-[500] text-[#1f2937] text-[14px]">
+                Select Roles
+              </label>
+
+              <Controller
+                name="role_ids"
+                control={control}
+                defaultValue={defaultUserRoleOptions.map((x) => x.value)}
+                render={({ field }) => (
+                  <Select
+                    {...field}
+                    isMulti
+                    options={roleOptions}
+                    isDisabled={FormStatus?.mode === "view"}
+                    value={roleOptions.filter((opt) =>
+                      field.value?.includes(opt.value)
+                    )}
+                    onChange={(val) => field.onChange(val.map((x) => x.value))}
+                    placeholder="Select roles..."
+                  />
+                )}
+              />
+            </div>
           </div>
 
           <h3 className="mt-[25px] mb-8 font-[500] font-fsecondary text-[#adadad] text-[12px] text-center uppercase tracking-[1.5px]">
