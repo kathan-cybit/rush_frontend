@@ -4,7 +4,7 @@ import DashboardComponent from "./dashboard/DashboardComponent";
 import LicenseComponent from "./license/LicenseComponent";
 import RoleComponent from "./role/RoleComponent";
 import UserComponent from "./usermanagement/UserComponent";
-import CreateUserComponent from "./usermanagement/components/CreateUserComponent";
+import CreateUserComponent from "./usermanagement/CreateUserComponent";
 
 export {
   LoginComponent,

@@ -59,7 +59,7 @@ export const createTenant = createAsyncThunk<unknown, CreateTenantParams>(
   async (params, { rejectWithValue }) => {
     try {
       const response = await axiosInstance.post(
-        `http://localhost:8080/api/admin/tenants`,
+        `/admin/tenants`,
         params.payload
       );
       success_toast(response.data.message || "Tenant created successfully");
@@ -77,7 +77,7 @@ export const updateTenant = createAsyncThunk<unknown, UpdateTenantParams>(
   async (params, { rejectWithValue }) => {
     try {
       const response = await axiosInstance.post(
-        `http://localhost:8080/api/admin/tenants/update`,
+        `/admin/tenants/update`,
         params
       );
       success_toast(response.data.message || "Tenant updated successfully");
@@ -95,7 +95,7 @@ export const fetchTenants = createAsyncThunk<unknown, FetchTenantsParams>(
   async (currentTenant = null, { rejectWithValue }) => {
     try {
       const response = await axiosInstance.get(
-        `http://localhost:8080/api/admin/tenants?tenant=${currentTenant}`
+        `/admin/tenants?tenant=${currentTenant}`
       );
       return response.data;
     } catch (err: any) {
@@ -111,7 +111,7 @@ export const createTenantUser = createAsyncThunk<unknown, any>(
   async (props, { rejectWithValue }) => {
     try {
       const response = await axiosInstance.post(
-        `http://localhost:8080/api/users?tenant=${props.currentTenant}`,
+        `/users?tenant=${props.currentTenant}`,
         props?.payload
       );
       success_toast("User created successfully");
@@ -129,7 +129,7 @@ export const deleteTenantUser = createAsyncThunk<unknown, any>(
   async (props, { rejectWithValue }) => {
     try {
       const response = await axiosInstance.delete(
-        `http://localhost:8080/api/users?tenant=${props.currentTenant}`,
+        `/users?tenant=${props.currentTenant}`,
         props?.payload
       );
       success_toast("User deleted successfully");
@@ -147,7 +147,7 @@ export const updateTenantUser = createAsyncThunk<unknown, any>(
   async (props, { rejectWithValue }) => {
     try {
       const response = await axiosInstance.post(
-        `http://localhost:8080/api/users/update/${props.id}?tenant=${props.currentTenant}`,
+        `/users/update/${props.id}?tenant=${props.currentTenant}`,
         props?.payload
       );
       success_toast("User updated successfully");
@@ -165,9 +165,7 @@ export const addRole = createAsyncThunk<unknown, any>(
   async (props, { rejectWithValue }) => {
     try {
       const response = await axiosInstance.post(
-        props.role != "admin"
-          ? `http://localhost:8080/api/users/addroles`
-          : "http://localhost:8080/api/admin/addroles",
+        props.role != "admin" ? `/users/addroles` : "/admin/addroles",
         props?.payload,
         { headers: { ...props.headers } }
       );
@@ -186,9 +184,7 @@ export const addPermssion = createAsyncThunk<unknown, any>(
   async (props, { rejectWithValue }) => {
     try {
       const response = await axiosInstance.post(
-        props.role != "admin"
-          ? `http://localhost:8080/api/users/permissions`
-          : "http://localhost:8080/api/admin/permissions",
+        props.role != "admin" ? `/users/permissions` : "/admin/permissions",
         props?.payload,
         { headers: { ...props.headers } }
       );
@@ -207,9 +203,7 @@ export const getPermssion = createAsyncThunk<unknown, any>(
   async (props, { rejectWithValue }) => {
     try {
       const response = await axiosInstance.get(
-        props.role != "admin"
-          ? `http://localhost:8080/api/users/permissions`
-          : "http://localhost:8080/api/admin/permissions",
+        props.role != "admin" ? `/users/permissions` : "/admin/permissions",
         { headers: { ...props.headers } }
       );
       return response.data;
@@ -226,9 +220,7 @@ export const getRoles = createAsyncThunk<unknown, any>(
   async (props, { rejectWithValue }) => {
     try {
       const response = await axiosInstance.get(
-        props.role != "admin"
-          ? `http://localhost:8080/api/users/addroles`
-          : "http://localhost:8080/api/admin/addroles",
+        props.role != "admin" ? `/users/addroles` : "/admin/addroles",
         { headers: { ...props.headers } }
       );
       return response.data;
@@ -246,8 +238,8 @@ export const addPermissonRole = createAsyncThunk<unknown, any>(
     try {
       const response = await axiosInstance.post(
         props.role != "admin"
-          ? `http://localhost:8080/api/users/addpermissionsroles`
-          : "http://localhost:8080/api/admin/addpermissionsroles",
+          ? `/users/addpermissionsroles`
+          : "/admin/addpermissionsroles",
         props?.payload,
         { headers: { ...props.headers } }
       );
@@ -269,8 +261,8 @@ export const getPermissonRole = createAsyncThunk<unknown, any>(
     try {
       const response = await axiosInstance.get(
         props.role != "admin"
-          ? `http://localhost:8080/api/users/permissionsroles/${props?.id}`
-          : `http://localhost:8080/api/admin/permissionsroles/${props?.id}`,
+          ? `/users/permissionsroles/${props?.id}`
+          : `/admin/permissionsroles/${props?.id}`,
         { headers: { ...props.headers } }
       );
 
@@ -289,8 +281,8 @@ export const getAllPermissonRole = createAsyncThunk<unknown, any>(
     try {
       const response = await axiosInstance.get(
         props.role != "admin"
-          ? `http://localhost:8080/api/users/allpermissionsroles`
-          : `http://localhost:8080/api/admin/allpermissionsroles`,
+          ? `/users/allpermissionsroles`
+          : `/admin/allpermissionsroles`,
         { headers: { ...props.headers } }
       );
 
@@ -309,8 +301,8 @@ export const getAllRoleUsers = createAsyncThunk<unknown, any>(
     try {
       const response = await axiosInstance.get(
         props.role != "admin"
-          ? `http://localhost:8080/api/users/getAllRolesUsers`
-          : `http://localhost:8080/api/admin/getAllRolesUsers`,
+          ? `/users/getAllRolesUsers`
+          : `/admin/getAllRolesUsers`,
         { headers: { ...props.headers } }
       );
 

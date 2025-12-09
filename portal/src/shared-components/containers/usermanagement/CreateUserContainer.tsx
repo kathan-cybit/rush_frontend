@@ -1,7 +1,7 @@
 import React, { useEffect, useMemo, useState } from "react";
-import { CreateUserComponent } from "../../../components";
+import { CreateUserComponent } from "../../components";
 import { useDispatch, useSelector } from "react-redux";
-import { AppDispatch, RootState } from "../../../../store/store";
+import { AppDispatch, RootState } from "../../../store/store";
 import { useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import {
@@ -10,7 +10,7 @@ import {
   getAllRoleUsers,
   getRoles,
   updateTenantUser,
-} from "../../../../store/reducers/tenantSlice";
+} from "../../../store/reducers/tenantSlice";
 
 interface UserFormValues {
   name: string;
