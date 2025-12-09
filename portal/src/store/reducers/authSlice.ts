@@ -37,7 +37,7 @@ export const loginUser = createAsyncThunk<LoginResponse, LoginPayload>(
 );
 
 interface AuthState {
-  user: unknown | null | any;
+  user: any;
   token: string | null;
   loading: boolean;
   isAuthenticated: boolean;
@@ -47,7 +47,7 @@ interface AuthState {
 }
 
 const initialState: AuthState = {
-  user: null,
+  user: JSON.parse(localStorage.getItem("user")) || {},
   token: localStorage.getItem("auth_token") || null,
   loading: false,
   isAuthenticated: false,
@@ -79,10 +79,12 @@ const authSlice = createSlice({
       .addCase(loginUser.fulfilled, (state, action) => {
         state.loading = false;
         state.token = action.payload.token;
+
         state.user = action.payload.user;
         state.isAuthenticated = true;
         state.roleType = action.payload.roleType;
 
+        localStorage.setItem("user", JSON.stringify(action.payload.user));
         localStorage.setItem("auth_token", action.payload.token);
         localStorage.setItem("user_type", action.payload.roleType);
       })
