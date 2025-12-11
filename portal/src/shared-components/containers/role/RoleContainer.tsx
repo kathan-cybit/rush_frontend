@@ -58,6 +58,7 @@ export default function RoleContainer() {
   const [Roleform, setRoleForm] = useState({
     name: "",
     description: "",
+    permissions: [],
     organization_id: 1,
   });
 
@@ -95,13 +96,42 @@ export default function RoleContainer() {
       .catch(() => {});
   };
 
+  // const handleSubmit = async (e: any) => {
+  //   e.preventDefault();
+
+  //   const payload = {
+  //     name: Roleform.name || "-",
+  //     description: Roleform.description || "-",
+  //     organization_id: 1,
+  //   };
+
+  //   await dispatch(
+  //     addRole({
+  //       role: roleType,
+  //       payload,
+  //       headers: { "x-tenant-id": subDomain },
+  //     })
+  //   )
+  //     .unwrap()
+  //     .then(() => {
+  //       setRoleForm({
+  //         name: "",
+  //         description: "",
+  //         organization_id: 1,
+  //       });
+  //       setOpenCreateRole(false);
+  //     })
+  //     .catch(() => {});
+  // };
+
   const handleSubmit = async (e: any) => {
     e.preventDefault();
 
     const payload = {
-      name: Roleform.name || "-",
-      description: Roleform.description || "-",
+      name: Roleform.name.trim() || "-",
+      description: Roleform.description.trim() || "-",
       organization_id: 1,
+      permission_ids: Roleform.permissions.map((p: any) => p.value), // 🔥 Add permissions
     };
 
     await dispatch(
@@ -116,6 +146,7 @@ export default function RoleContainer() {
         setRoleForm({
           name: "",
           description: "",
+          permissions: [],
           organization_id: 1,
         });
         setOpenCreateRole(false);
@@ -228,6 +259,7 @@ export default function RoleContainer() {
             controlAssign={controlAssign}
             handleSubmitAssign={handleSubmitAssign}
             Roleform={Roleform}
+            setRoleForm={setRoleForm}
             submitAssign={submitAssign}
             handleSubmit={handleSubmit}
             onChangeRoleForm={onChangeRoleForm}
