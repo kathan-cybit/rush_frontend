@@ -339,9 +339,12 @@ export const getApps = createAsyncThunk<unknown, any>(
   "tenant/getApps",
   async (props, { rejectWithValue }) => {
     try {
-      const response = await axiosInstance.get("/users/createapps", {
-        headers: { ...props.headers },
-      });
+      const response = await axiosInstance.get(
+        props?.role == "admin" ? `/admin/createapps` : `/users/createapps`,
+        {
+          headers: { ...props.headers },
+        }
+      );
       return response.data;
     } catch (err: any) {
       const error = err.response?.data?.error || err.message;

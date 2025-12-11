@@ -77,54 +77,35 @@ export default function DashboardContainer() {
     setFormStatus({ mode: "edit", tenant: row.id });
   };
 
-  // const formattedTenants = useMemo(() => {
-  //   return tenants?.map((tenant: any) => ({
-  //     id: tenant.id,
-  //     company: tenant.company_name,
-  //     domain: tenant.domain,
-  //     status: tenant.status,
-  //     excel: tenant.licenses.excel,
-  //     outlook: tenant.licenses.outlook,
-  //     powerPoint: tenant.licenses.powerPoint,
-  //     microsoftTeam: tenant.licenses.microsoftTeam,
-  //   }));
-  // }, [tenants]);
-
-  // const formattedTenants = useMemo(() => {
-  //   return tenants?.map((tenant: any) => {
-  //     let appsObj: any = {};
-
-  //     if (tenant.licenses) {
-  //     }
-  //     console.log(appsObj);
-  //     return {
-  //       id: tenant.id,
-  //       company: tenant.company_name,
-  //       domain: tenant.domain,
-  //       status: tenant.status,
-  //       ...appsObj,
-  //     };
-  //   });
-  // }, [tenants]);
-
+  const allLicenseKeys = Array.from(
+    new Set(
+      tenants?.flatMap((tenant: any) =>
+        tenant?.licenses ? Object.keys(tenant.licenses) : []
+      )
+    )
+  );
   const formattedTenants = useMemo(() => {
-    return tenants?.map((tenant: any) => {
-      let appsObj: any = {};
+    if (!tenants) return [];
 
-      if (tenant.licenses && typeof tenant.licenses === "object") {
-        // Copy all license keys dynamically
-        Object.entries(tenant.licenses).forEach(([key, value]) => {
-          appsObj[key] = value;
-        });
-      }
+    const allLicenseKeys = Array.from(
+      new Set(
+        tenants.flatMap((t: any) => (t.licenses ? Object.keys(t.licenses) : []))
+      )
+    );
 
-      return {
+    return tenants.map((tenant: any) => {
+      const row: any = {
         id: tenant.id,
         company: tenant.company_name,
         domain: tenant.domain,
         status: tenant.status,
-        ...appsObj, // spread dynamic license keys
       };
+
+      allLicenseKeys.forEach((app) => {
+        row[app] = tenant.licenses?.[app] ?? 0;
+      });
+
+      return row;
     });
   }, [tenants]);
 

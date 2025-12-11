@@ -61,6 +61,7 @@ const CreateTenantContainer: React.FC<CreateTenantProps> = ({
   };
 
   const allApps = useSelector((state: RootState) => state.tenant.allApps);
+  const { roleType } = useSelector((state: RootState) => state.auth);
   // const [licenses, setLicenses] = useState<any>({});
   const [licenses, setLicenses] = useState<any>(() => {
     const initialLicenses: any = {};
@@ -74,6 +75,7 @@ const CreateTenantContainer: React.FC<CreateTenantProps> = ({
     const host = new URL(window.location.href).hostname.split(".")[0];
     dispatch(
       getApps({
+        role: roleType,
         headers: {
           "x-tenant-id": host,
         },
@@ -134,6 +136,9 @@ const CreateTenantContainer: React.FC<CreateTenantProps> = ({
 
   const onSubmit = async (data: TenantFormValues) => {
     const host = new URL(window.location.href).hostname.split(".")[0];
+    const filteredLicenses: any = Object.fromEntries(
+      Object.entries(licenses).filter(([_, value]) => Number(value) > 0)
+    );
 
     if (!FormStatus?.mode) {
       await dispatch(
@@ -148,7 +153,7 @@ const CreateTenantContainer: React.FC<CreateTenantProps> = ({
             phonenumber: data.phoneNumber,
             contactperson: data.contactperson,
             contactemail: data.contactemail,
-            licenses,
+            licenses: filteredLicenses,
             schema_name: data.domainname,
           },
           currentTenant: host,
@@ -177,7 +182,7 @@ const CreateTenantContainer: React.FC<CreateTenantProps> = ({
             phonenumber: data.phoneNumber,
             contactperson: data.contactperson,
             contactemail: data.contactemail,
-            licenses,
+            licenses: filteredLicenses,
           },
           id: CurrData.id,
         })

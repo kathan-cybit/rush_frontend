@@ -202,7 +202,7 @@ export default function CreateUserComponent({
             Assigned Applications
           </h3>
 
-          <div className="flex flex-wrap mb-[20px] px-[12px] w-full">
+          <div className="flex flex-wrap justify-center mb-[20px] px-[12px] w-full">
             {/* {["teams", "outlook", "powerpoint", "excel"].map((app) => (
               <div key={app} className="mb-[10px] w-[25%]">
                 <label className="flex items-center gap-2 text-[#1f2937] text-[14px]">
