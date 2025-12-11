@@ -8,6 +8,7 @@ import {
   createTenantUser,
   fetchUsers,
   getAllRoleUsers,
+  getApps,
   getRoles,
   updateTenantUser,
 } from "../../../store/reducers/tenantSlice";
@@ -41,6 +42,15 @@ export default function CreateUserContainer({
     useSelector((state: any) => state.tenant.allUsersRoles) || [];
   const [defaultUserRoleOptions, setDefaultUserRoleOptions] = useState([]);
 
+  const allApps = useSelector((state: RootState) => state.tenant.allApps);
+  useEffect(() => {
+    const host = new URL(window.location.href).hostname.split(".")[0];
+    dispatch(
+      getApps({
+        headers: { "x-tenant-id": host },
+      })
+    );
+  }, []);
   const {
     control,
     register,
@@ -207,6 +217,7 @@ export default function CreateUserContainer({
         setAssignedApps={setAssignedApps}
         control={control}
         allRoles={allRoles}
+        allApps={allApps}
       />
     </div>
   );

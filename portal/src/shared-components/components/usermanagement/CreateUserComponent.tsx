@@ -19,6 +19,7 @@ export default function CreateUserComponent({
   allRoles,
   control,
   roleOptions,
+  allApps,
   defaultUserRoleOptions,
 }) {
   return (
@@ -202,7 +203,7 @@ export default function CreateUserComponent({
           </h3>
 
           <div className="flex flex-wrap mb-[20px] px-[12px] w-full">
-            {["teams", "outlook", "powerpoint", "excel"].map((app) => (
+            {/* {["teams", "outlook", "powerpoint", "excel"].map((app) => (
               <div key={app} className="mb-[10px] w-[25%]">
                 <label className="flex items-center gap-2 text-[#1f2937] text-[14px]">
                   <input
@@ -221,7 +222,29 @@ export default function CreateUserComponent({
                   {app}
                 </label>
               </div>
-            ))}
+            ))} */}
+            {allApps?.length > 0 &&
+              allApps.map((app: any) => (
+                <div key={app.name} className="mb-[10px] w-[25%]">
+                  <label className="flex items-center gap-2 text-[#1f2937] text-[14px]">
+                    <input
+                      type="checkbox"
+                      disabled={FormStatus?.mode === "view"}
+                      checked={assignedApps.includes(app.name)}
+                      onChange={() => {
+                        if (assignedApps.includes(app.name)) {
+                          setAssignedApps(
+                            assignedApps.filter((x) => x !== app.name)
+                          );
+                        } else {
+                          setAssignedApps([...assignedApps, app.name]);
+                        }
+                      }}
+                    />
+                    {app.name}
+                  </label>
+                </div>
+              ))}
           </div>
 
           {FormStatus?.mode != "view" && (

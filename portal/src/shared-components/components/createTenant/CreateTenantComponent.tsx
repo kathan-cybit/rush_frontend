@@ -4,6 +4,8 @@ import { UseFormRegister, FieldErrors } from "react-hook-form";
 import { BackIcon, EditIcon } from "../../../assets/svgs";
 import { useNavigate } from "react-router-dom";
 import { CustomBreadCrumbs } from "../../../components/breadCrumbs";
+import { useSelector } from "react-redux";
+import { RootState } from "../../../store/store";
 
 interface TenantFormValues {
   domainname: string;
@@ -17,13 +19,6 @@ interface TenantFormValues {
   phoneNumber: string;
 }
 
-interface LicensesState {
-  microsoftTeam: number;
-  powerPoint: number;
-  outlook: number;
-  excel: number;
-}
-
 interface FormStatus {
   mode: "view" | "edit" | null;
   tenant: any;
@@ -32,10 +27,10 @@ interface FormStatus {
 interface CreateTenantProps {
   register: UseFormRegister<TenantFormValues>;
   errors: FieldErrors<TenantFormValues>;
-  licenses: LicensesState;
+  licenses: any;
   FormStatus?: FormStatus;
   CurrData?: any;
-  handleLicenseChange: (app: keyof LicensesState, value: number) => void;
+  handleLicenseChange: (app: keyof any, value: number) => void;
   onDiscard: () => void;
   handleSubmit: () => void;
   BreadCrumbItems: Array<any>;
@@ -56,6 +51,8 @@ const CreateTenantComponent: React.FC<CreateTenantProps> = ({
   handleSubmit,
   BreadCrumbItems,
 }) => {
+  const allApps: any = useSelector<RootState>((state) => state.tenant.allApps);
+
   return (
     <>
       <div className="clear-both flex justify-between items-center mb-[40px] overflow-hidden">
@@ -432,7 +429,27 @@ const CreateTenantComponent: React.FC<CreateTenantProps> = ({
               </div>
             </div>
 
-            <div className="table-row">
+            {allApps?.map((app) => (
+              <div className="table-row" key={app.id}>
+                <div className="row-application">{app.name}</div>
+                <div className="row-input">
+                  <input
+                    disabled={FormStatus?.mode === "view"}
+                    type="number"
+                    className="disabled:bg-[#ced4da] license-input"
+                    value={licenses[app.name] ?? 0}
+                    onChange={(e) =>
+                      handleLicenseChange(
+                        app.name as keyof any,
+                        Number(e.target.value)
+                      )
+                    }
+                    min="0"
+                  />
+                </div>
+              </div>
+            ))}
+            {/* <div className="table-row">
               <div className="row-application">Microsoft Team</div>
               <div className="row-input">
                 <input
@@ -494,7 +511,7 @@ const CreateTenantComponent: React.FC<CreateTenantProps> = ({
                   min="0"
                 />
               </div>
-            </div>
+            </div> */}
           </div>
         </div>
 

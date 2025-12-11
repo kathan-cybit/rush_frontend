@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import { AppDispatch } from "../../../store/store";
+import { AppDispatch, RootState } from "../../../store/store";
 import {
   createTenant,
   fetchTenants,
+  getApps,
   updateTenant,
 } from "../../../store/reducers/tenantSlice";
 import { CreateTenantComponent } from "../../components";
@@ -48,16 +49,37 @@ const CreateTenantContainer: React.FC<CreateTenantProps> = ({
   const navigate = useNavigate();
   const dispatch = useDispatch<AppDispatch>();
 
-  const [licenses, setLicenses] = useState<LicensesState>({
-    microsoftTeam: 0,
-    powerPoint: 0,
-    outlook: 0,
-    excel: 0,
-  });
+  // const [licenses, setLicenses] = useState<LicensesState>({
+  //   microsoftTeam: 0,
+  //   powerPoint: 0,
+  //   outlook: 0,
+  //   excel: 0,
+  // });
 
   const handleLicenseChange = (app: keyof LicensesState, value: number) => {
     setLicenses((prev) => ({ ...prev, [app]: value }));
   };
+
+  const allApps = useSelector((state: RootState) => state.tenant.allApps);
+  // const [licenses, setLicenses] = useState<any>({});
+  const [licenses, setLicenses] = useState<any>(() => {
+    const initialLicenses: any = {};
+    allApps?.forEach((app: any) => {
+      initialLicenses[app.name] = 0;
+    });
+    return initialLicenses;
+  });
+
+  useEffect(() => {
+    const host = new URL(window.location.href).hostname.split(".")[0];
+    dispatch(
+      getApps({
+        headers: {
+          "x-tenant-id": host,
+        },
+      })
+    );
+  }, []);
 
   const {
     register,
@@ -92,16 +114,23 @@ const CreateTenantContainer: React.FC<CreateTenantProps> = ({
       setValue("contactemail", CurrData.contactemail || "");
       setValue("phoneNumber", CurrData.phonenumber || "");
 
-      if (CurrData.licenses) {
-        setLicenses({
-          microsoftTeam: CurrData.licenses.microsoftTeam || 0,
-          powerPoint: CurrData.licenses.powerPoint || 0,
-          outlook: CurrData.licenses.outlook || 0,
-          excel: CurrData.licenses.excel || 0,
+      // if (CurrData.licenses) {
+      //   setLicenses({
+      //     microsoftTeam: CurrData.licenses.microsoftTeam || 0,
+      //     powerPoint: CurrData.licenses.powerPoint || 0,
+      //     outlook: CurrData.licenses.outlook || 0,
+      //     excel: CurrData.licenses.excel || 0,
+      //   });
+      // }
+      if (allApps?.length) {
+        const dynamicLicenses: any = {};
+        allApps.forEach((app: any) => {
+          dynamicLicenses[app.name] = CurrData?.licenses?.[app.name] || 0;
         });
+        setLicenses(dynamicLicenses);
       }
     }
-  }, [FormStatus?.mode, CurrData, setValue]);
+  }, [FormStatus?.mode, allApps, CurrData, setValue]);
 
   const onSubmit = async (data: TenantFormValues) => {
     const host = new URL(window.location.href).hostname.split(".")[0];

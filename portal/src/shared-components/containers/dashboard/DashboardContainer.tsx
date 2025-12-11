@@ -77,17 +77,55 @@ export default function DashboardContainer() {
     setFormStatus({ mode: "edit", tenant: row.id });
   };
 
+  // const formattedTenants = useMemo(() => {
+  //   return tenants?.map((tenant: any) => ({
+  //     id: tenant.id,
+  //     company: tenant.company_name,
+  //     domain: tenant.domain,
+  //     status: tenant.status,
+  //     excel: tenant.licenses.excel,
+  //     outlook: tenant.licenses.outlook,
+  //     powerPoint: tenant.licenses.powerPoint,
+  //     microsoftTeam: tenant.licenses.microsoftTeam,
+  //   }));
+  // }, [tenants]);
+
+  // const formattedTenants = useMemo(() => {
+  //   return tenants?.map((tenant: any) => {
+  //     let appsObj: any = {};
+
+  //     if (tenant.licenses) {
+  //     }
+  //     console.log(appsObj);
+  //     return {
+  //       id: tenant.id,
+  //       company: tenant.company_name,
+  //       domain: tenant.domain,
+  //       status: tenant.status,
+  //       ...appsObj,
+  //     };
+  //   });
+  // }, [tenants]);
+
   const formattedTenants = useMemo(() => {
-    return tenants?.map((tenant: any) => ({
-      id: tenant.id,
-      company: tenant.company_name,
-      domain: tenant.domain,
-      status: tenant.status,
-      excel: tenant.licenses.excel,
-      outlook: tenant.licenses.outlook,
-      powerPoint: tenant.licenses.powerPoint,
-      microsoftTeam: tenant.licenses.microsoftTeam,
-    }));
+    return tenants?.map((tenant: any) => {
+      let appsObj: any = {};
+
+      if (tenant.licenses && typeof tenant.licenses === "object") {
+        // Copy all license keys dynamically
+        Object.entries(tenant.licenses).forEach(([key, value]) => {
+          appsObj[key] = value;
+        });
+      }
+
+      return {
+        id: tenant.id,
+        company: tenant.company_name,
+        domain: tenant.domain,
+        status: tenant.status,
+        ...appsObj, // spread dynamic license keys
+      };
+    });
   }, [tenants]);
 
   const componentProps = {
