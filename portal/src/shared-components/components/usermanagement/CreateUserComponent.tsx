@@ -42,7 +42,9 @@ export default function CreateUserComponent({
             </div>
             <div>
               <h1 className="mb-0 font-fsecondary text-[32px] text-[500] leading-[140%] tracking-[0.25px]">
-                {!FormStatus?.mode ? "Create New User" : CurrData?.name || ""}
+                {!FormStatus?.mode
+                  ? "Create New User"
+                  : CurrData?.first_name || ""}
               </h1>
               <CustomBreadCrumbs
                 separator=">"
@@ -92,18 +94,35 @@ export default function CreateUserComponent({
           <div className="flex flex-wrap pb-[20px] border-[#e5e7eb] border-b w-full">
             <div className="float-left mb-[15px] px-[12px] w-[50%]">
               <label className="block mb-[8px] font-[500] text-[#1f2937] text-[14px]">
-                Full Name
+                First Name
               </label>
               <input
-                {...register("name")}
+                {...register("first_name")}
                 disabled={FormStatus?.mode == "view"}
                 type="text"
                 className="disabled:bg-[#ced4da] px-3 py-2 border border-[#ced4da] focus:border-[#86b7fe] rounded-md outline-none w-full transition-all"
-                placeholder="Enter full name"
+                placeholder="Enter First name"
               />
-              {errors.name && (
+              {errors.first_name && (
                 <p className="mt-[4px] text-[12px] text-red-500">
-                  {errors.name.message}
+                  {errors.first_name.message}
+                </p>
+              )}
+            </div>
+            <div className="float-left mb-[15px] px-[12px] w-[50%]">
+              <label className="block mb-[8px] font-[500] text-[#1f2937] text-[14px]">
+                Last Name
+              </label>
+              <input
+                {...register("last_name")}
+                disabled={FormStatus?.mode == "view"}
+                type="text"
+                className="disabled:bg-[#ced4da] px-3 py-2 border border-[#ced4da] focus:border-[#86b7fe] rounded-md outline-none w-full transition-all"
+                placeholder="Enter Last name"
+              />
+              {errors.last_name && (
+                <p className="mt-[4px] text-[12px] text-red-500">
+                  {errors.last_name.message}
                 </p>
               )}
             </div>
@@ -158,6 +177,114 @@ export default function CreateUserComponent({
               </select>
             </div>
 
+            {!CurrData?.is_default_admin && (
+              <>
+                <div className="float-left mb-[15px] px-[12px] w-[50%]">
+                  <label className="block mb-[8px] font-[500] text-[#1f2937] text-[14px]">
+                    Address One
+                  </label>
+                  <input
+                    {...register("address_one")}
+                    disabled={FormStatus?.mode == "view"}
+                    type="text"
+                    className="disabled:bg-[#ced4da] px-3 py-2 border border-[#ced4da] focus:border-[#86b7fe] rounded-md outline-none w-full transition-all"
+                    placeholder="Enter First Address"
+                  />
+                  {errors.address_one && (
+                    <p className="mt-[4px] text-[12px] text-red-500">
+                      {errors.address_one.message}
+                    </p>
+                  )}
+                </div>
+                <div className="float-left mb-[15px] px-[12px] w-[50%]">
+                  <label className="block mb-[8px] font-[500] text-[#1f2937] text-[14px]">
+                    Address Two
+                  </label>
+                  <input
+                    {...register("address_two")}
+                    disabled={FormStatus?.mode == "view"}
+                    type="text"
+                    className="disabled:bg-[#ced4da] px-3 py-2 border border-[#ced4da] focus:border-[#86b7fe] rounded-md outline-none w-full transition-all"
+                    placeholder="Enter Second Address"
+                  />
+                  {errors.address_two && (
+                    <p className="mt-[4px] text-[12px] text-red-500">
+                      {errors.address_two.message}
+                    </p>
+                  )}
+                </div>
+                <div className="float-left mb-[15px] px-[12px] w-[50%]">
+                  <label className="block mb-[8px] font-[500] text-[#1f2937] text-[14px]">
+                    Country
+                  </label>
+                  <input
+                    {...register("country", {
+                      required: "Country is required",
+                      pattern: {
+                        value: /^[A-Za-z ]{2,}$/i,
+                        message: "Country must contain only letters",
+                      },
+                    })}
+                    disabled={FormStatus?.mode == "view"}
+                    type="text"
+                    className="disabled:bg-[#ced4da] px-3 py-2 border border-[#ced4da] focus:border-[#86b7fe] rounded-md outline-none w-full transition-all"
+                    placeholder="Enter Country"
+                  />
+                  {errors.country && (
+                    <p className="mt-[4px] text-[12px] text-red-500">
+                      {errors.country.message}
+                    </p>
+                  )}
+                </div>
+                <div className="float-left mb-[15px] px-[12px] w-[50%]">
+                  <label className="block mb-[8px] font-[500] text-[#1f2937] text-[14px]">
+                    City
+                  </label>
+                  <input
+                    {...register("city", {
+                      required: "City is required",
+                      pattern: {
+                        value: /^[A-Za-z ]{2,}$/i,
+                        message: "City must contain only letters",
+                      },
+                    })}
+                    disabled={FormStatus?.mode == "view"}
+                    type="text"
+                    className="disabled:bg-[#ced4da] px-3 py-2 border border-[#ced4da] focus:border-[#86b7fe] rounded-md outline-none w-full transition-all"
+                    placeholder="Enter City"
+                  />
+                  {errors.city && (
+                    <p className="mt-[4px] text-[12px] text-red-500">
+                      {errors.city.message}
+                    </p>
+                  )}
+                </div>
+                <div className="float-left mb-[15px] px-[12px] w-[50%]">
+                  <label className="block mb-[8px] font-[500] text-[#1f2937] text-[14px]">
+                    Pincode
+                  </label>
+                  <input
+                    {...register("pincode", {
+                      required: "Pincode is required",
+                      pattern: {
+                        value: /^[1-9][0-9]{5}$/,
+                        message: "Enter a valid 6-digit pincode",
+                      },
+                    })}
+                    disabled={FormStatus?.mode == "view"}
+                    type="text"
+                    className="disabled:bg-[#ced4da] px-3 py-2 border border-[#ced4da] focus:border-[#86b7fe] rounded-md outline-none w-full transition-all"
+                    placeholder="Enter Pincode"
+                  />
+                  {errors.pincode && (
+                    <p className="mt-[4px] text-[12px] text-red-500">
+                      {errors.pincode.message}
+                    </p>
+                  )}
+                </div>
+              </>
+            )}
+
             {!FormStatus?.mode && (
               <div className="float-left mb-[15px] px-[12px] w-[50%]">
                 <label className="block mb-[8px] font-[500] text-[#1f2937] text-[14px]">
@@ -165,7 +292,15 @@ export default function CreateUserComponent({
                 </label>
                 <input
                   disabled={FormStatus?.mode == "view"}
-                  {...register("password")}
+                  {...register("password", {
+                    required: "Password is required",
+                    pattern: {
+                      value:
+                        /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/,
+                      message:
+                        "Min 8 chars, 1 uppercase, 1 lowercase, 1 number & 1 special character required",
+                    },
+                  })}
                   type="password"
                   className="disabled:bg-[#ced4da] px-3 py-2 border border-[#ced4da] focus:border-[#86b7fe] rounded-md outline-none w-full"
                   placeholder="Enter password"
@@ -203,26 +338,6 @@ export default function CreateUserComponent({
           </h3>
 
           <div className="flex flex-wrap justify-center mb-[20px] px-[12px] w-full">
-            {/* {["teams", "outlook", "powerpoint", "excel"].map((app) => (
-              <div key={app} className="mb-[10px] w-[25%]">
-                <label className="flex items-center gap-2 text-[#1f2937] text-[14px]">
-                  <input
-                    className="disabled:bg-[#ced4da]"
-                    disabled={FormStatus?.mode == "view"}
-                    type="checkbox"
-                    checked={assignedApps.includes(app)}
-                    onChange={() => {
-                      if (assignedApps.includes(app)) {
-                        setAssignedApps(assignedApps.filter((x) => x !== app));
-                      } else {
-                        setAssignedApps([...assignedApps, app]);
-                      }
-                    }}
-                  />
-                  {app}
-                </label>
-              </div>
-            ))} */}
             {allApps?.length > 0 &&
               allApps.map((app: any) => (
                 <div key={app.name} className="mb-[10px] w-[25%]">

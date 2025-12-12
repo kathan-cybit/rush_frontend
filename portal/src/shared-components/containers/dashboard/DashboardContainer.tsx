@@ -2,7 +2,7 @@ import React, { useEffect, useMemo, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 
-import { fetchTenants } from "../../../store/reducers/tenantSlice";
+import { fetchTenants, getApps } from "../../../store/reducers/tenantSlice";
 import { AppDispatch, RootState } from "../../../store/store";
 import { DashboardComponent } from "../../components";
 import { EditIcon, EyeIcon } from "../../../assets/svgs";
@@ -10,7 +10,6 @@ import { EditIcon, EyeIcon } from "../../../assets/svgs";
 export default function DashboardContainer() {
   const dispatch = useDispatch<AppDispatch>();
   const navigate = useNavigate();
-
   const menuItems = [
     {
       label: "View",
@@ -36,7 +35,9 @@ export default function DashboardContainer() {
   const { tenants, isLoading } = useSelector(
     (state: RootState) => state.tenant
   );
-
+  const { user, loading, roleType } = useSelector(
+    (state: RootState) => state.auth
+  );
   const [host, setHost] = useState<string | null>(null);
 
   const [FormStatus, setFormStatus] = useState({
@@ -45,6 +46,17 @@ export default function DashboardContainer() {
   });
 
   const [CurrData, setCurrData] = useState<any>(null);
+
+  const allApps = useSelector((state: RootState) => state.tenant.allApps);
+  useEffect(() => {
+    const host = new URL(window.location.href).hostname.split(".")[0];
+    dispatch(
+      getApps({
+        role: roleType,
+        headers: { "x-tenant-id": host },
+      })
+    );
+  }, []);
 
   // ── Effects ------------------------------------------------------------
   useEffect(() => {
@@ -110,8 +122,11 @@ export default function DashboardContainer() {
   }, [tenants]);
 
   const componentProps = {
+    allApps,
+    user,
     host,
     isLoading,
+    loading,
     tenants,
     FormStatus,
     CurrData,

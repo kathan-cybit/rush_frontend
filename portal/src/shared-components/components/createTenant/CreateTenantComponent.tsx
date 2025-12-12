@@ -139,9 +139,16 @@ const CreateTenantComponent: React.FC<CreateTenantProps> = ({
               placeholder="Enter Tenant Name"
               {...register("domainname", {
                 required: "Domain name is required",
+
+                maxLength: {
+                  value: 50,
+                  message: "Cannot exceed 50 characters",
+                },
+
                 pattern: {
-                  value: /^[a-zA-Z0-9-]+$/,
-                  message: "Enter a valid domain name",
+                  value: /^(?!pg_)(?![0-9])(?!_)[a-z0-9_]+$/,
+                  message:
+                    "Only lowercase letters, numbers, underscore allowed. Cannot start with number, underscore, or 'pg_'",
                 },
               })}
             />

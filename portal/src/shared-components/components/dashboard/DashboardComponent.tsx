@@ -3,7 +3,15 @@ import React from "react";
 import { CreateTenantContainer } from "../../containers";
 import { Loader, TableV2 } from "../../ui";
 import { AuthIcn } from "../../../assets/svgs";
-import { ExcelImg, OutlookImg, PpImg, TeamsImg } from "../../../assets/img";
+import {
+  ExcelImg,
+  ICExpert,
+  OutlookImg,
+  PoleExpert,
+  PpImg,
+  SimExpert,
+  TeamsImg,
+} from "../../../assets/img";
 
 interface DashboardProps {
   host: string | null;
@@ -23,8 +31,11 @@ interface DashboardProps {
 }
 
 export default function DashboardComponent({
+  allApps,
+  user,
   host,
   isLoading,
+  loading,
   tenants,
   FormStatus,
   CurrData,
@@ -36,9 +47,10 @@ export default function DashboardComponent({
   menuItems,
   formattedTenants,
 }: any) {
+  console.log(allApps, "allApps");
   return (
     <>
-      {isLoading && (
+      {(isLoading || loading) && (
         <div className="loader-overlay">
           <Loader />
         </div>
@@ -84,64 +96,32 @@ export default function DashboardComponent({
         </div>
       </div>
 
-      {host !== "public" ? (
-        <div className="flex flex-wrap -mx-3">
-          <div className="px-2 w-1/4">
-            <div className="flex flex-col justify-between items-center hover:shadow-[0_12px_24px_rgba(0,0,0,0.12)] px-4 pt-12 pb-6 border border-[#e4e5e7] border-[1.2px] rounded-[16px] h-[280px] text-center transition-all hover:-translate-y-1.5 duration-200 cursor-pointer">
-              <div className="max-w-[130px] max-h-[140px]">
-                <img
-                  className="w-full h-full object-contain"
-                  src={ExcelImg}
-                  alt="Excel"
-                />
+      {host != "public" && allApps?.length > 0 ? (
+        <div className="flex flex-wrap justify-center -mx-3">
+          {allApps.map((e: any, index: number | string) => {
+            return (
+              <div className="px-2 w-1/4">
+                <div className="flex flex-col justify-between items-center hover:shadow-[0_12px_24px_rgba(0,0,0,0.12)] px-4 pt-12 pb-6 border border-[#e4e5e7] border-[1.2px] rounded-[16px] h-[280px] text-center transition-all hover:-translate-y-1.5 duration-200 cursor-pointer">
+                  <div className="max-w-[130px] max-h-[140px]">
+                    <img
+                      className="w-full h-full object-contain"
+                      src={
+                        index == 0
+                          ? ICExpert
+                          : index == 1
+                          ? PoleExpert
+                          : SimExpert
+                      }
+                      alt="Teams"
+                    />
+                  </div>
+                  <h2 className="mb-0 font-fsecondary text-[24px] text-[500] leading-[140%]">
+                    {e?.name}
+                  </h2>
+                </div>
               </div>
-              <h2 className="mb-0 font-fsecondary text-[24px] text-[500] leading-[140%]">
-                Excel
-              </h2>
-            </div>
-          </div>
-          <div className="px-2 w-1/4">
-            <div className="flex flex-col justify-between items-center hover:shadow-[0_12px_24px_rgba(0,0,0,0.12)] px-4 pt-12 pb-6 border border-[#e4e5e7] border-[1.2px] rounded-[16px] h-[280px] text-center transition-all hover:-translate-y-1.5 duration-200 cursor-pointer">
-              <div className="max-w-[130px] max-h-[140px]">
-                <img
-                  className="w-full h-full object-contain"
-                  src={OutlookImg}
-                  alt="Outlook"
-                />
-              </div>
-              <h2 className="mb-0 font-fsecondary text-[24px] text-[500] leading-[140%]">
-                Outlook
-              </h2>
-            </div>
-          </div>
-          <div className="px-2 w-1/4">
-            <div className="flex flex-col justify-between items-center hover:shadow-[0_12px_24px_rgba(0,0,0,0.12)] px-4 pt-12 pb-6 border border-[#e4e5e7] border-[1.2px] rounded-[16px] h-[280px] text-center transition-all hover:-translate-y-1.5 duration-200 cursor-pointer">
-              <div className="max-w-[130px] max-h-[140px]">
-                <img
-                  className="w-full h-full object-contain"
-                  src={TeamsImg}
-                  alt="Teams"
-                />
-              </div>
-              <h2 className="mb-0 font-fsecondary text-[24px] text-[500] leading-[140%]">
-                Teams
-              </h2>
-            </div>
-          </div>
-          <div className="px-2 w-1/4">
-            <div className="flex flex-col justify-between items-center hover:shadow-[0_12px_24px_rgba(0,0,0,0.12)] px-4 pt-12 pb-6 border border-[#e4e5e7] border-[1.2px] rounded-[16px] h-[280px] text-center transition-all hover:-translate-y-1.5 duration-200 cursor-pointer">
-              <div className="max-w-[130px] max-h-[140px]">
-                <img
-                  className="w-full h-full object-contain"
-                  src={PpImg}
-                  alt="PowerPoint"
-                />
-              </div>
-              <h2 className="mb-0 font-fsecondary text-[24px] text-[500] leading-[140%]">
-                Powerpoint
-              </h2>
-            </div>
-          </div>
+            );
+          })}
         </div>
       ) : (
         <>

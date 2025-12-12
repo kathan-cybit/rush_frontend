@@ -64,7 +64,7 @@ export default function UserContainer() {
   const formattedTenants = useMemo(() => {
     return userData?.map((e: any) => ({
       id: e?.id,
-      username: e.name,
+      username: e.first_name + " " + e?.last_name,
       status: e.status,
       email: e.email,
       phonenumber: e.phonenumber,

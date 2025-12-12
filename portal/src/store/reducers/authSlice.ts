@@ -45,9 +45,13 @@ interface AuthState {
   currentTenantId: string | null;
   roleType: string;
 }
+const userString = localStorage.getItem("user");
 
 const initialState: AuthState = {
-  user: JSON.parse(localStorage.getItem("user")) || {},
+  user:
+    userString && (userString !== "undefined" || userString == undefined)
+      ? JSON.parse(userString)
+      : null,
   token: localStorage.getItem("auth_token") || null,
   loading: false,
   isAuthenticated: false,

@@ -47,10 +47,12 @@ export default function CreateUserContainer({
     const host = new URL(window.location.href).hostname.split(".")[0];
     dispatch(
       getApps({
+        role: roleType,
         headers: { "x-tenant-id": host },
       })
     );
   }, []);
+
   const {
     control,
     register,
@@ -58,12 +60,18 @@ export default function CreateUserContainer({
     setValue,
     reset,
     formState: { errors },
-  } = useForm<UserFormValues>({
+  } = useForm<any>({
     defaultValues: {
-      name: CurrData?.name || "",
+      first_name: CurrData?.first_name || "",
+      last_name: CurrData?.last_name || "",
       email: CurrData?.email || "",
       password: "",
       phonenumber: CurrData?.phonenumber || "",
+      address_one: CurrData?.address_one || "",
+      address_two: CurrData?.address_two || "",
+      pincode: CurrData?.pincode || "",
+      city: CurrData?.city || "",
+      country: CurrData?.country || "",
       status: CurrData?.status || "active",
       assigned_apps: CurrData?.assigned_apps || [],
       role_ids: CurrData?.role_ids || [],
@@ -72,10 +80,16 @@ export default function CreateUserContainer({
 
   useEffect(() => {
     if (FormStatus?.mode && CurrData) {
-      setValue("name", CurrData.name);
+      setValue("first_name", CurrData.first_name);
+      setValue("last_name", CurrData.last_name);
       setValue("email", CurrData.email);
       setValue("phonenumber", CurrData.phonenumber);
       setValue("status", CurrData.status);
+      setValue("address_one", CurrData.address_one);
+      setValue("address_two", CurrData.address_two);
+      setValue("pincode", CurrData.pincode);
+      setValue("city", CurrData.city);
+      setValue("country", CurrData.country);
       setAssignedApps(CurrData.assigned_apps || []);
     }
   }, [CurrData, FormStatus?.mode]);
