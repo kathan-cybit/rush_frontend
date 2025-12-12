@@ -1,19 +1,17 @@
 import { useLocation, useNavigate } from "react-router-dom";
-import {
-  AppShellSection,
-  AppShellNavbar,
-  Stack,
-  Tooltip,
-  ThemeIcon,
-  UnstyledButton,
-  Text,
-  rem,
-  useMantineTheme,
-  AppShell,
-} from "@mantine/core";
 
 import { LicenseIcn, RoleIcn, UserIcn } from "../../assets/svgs";
 import { logo } from "../../assets/img";
+import { useMantineTheme } from "@mantine/core";
+import {
+  AppShellNavbar,
+  AppShellSection,
+  Stack,
+  Text,
+  ThemeIcon,
+  Tooltip,
+  UnstyledButton,
+} from "../../shared-components/ui";
 
 export default function Sidebar({ isOpen }: any) {
   const pathName = useLocation()?.pathname;
@@ -54,7 +52,7 @@ export default function Sidebar({ isOpen }: any) {
           style={{
             display: "flex",
             alignItems: "center",
-            padding: `${rem(12)} ${rem(14)}`,
+            padding: `10px 16px`,
             width: "100%",
             backgroundColor: active ? "rgba(0,0,0,0.06)" : "transparent",
             borderLeft: active
@@ -85,7 +83,7 @@ export default function Sidebar({ isOpen }: any) {
   };
 
   return (
-    <AppShell.Navbar
+    <AppShellNavbar
     // p={0}
     // style={{
     //   backgroundColor: "#fff",
@@ -151,6 +149,6 @@ export default function Sidebar({ isOpen }: any) {
           )}
         </UnstyledButton>
       </AppShellSection> */}
-    </AppShell.Navbar>
+    </AppShellNavbar>
   );
 }

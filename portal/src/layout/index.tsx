@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import { AppShell } from "@mantine/core";
 import { useSelector } from "react-redux";
 import { Outlet, useLocation } from "react-router-dom";
 
@@ -8,6 +7,12 @@ import Sidebar from "./sidebar/Sidebar";
 import AdminNavbar from "./navbar/AdminNavbar";
 import "./layout.css";
 import { RootState } from "../store/store";
+import {
+  AppShell,
+  AppShellHeader,
+  AppShellMain,
+  AppShellNavbar,
+} from "../shared-components/ui";
 
 const Layout: React.FC = () => {
   const location = useLocation();
@@ -36,21 +41,21 @@ const Layout: React.FC = () => {
       }}
     >
       {/* HEADER SECTION */}
-      <AppShell.Header>
+      <AppShellHeader>
         {showTenantNavbar && <Navbar toggleSidebar={toggleSidebar} />}
         {showTenantAdminNavbar && <AdminNavbar toggleSidebar={toggleSidebar} />}
         {showAdminNavbar && <AdminNavbar toggleSidebar={toggleSidebar} />}
-      </AppShell.Header>
+      </AppShellHeader>
 
       {/* SIDEBAR SECTION */}
       {showSidebar && (
-        <AppShell.Navbar>
+        <AppShellNavbar>
           <Sidebar isOpen={true} />
-        </AppShell.Navbar>
+        </AppShellNavbar>
       )}
 
       {/* MAIN CONTENT */}
-      <AppShell.Main
+      <AppShellMain
         className={
           currentPathname === "/dashboard" || roleType === "admin"
             ? "admin-content admin-container mx-auto px-2 sm:px-6 lg:px-6 xl:pl-0"
@@ -58,7 +63,7 @@ const Layout: React.FC = () => {
         }
       >
         <Outlet />
-      </AppShell.Main>
+      </AppShellMain>
     </AppShell>
   );
 };

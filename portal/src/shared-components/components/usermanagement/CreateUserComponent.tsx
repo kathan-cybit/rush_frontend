@@ -177,113 +177,109 @@ export default function CreateUserComponent({
               </select>
             </div>
 
-            {!CurrData?.is_default_admin && (
-              <>
-                <div className="float-left mb-[15px] px-[12px] w-[50%]">
-                  <label className="block mb-[8px] font-[500] text-[#1f2937] text-[14px]">
-                    Address One
-                  </label>
-                  <input
-                    {...register("address_one")}
-                    disabled={FormStatus?.mode == "view"}
-                    type="text"
-                    className="disabled:bg-[#ced4da] px-3 py-2 border border-[#ced4da] focus:border-[#86b7fe] rounded-md outline-none w-full transition-all"
-                    placeholder="Enter First Address"
-                  />
-                  {errors.address_one && (
-                    <p className="mt-[4px] text-[12px] text-red-500">
-                      {errors.address_one.message}
-                    </p>
-                  )}
-                </div>
-                <div className="float-left mb-[15px] px-[12px] w-[50%]">
-                  <label className="block mb-[8px] font-[500] text-[#1f2937] text-[14px]">
-                    Address Two
-                  </label>
-                  <input
-                    {...register("address_two")}
-                    disabled={FormStatus?.mode == "view"}
-                    type="text"
-                    className="disabled:bg-[#ced4da] px-3 py-2 border border-[#ced4da] focus:border-[#86b7fe] rounded-md outline-none w-full transition-all"
-                    placeholder="Enter Second Address"
-                  />
-                  {errors.address_two && (
-                    <p className="mt-[4px] text-[12px] text-red-500">
-                      {errors.address_two.message}
-                    </p>
-                  )}
-                </div>
-                <div className="float-left mb-[15px] px-[12px] w-[50%]">
-                  <label className="block mb-[8px] font-[500] text-[#1f2937] text-[14px]">
-                    Country
-                  </label>
-                  <input
-                    {...register("country", {
-                      required: "Country is required",
-                      pattern: {
-                        value: /^[A-Za-z ]{2,}$/i,
-                        message: "Country must contain only letters",
-                      },
-                    })}
-                    disabled={FormStatus?.mode == "view"}
-                    type="text"
-                    className="disabled:bg-[#ced4da] px-3 py-2 border border-[#ced4da] focus:border-[#86b7fe] rounded-md outline-none w-full transition-all"
-                    placeholder="Enter Country"
-                  />
-                  {errors.country && (
-                    <p className="mt-[4px] text-[12px] text-red-500">
-                      {errors.country.message}
-                    </p>
-                  )}
-                </div>
-                <div className="float-left mb-[15px] px-[12px] w-[50%]">
-                  <label className="block mb-[8px] font-[500] text-[#1f2937] text-[14px]">
-                    City
-                  </label>
-                  <input
-                    {...register("city", {
-                      required: "City is required",
-                      pattern: {
-                        value: /^[A-Za-z ]{2,}$/i,
-                        message: "City must contain only letters",
-                      },
-                    })}
-                    disabled={FormStatus?.mode == "view"}
-                    type="text"
-                    className="disabled:bg-[#ced4da] px-3 py-2 border border-[#ced4da] focus:border-[#86b7fe] rounded-md outline-none w-full transition-all"
-                    placeholder="Enter City"
-                  />
-                  {errors.city && (
-                    <p className="mt-[4px] text-[12px] text-red-500">
-                      {errors.city.message}
-                    </p>
-                  )}
-                </div>
-                <div className="float-left mb-[15px] px-[12px] w-[50%]">
-                  <label className="block mb-[8px] font-[500] text-[#1f2937] text-[14px]">
-                    Pincode
-                  </label>
-                  <input
-                    {...register("pincode", {
-                      required: "Pincode is required",
-                      pattern: {
-                        value: /^[1-9][0-9]{5}$/,
-                        message: "Enter a valid 6-digit pincode",
-                      },
-                    })}
-                    disabled={FormStatus?.mode == "view"}
-                    type="text"
-                    className="disabled:bg-[#ced4da] px-3 py-2 border border-[#ced4da] focus:border-[#86b7fe] rounded-md outline-none w-full transition-all"
-                    placeholder="Enter Pincode"
-                  />
-                  {errors.pincode && (
-                    <p className="mt-[4px] text-[12px] text-red-500">
-                      {errors.pincode.message}
-                    </p>
-                  )}
-                </div>
-              </>
-            )}
+            <div className="float-left mb-[15px] px-[12px] w-[50%]">
+              <label className="block mb-[8px] font-[500] text-[#1f2937] text-[14px]">
+                Address One
+              </label>
+              <input
+                {...register("address_one")}
+                disabled={FormStatus?.mode == "view"}
+                type="text"
+                className="disabled:bg-[#ced4da] px-3 py-2 border border-[#ced4da] focus:border-[#86b7fe] rounded-md outline-none w-full transition-all"
+                placeholder="Enter First Address"
+              />
+              {errors.address_one && (
+                <p className="mt-[4px] text-[12px] text-red-500">
+                  {errors.address_one.message}
+                </p>
+              )}
+            </div>
+            <div className="float-left mb-[15px] px-[12px] w-[50%]">
+              <label className="block mb-[8px] font-[500] text-[#1f2937] text-[14px]">
+                Address Two
+              </label>
+              <input
+                {...register("address_two")}
+                disabled={FormStatus?.mode == "view"}
+                type="text"
+                className="disabled:bg-[#ced4da] px-3 py-2 border border-[#ced4da] focus:border-[#86b7fe] rounded-md outline-none w-full transition-all"
+                placeholder="Enter Second Address"
+              />
+              {errors.address_two && (
+                <p className="mt-[4px] text-[12px] text-red-500">
+                  {errors.address_two.message}
+                </p>
+              )}
+            </div>
+            <div className="float-left mb-[15px] px-[12px] w-[50%]">
+              <label className="block mb-[8px] font-[500] text-[#1f2937] text-[14px]">
+                Country
+              </label>
+              <input
+                {...register("country", {
+                  required: "Country is required",
+                  pattern: {
+                    value: /^[A-Za-z ]{2,}$/i,
+                    message: "Country must contain only letters",
+                  },
+                })}
+                disabled={FormStatus?.mode == "view"}
+                type="text"
+                className="disabled:bg-[#ced4da] px-3 py-2 border border-[#ced4da] focus:border-[#86b7fe] rounded-md outline-none w-full transition-all"
+                placeholder="Enter Country"
+              />
+              {errors.country && (
+                <p className="mt-[4px] text-[12px] text-red-500">
+                  {errors.country.message}
+                </p>
+              )}
+            </div>
+            <div className="float-left mb-[15px] px-[12px] w-[50%]">
+              <label className="block mb-[8px] font-[500] text-[#1f2937] text-[14px]">
+                City
+              </label>
+              <input
+                {...register("city", {
+                  required: "City is required",
+                  pattern: {
+                    value: /^[A-Za-z ]{2,}$/i,
+                    message: "City must contain only letters",
+                  },
+                })}
+                disabled={FormStatus?.mode == "view"}
+                type="text"
+                className="disabled:bg-[#ced4da] px-3 py-2 border border-[#ced4da] focus:border-[#86b7fe] rounded-md outline-none w-full transition-all"
+                placeholder="Enter City"
+              />
+              {errors.city && (
+                <p className="mt-[4px] text-[12px] text-red-500">
+                  {errors.city.message}
+                </p>
+              )}
+            </div>
+            <div className="float-left mb-[15px] px-[12px] w-[50%]">
+              <label className="block mb-[8px] font-[500] text-[#1f2937] text-[14px]">
+                Pincode
+              </label>
+              <input
+                {...register("pincode", {
+                  required: "Pincode is required",
+                  pattern: {
+                    value: /^[1-9][0-9]{5}$/,
+                    message: "Enter a valid 6-digit pincode",
+                  },
+                })}
+                disabled={FormStatus?.mode == "view"}
+                type="text"
+                className="disabled:bg-[#ced4da] px-3 py-2 border border-[#ced4da] focus:border-[#86b7fe] rounded-md outline-none w-full transition-all"
+                placeholder="Enter Pincode"
+              />
+              {errors.pincode && (
+                <p className="mt-[4px] text-[12px] text-red-500">
+                  {errors.pincode.message}
+                </p>
+              )}
+            </div>
 
             {!FormStatus?.mode && (
               <div className="float-left mb-[15px] px-[12px] w-[50%]">
