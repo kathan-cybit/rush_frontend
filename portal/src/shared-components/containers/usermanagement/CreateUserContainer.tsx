@@ -35,7 +35,7 @@ export default function CreateUserContainer({
 }: any) {
   const dispatch = useDispatch<AppDispatch>();
   const navigate = useNavigate();
-  const { roleType } = useSelector((state: RootState) => state.auth);
+  const { tenantType } = useSelector((state: RootState) => state.auth);
   const [assignedApps, setAssignedApps] = useState<string[]>([]);
   const allRoles = useSelector((state: any) => state.tenant.allRoles) || [];
   const allUsersRoles =
@@ -47,7 +47,7 @@ export default function CreateUserContainer({
     const host = new URL(window.location.href).hostname.split(".")[0];
     dispatch(
       getApps({
-        role: roleType,
+        role: tenantType,
         headers: { "x-tenant-id": host },
       })
     );
@@ -170,7 +170,7 @@ export default function CreateUserContainer({
     const host = new URL(window.location.href).hostname.split(".")[0];
     dispatch(
       getRoles({
-        role: roleType,
+        role: tenantType,
         headers: {
           "x-tenant-id": host,
         },
@@ -178,7 +178,7 @@ export default function CreateUserContainer({
     );
     dispatch(
       getAllRoleUsers({
-        role: roleType,
+        role: tenantType,
         headers: {
           "x-tenant-id": host,
         },

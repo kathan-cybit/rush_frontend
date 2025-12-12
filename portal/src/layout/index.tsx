@@ -21,15 +21,16 @@ const Layout: React.FC = () => {
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const toggleSidebar = (): void => setIsOpen((prev) => !prev);
 
-  const { roleType } = useSelector((state: RootState) => state.auth);
+  const { tenantType } = useSelector((state: RootState) => state.auth);
 
   const showTenantNavbar =
-    roleType === "tenant" && currentPathname !== "/dashboard";
+    tenantType === "tenant" && currentPathname !== "/dashboard";
   const showTenantAdminNavbar =
-    roleType === "tenant" && currentPathname === "/dashboard";
-  const showAdminNavbar = roleType === "admin";
+    tenantType === "tenant" && currentPathname === "/dashboard";
+  const showAdminNavbar = tenantType === "admin";
 
-  const showSidebar = roleType === "tenant" && currentPathname !== "/dashboard";
+  const showSidebar =
+    tenantType === "tenant" && currentPathname !== "/dashboard";
 
   return (
     <AppShell
@@ -57,7 +58,7 @@ const Layout: React.FC = () => {
       {/* MAIN CONTENT */}
       <AppShellMain
         className={
-          currentPathname === "/dashboard" || roleType === "admin"
+          currentPathname === "/dashboard" || tenantType === "admin"
             ? "admin-content admin-container mx-auto px-2 sm:px-6 lg:px-6 xl:pl-0"
             : "content"
         }

@@ -17,7 +17,7 @@ import EditIcn from "../../../assets/svgs/EditIcn";
 
 export default function RoleContainer() {
   const dispatch = useDispatch<AppDispatch>();
-  const { roleType } = useSelector((state: RootState) => state.auth);
+  const { tenantType } = useSelector((state: RootState) => state.auth);
   const subDomain = new URL(window.location.href).hostname.split(".")[0];
 
   const isLoading = useSelector((state: any) => state.tenant.isLoading);
@@ -83,7 +83,7 @@ export default function RoleContainer() {
 
     await dispatch(
       addPermissonRole({
-        role: roleType,
+        role: tenantType,
         payload,
         headers: { "x-tenant-id": subDomain },
       })
@@ -107,7 +107,7 @@ export default function RoleContainer() {
 
   //   await dispatch(
   //     addRole({
-  //       role: roleType,
+  //       role: tenantType,
   //       payload,
   //       headers: { "x-tenant-id": subDomain },
   //     })
@@ -136,7 +136,7 @@ export default function RoleContainer() {
 
     await dispatch(
       addRole({
-        role: roleType,
+        role: tenantType,
         payload,
         headers: { "x-tenant-id": subDomain },
       })
@@ -162,7 +162,7 @@ export default function RoleContainer() {
     if (EditRole?.open || OpenCreateRole) {
       dispatch(
         getPermssion({
-          role: roleType,
+          role: tenantType,
           headers: {
             "x-tenant-id": subDomain,
           },
@@ -172,7 +172,7 @@ export default function RoleContainer() {
 
     dispatch(
       getAllPermissonRole({
-        role: roleType,
+        role: tenantType,
         headers: {
           "x-tenant-id": subDomain,
         },
@@ -182,7 +182,7 @@ export default function RoleContainer() {
     if (EditRole?.open && EditRole?.roleId) {
       dispatch(
         getPermissonRole({
-          role: roleType,
+          role: tenantType,
           id: EditRole?.roleId,
           headers: {
             "x-tenant-id": subDomain,
@@ -195,7 +195,7 @@ export default function RoleContainer() {
   useEffect(() => {
     dispatch(
       getRoles({
-        role: roleType,
+        role: tenantType,
         headers: {
           "x-tenant-id": subDomain,
         },

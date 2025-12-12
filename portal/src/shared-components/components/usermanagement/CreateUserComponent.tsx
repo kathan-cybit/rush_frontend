@@ -1,8 +1,8 @@
 import React from "react";
 import { BackIcon, EditIcon } from "../../../assets/svgs";
-import { CustomBreadCrumbs } from "../../../components/breadCrumbs";
 import { Controller } from "react-hook-form";
 import Select from "react-select";
+import { CustomBreadCrumbs } from "../../ui";
 
 export default function CreateUserComponent({
   register,

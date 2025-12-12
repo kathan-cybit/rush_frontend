@@ -5,7 +5,7 @@ import { error_toast, success_toast } from "../../utils/toaster";
 interface LoginResponse {
   token: string;
   user?: unknown | any;
-  roleType: string;
+  tenantType: string;
   message?: string;
 }
 
@@ -43,7 +43,7 @@ interface AuthState {
   isAuthenticated: boolean;
   currentTenantName: string | null;
   currentTenantId: string | null;
-  roleType: string;
+  tenantType: string;
 }
 const userString = localStorage.getItem("user");
 
@@ -57,7 +57,7 @@ const initialState: AuthState = {
   isAuthenticated: false,
   currentTenantName: null,
   currentTenantId: null,
-  roleType: localStorage.getItem("user_type") || "tenant",
+  tenantType: localStorage.getItem("user_type") || "tenant",
 };
 
 const authSlice = createSlice({
@@ -86,11 +86,11 @@ const authSlice = createSlice({
 
         state.user = action.payload.user;
         state.isAuthenticated = true;
-        state.roleType = action.payload.roleType;
+        state.tenantType = action.payload.tenantType;
 
         localStorage.setItem("user", JSON.stringify(action.payload.user));
         localStorage.setItem("auth_token", action.payload.token);
-        localStorage.setItem("user_type", action.payload.roleType);
+        localStorage.setItem("user_type", action.payload.tenantType);
       })
       .addCase(loginUser.rejected, (state) => {
         state.loading = false;

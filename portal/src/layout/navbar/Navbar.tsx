@@ -1,7 +1,11 @@
 import React from "react";
 import "./navbar.css";
+import { useSelector } from "react-redux";
+import { RootState } from "../../store/store";
 
 export default function Navbar({ toggleSidebar }: any) {
+  const { tenantType, user } = useSelector((state: RootState) => state.auth);
+
   return (
     <nav className="flex items-center p-3 custom-navbar">
       <div className="flex justify-between items-center w-full">
@@ -20,8 +24,16 @@ export default function Navbar({ toggleSidebar }: any) {
             <div className="flex items-center gap-2 nav-profile-parent">
               <div className="nav-profile"></div>
               <div>
-                <h2 className="p-name">Rishabh Gangwar</h2>
-                <h3 className="p-role">Admin</h3>
+                <h2 className="p-name">
+                  {" "}
+                  {tenantType == "admin"
+                    ? user?.username
+                    : user?.first_name + " " + user?.last_name}
+                </h2>
+                <h3 className="p-role">
+                  {" "}
+                  {tenantType == "admin" ? "Admin" : ""}
+                </h3>
               </div>
             </div>
           </div>

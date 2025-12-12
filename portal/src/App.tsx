@@ -24,7 +24,7 @@ function App() {
     }
   }, []);
 
-  const { token, roleType } = useSelector((state: RootState) => state.auth);
+  const { token, tenantType } = useSelector((state: RootState) => state.auth);
   return (
     <>
       {token != "undefined" &&
@@ -32,7 +32,7 @@ function App() {
       token != undefined &&
       token != "null" ? (
         <>
-          {roleType == "tenant" ? (
+          {tenantType == "tenant" ? (
             <Routes>
               <Route path="/" element={<Layout />}>
                 <Route
@@ -50,7 +50,7 @@ function App() {
                 />
               </Route>
             </Routes>
-          ) : roleType == "admin" ? (
+          ) : tenantType == "admin" ? (
             <>
               <Routes>
                 <Route path="/" element={<Layout />}>

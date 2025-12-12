@@ -6,10 +6,9 @@ import { RootState } from "../../store/store";
 import { useSelector } from "react-redux";
 
 export default function AdminNavbar({ toggleSidebar }: any) {
-  const { roleType } = useSelector((state: RootState) => state.auth);
+  const { tenantType, user } = useSelector((state: RootState) => state.auth);
 
   const naviagte = useNavigate();
-
   return (
     <nav className="flex items-center p-3 custom-admin-navbar">
       <div className="px-2 sm:px-6 lg:px-6 xl:pl-0 w-full admin-container">
@@ -29,7 +28,7 @@ export default function AdminNavbar({ toggleSidebar }: any) {
             >
               <img src={logo} />
             </div>
-            {roleType == "admin" && (
+            {tenantType == "admin" && (
               <>
                 <NavLink
                   to="/"
@@ -52,8 +51,14 @@ export default function AdminNavbar({ toggleSidebar }: any) {
               <div className="flex items-center gap-2 nav-profile-parent">
                 <div className="nav-profile"></div>
                 <div>
-                  <h2 className="p-name">Rishabh Gangwar</h2>
-                  <h3 className="p-role">Admin</h3>
+                  <h2 className="p-name">
+                    {tenantType == "admin"
+                      ? user?.username
+                      : user?.first_name + " " + user?.last_name}
+                  </h2>
+                  <h3 className="p-role">
+                    {tenantType == "admin" ? "Admin" : ""}
+                  </h3>
                 </div>
               </div>
             </div>

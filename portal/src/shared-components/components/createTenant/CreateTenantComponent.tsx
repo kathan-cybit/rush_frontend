@@ -3,9 +3,9 @@ import { UseFormRegister, FieldErrors } from "react-hook-form";
 
 import { BackIcon, EditIcon } from "../../../assets/svgs";
 import { useNavigate } from "react-router-dom";
-import { CustomBreadCrumbs } from "../../../components/breadCrumbs";
 import { useSelector } from "react-redux";
 import { RootState } from "../../../store/store";
+import { CustomBreadCrumbs } from "../../ui";
 
 interface TenantFormValues {
   domainname: string;

@@ -35,7 +35,7 @@ export default function DashboardContainer() {
   const { tenants, isLoading } = useSelector(
     (state: RootState) => state.tenant
   );
-  const { user, loading, roleType } = useSelector(
+  const { user, loading, tenantType } = useSelector(
     (state: RootState) => state.auth
   );
   const [host, setHost] = useState<string | null>(null);
@@ -52,7 +52,7 @@ export default function DashboardContainer() {
     const host = new URL(window.location.href).hostname.split(".")[0];
     dispatch(
       getApps({
-        role: roleType,
+        role: tenantType,
         headers: { "x-tenant-id": host },
       })
     );

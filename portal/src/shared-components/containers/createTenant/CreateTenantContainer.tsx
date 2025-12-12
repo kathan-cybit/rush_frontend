@@ -61,7 +61,7 @@ const CreateTenantContainer: React.FC<CreateTenantProps> = ({
   };
 
   const allApps = useSelector((state: RootState) => state.tenant.allApps);
-  const { roleType } = useSelector((state: RootState) => state.auth);
+  const { tenantType } = useSelector((state: RootState) => state.auth);
   // const [licenses, setLicenses] = useState<any>({});
   const [licenses, setLicenses] = useState<any>(() => {
     const initialLicenses: any = {};
@@ -75,7 +75,7 @@ const CreateTenantContainer: React.FC<CreateTenantProps> = ({
     const host = new URL(window.location.href).hostname.split(".")[0];
     dispatch(
       getApps({
-        role: roleType,
+        role: tenantType,
         headers: {
           "x-tenant-id": host,
         },

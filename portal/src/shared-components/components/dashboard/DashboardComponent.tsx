@@ -59,7 +59,7 @@ export default function DashboardComponent({
         {host !== "public" ? (
           <div>
             <h1 className="mb-0 font-fsecondary text-[32px] text-[500] leading-[140%] tracking-[0.25px]">
-              Hi, Rishabh
+              {"hi" + " " + user?.first_name + " " + user?.last_name}
             </h1>
             <span className="font-fsecondary text-[#adadad] text-[14px] text-[500] leading-[140%]">
               Continue to other apps
