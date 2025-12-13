@@ -301,8 +301,8 @@ export const getAllRoleUsers = createAsyncThunk<unknown, any>(
     try {
       const response = await axiosInstance.get(
         props.role != "admin"
-          ? `/users/getAllRolesUsers`
-          : `/admin/getAllRolesUsers`,
+          ? `/users/getallrolesusers`
+          : `/admin/getallrolesusers`,
         { headers: { ...props.headers } }
       );
 
