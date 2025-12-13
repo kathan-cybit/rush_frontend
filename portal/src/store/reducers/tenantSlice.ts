@@ -335,25 +335,6 @@ export const getAllUsersRolesPermissions = createAsyncThunk<unknown, any>(
   }
 );
 
-export const getApps = createAsyncThunk<unknown, any>(
-  "tenant/getApps",
-  async (props, { rejectWithValue }) => {
-    try {
-      const response = await axiosInstance.get(
-        props?.role == "admin" ? `/admin/createapps` : `/users/createapps`,
-        {
-          headers: { ...props.headers },
-        }
-      );
-      return response.data;
-    } catch (err: any) {
-      const error = err.response?.data?.error || err.message;
-      error_toast(error);
-      return rejectWithValue({ error, status: err.response?.status });
-    }
-  }
-);
-
 interface TenantState {
   users: unknown[];
   tenants: unknown[];
@@ -363,7 +344,7 @@ interface TenantState {
   allpermissions: unknown[];
   permissionsRoles: unknown[];
   allpermissionsroles: unknown[];
-  allApps: unknown[];
+
   allUsersRolesPermissions: unknown[];
 }
 
@@ -375,7 +356,7 @@ const initialState: TenantState = {
   permissionsRoles: [],
   allUsersRoles: [],
   allpermissionsroles: [],
-  allApps: [],
+
   allUsersRolesPermissions: [],
   isLoading: false,
 };
@@ -537,17 +518,17 @@ const tenantSlice = createSlice({
       })
       .addCase(getAllUsersRolesPermissions.rejected, (state) => {
         state.isLoading = false;
-      })
-      .addCase(getApps.pending, (state) => {
-        state.isLoading = true;
-      })
-      .addCase(getApps.fulfilled, (state, action) => {
-        state.isLoading = false;
-        state.allApps = action.payload as unknown[];
-      })
-      .addCase(getApps.rejected, (state) => {
-        state.isLoading = false;
       });
+    // .addCase(getApps.pending, (state) => {
+    //   state.isLoading = true;
+    // })
+    // .addCase(getApps.fulfilled, (state, action) => {
+    //   state.isLoading = false;
+    //   state.allApps = action.payload as unknown[];
+    // })
+    // .addCase(getApps.rejected, (state) => {
+    //   state.isLoading = false;
+    // });
   },
 });
 

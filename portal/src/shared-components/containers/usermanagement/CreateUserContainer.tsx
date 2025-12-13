@@ -8,10 +8,10 @@ import {
   createTenantUser,
   fetchUsers,
   getAllRoleUsers,
-  getApps,
   getRoles,
   updateTenantUser,
 } from "../../../store/reducers/tenantSlice";
+import { getLicenseApps } from "../../../store/reducers/licenseSlice";
 
 interface UserFormValues {
   name: string;
@@ -42,11 +42,11 @@ export default function CreateUserContainer({
     useSelector((state: any) => state.tenant.allUsersRoles) || [];
   const [defaultUserRoleOptions, setDefaultUserRoleOptions] = useState([]);
 
-  const allApps = useSelector((state: RootState) => state.tenant.allApps);
+  const allApps = useSelector((state: RootState) => state.license.allApps);
   useEffect(() => {
     const host = new URL(window.location.href).hostname.split(".")[0];
     dispatch(
-      getApps({
+      getLicenseApps({
         role: tenantType,
         headers: { "x-tenant-id": host },
       })

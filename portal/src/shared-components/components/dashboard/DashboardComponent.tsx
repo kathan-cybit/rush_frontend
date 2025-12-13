@@ -32,6 +32,8 @@ interface DashboardProps {
 
 export default function DashboardComponent({
   allApps,
+  allLicenses,
+  filteredApps,
   user,
   host,
   isLoading,
@@ -47,7 +49,6 @@ export default function DashboardComponent({
   menuItems,
   formattedTenants,
 }: any) {
-  console.log(allApps, "allApps");
   return (
     <>
       {(isLoading || loading) && (
@@ -96,32 +97,43 @@ export default function DashboardComponent({
         </div>
       </div>
 
-      {host != "public" && allApps?.length > 0 ? (
+      {host != "public" ? (
         <div className="flex flex-wrap justify-center -mx-3">
-          {allApps.map((e: any, index: number | string) => {
-            return (
-              <div className="px-2 w-1/4">
-                <div className="flex flex-col justify-between items-center hover:shadow-[0_12px_24px_rgba(0,0,0,0.12)] px-4 pt-12 pb-6 border border-[#e4e5e7] border-[1.2px] rounded-[16px] h-[280px] text-center transition-all hover:-translate-y-1.5 duration-200 cursor-pointer">
-                  <div className="max-w-[130px] max-h-[140px]">
-                    <img
-                      className="w-full h-full object-contain"
-                      src={
-                        index == 0
-                          ? ICExpert
-                          : index == 1
-                          ? PoleExpert
-                          : SimExpert
+          {filteredApps?.length > 0 &&
+            filteredApps.map((e: any, index: number | string) => {
+              return (
+                <div className="px-2 w-1/4">
+                  <div className="flex flex-col justify-between items-center hover:shadow-[0_12px_24px_rgba(0,0,0,0.12)] px-4 pt-12 pb-6 border border-[#e4e5e7] border-[1.2px] rounded-[16px] h-[280px] text-center transition-all hover:-translate-y-1.5 duration-200 cursor-pointer">
+                    <div className="max-w-[130px] max-h-[140px]">
+                      <img
+                        className="w-full h-full object-contain"
+                        src={
+                          index == 0
+                            ? ICExpert
+                            : index == 1
+                            ? PoleExpert
+                            : SimExpert
+                        }
+                        alt="Teams"
+                      />
+                    </div>
+                    <h2 className="mb-0 font-fsecondary text-[24px] text-[500] leading-[140%]">
+                      {e?.name}
+                    </h2>
+                    <h2>
+                      Licenses left:{" "}
+                      {
+                        allLicenses.filter(
+                          (license): any =>
+                            license.application_id == e?.id &&
+                            license.status == "free"
+                        )?.length
                       }
-                      alt="Teams"
-                    />
+                    </h2>
                   </div>
-                  <h2 className="mb-0 font-fsecondary text-[24px] text-[500] leading-[140%]">
-                    {e?.name}
-                  </h2>
                 </div>
-              </div>
-            );
-          })}
+              );
+            })}
         </div>
       ) : (
         <>

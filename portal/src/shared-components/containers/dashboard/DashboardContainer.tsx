@@ -2,10 +2,14 @@ import React, { useEffect, useMemo, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 
-import { fetchTenants, getApps } from "../../../store/reducers/tenantSlice";
+import { fetchTenants } from "../../../store/reducers/tenantSlice";
 import { AppDispatch, RootState } from "../../../store/store";
 import { DashboardComponent } from "../../components";
 import { EditIcon, EyeIcon } from "../../../assets/svgs";
+import {
+  getAllLicenses,
+  getLicenseApps,
+} from "../../../store/reducers/licenseSlice";
 
 export default function DashboardContainer() {
   const dispatch = useDispatch<AppDispatch>();
@@ -47,17 +51,26 @@ export default function DashboardContainer() {
 
   const [CurrData, setCurrData] = useState<any>(null);
 
-  const allApps = useSelector((state: RootState) => state.tenant.allApps);
+  const { allApps, allLicenses } = useSelector(
+    (state: RootState) => state.license
+  );
+
   useEffect(() => {
     const host = new URL(window.location.href).hostname.split(".")[0];
     dispatch(
-      getApps({
+      getLicenseApps({
         role: tenantType,
         headers: { "x-tenant-id": host },
       })
     );
+    if (host != "public" && host != "admin") {
+      dispatch(
+        getAllLicenses({
+          headers: { "x-tenant-id": host },
+        })
+      );
+    }
   }, []);
-
   // ── Effects ------------------------------------------------------------
   useEffect(() => {
     const subDomain = new URL(window.location.href).hostname.split(".")[0];
@@ -96,14 +109,32 @@ export default function DashboardContainer() {
       )
     )
   );
-  const formattedTenants = useMemo(() => {
-    if (!tenants) return [];
+  // const formattedTenants = useMemo(() => {
+  //   if (!tenants) return [];
 
-    const allLicenseKeys = Array.from(
-      new Set(
-        tenants.flatMap((t: any) => (t.licenses ? Object.keys(t.licenses) : []))
-      )
-    );
+  //   const allLicenseKeys = Array.from(
+  //     new Set(
+  //       tenants.flatMap((t: any) => (t.licenses ? Object.keys(t.licenses) : []))
+  //     )
+  //   );
+
+  //   return tenants.map((tenant: any) => {
+  //     const row: any = {
+  //       id: tenant.id,
+  //       company: tenant.company_name,
+  //       domain: tenant.domain,
+  //       status: tenant.status,
+  //     };
+
+  //     allLicenseKeys.forEach((app) => {
+  //       row[app] = tenant.licenses?.[app] ?? 0;
+  //     });
+
+  //     return row;
+  //   });
+  // }, [tenants]);
+  const formattedTenants = useMemo(() => {
+    if (!tenants || !allApps) return [];
 
     return tenants.map((tenant: any) => {
       const row: any = {
@@ -113,16 +144,33 @@ export default function DashboardContainer() {
         status: tenant.status,
       };
 
-      allLicenseKeys.forEach((app) => {
-        row[app] = tenant.licenses?.[app] ?? 0;
+      // Normalize licenses array for quick lookup
+      const licenseMap = new Map(
+        (tenant.licenses || []).map((l: any) => [
+          Number(l.application_id),
+          Number(l.count),
+        ])
+      );
+
+      allApps.forEach((app: any) => {
+        row[`app_${app.id}`] = licenseMap.get(app.id) ?? 0;
       });
 
       return row;
     });
-  }, [tenants]);
+  }, [tenants, allApps]);
+
+  const licensedAppIds = new Set(
+    allLicenses?.map((l: any) => l?.application_id)
+  );
+
+  const filteredApps = allApps?.filter((app: any) =>
+    licensedAppIds?.has(app.id)
+  );
 
   const componentProps = {
     allApps,
+    allLicenses,
     user,
     host,
     isLoading,
@@ -137,6 +185,7 @@ export default function DashboardContainer() {
     statusColorMap,
     menuItems,
     formattedTenants,
+    filteredApps,
   };
 
   return <DashboardComponent {...componentProps} />;

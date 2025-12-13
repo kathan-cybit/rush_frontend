@@ -6,10 +6,10 @@ import { AppDispatch, RootState } from "../../../store/store";
 import {
   createTenant,
   fetchTenants,
-  getApps,
   updateTenant,
 } from "../../../store/reducers/tenantSlice";
 import { CreateTenantComponent } from "../../components";
+import { getLicenseApps } from "../../../store/reducers/licenseSlice";
 
 interface TenantFormValues {
   domainname: any;
@@ -49,32 +49,31 @@ const CreateTenantContainer: React.FC<CreateTenantProps> = ({
   const navigate = useNavigate();
   const dispatch = useDispatch<AppDispatch>();
 
-  // const [licenses, setLicenses] = useState<LicensesState>({
-  //   microsoftTeam: 0,
-  //   powerPoint: 0,
-  //   outlook: 0,
-  //   excel: 0,
-  // });
+  const [licenses, setLicenses] = useState<any>([]);
+  const handleLicenseChange = (applicationId: any, value: number) => {
+    setLicenses((prevLicenses: any) => {
+      return prevLicenses.map((license: any) => {
+        if (license.application_id == applicationId) {
+          return {
+            ...license,
+            count: value,
+          };
+        }
 
-  const handleLicenseChange = (app: keyof LicensesState, value: number) => {
-    setLicenses((prev) => ({ ...prev, [app]: value }));
+        return license;
+      });
+    });
   };
 
-  const allApps = useSelector((state: RootState) => state.tenant.allApps);
+  const { allApps, allLicenses } = useSelector(
+    (state: RootState) => state.license
+  );
   const { tenantType } = useSelector((state: RootState) => state.auth);
-  // const [licenses, setLicenses] = useState<any>({});
-  const [licenses, setLicenses] = useState<any>(() => {
-    const initialLicenses: any = {};
-    allApps?.forEach((app: any) => {
-      initialLicenses[app.name] = 0;
-    });
-    return initialLicenses;
-  });
 
   useEffect(() => {
     const host = new URL(window.location.href).hostname.split(".")[0];
     dispatch(
-      getApps({
+      getLicenseApps({
         role: tenantType,
         headers: {
           "x-tenant-id": host,
@@ -116,29 +115,14 @@ const CreateTenantContainer: React.FC<CreateTenantProps> = ({
       setValue("contactemail", CurrData.contactemail || "");
       setValue("phoneNumber", CurrData.phonenumber || "");
 
-      // if (CurrData.licenses) {
-      //   setLicenses({
-      //     microsoftTeam: CurrData.licenses.microsoftTeam || 0,
-      //     powerPoint: CurrData.licenses.powerPoint || 0,
-      //     outlook: CurrData.licenses.outlook || 0,
-      //     excel: CurrData.licenses.excel || 0,
-      //   });
-      // }
       if (allApps?.length) {
-        const dynamicLicenses: any = {};
-        allApps.forEach((app: any) => {
-          dynamicLicenses[app.name] = CurrData?.licenses?.[app.name] || 0;
-        });
-        setLicenses(dynamicLicenses);
+        setLicenses(CurrData?.licenses || []);
       }
     }
   }, [FormStatus?.mode, allApps, CurrData, setValue]);
 
   const onSubmit = async (data: TenantFormValues) => {
     const host = new URL(window.location.href).hostname.split(".")[0];
-    const filteredLicenses: any = Object.fromEntries(
-      Object.entries(licenses).filter(([_, value]) => Number(value) > 0)
-    );
 
     if (!FormStatus?.mode) {
       await dispatch(
@@ -153,7 +137,7 @@ const CreateTenantContainer: React.FC<CreateTenantProps> = ({
             phonenumber: data.phoneNumber,
             contactperson: data.contactperson,
             contactemail: data.contactemail,
-            licenses: filteredLicenses,
+            licenses: licenses,
             schema_name: data.domainname,
           },
           currentTenant: host,
@@ -162,12 +146,7 @@ const CreateTenantContainer: React.FC<CreateTenantProps> = ({
         .unwrap()
         .then(() => {
           reset();
-          setLicenses({
-            microsoftTeam: 0,
-            powerPoint: 0,
-            outlook: 0,
-            excel: 0,
-          });
+          setLicenses([]);
           setFormStatus?.({ mode: null, tenant: null });
           navigate("/dashboard");
         })
@@ -182,7 +161,7 @@ const CreateTenantContainer: React.FC<CreateTenantProps> = ({
             phonenumber: data.phoneNumber,
             contactperson: data.contactperson,
             contactemail: data.contactemail,
-            licenses: filteredLicenses,
+            licenses: licenses,
           },
           id: CurrData.id,
         })
@@ -190,12 +169,7 @@ const CreateTenantContainer: React.FC<CreateTenantProps> = ({
         .unwrap()
         .then(() => {
           reset();
-          setLicenses({
-            microsoftTeam: 0,
-            powerPoint: 0,
-            outlook: 0,
-            excel: 0,
-          });
+          setLicenses([]);
           setFormStatus?.({ mode: null, tenant: null });
           dispatch(fetchTenants(host));
           navigate("/dashboard");
@@ -240,6 +214,7 @@ const CreateTenantContainer: React.FC<CreateTenantProps> = ({
     errors,
     licenses,
     FormStatus,
+    allApps,
     CurrData,
     handleLicenseChange,
     onDiscard,

@@ -38,10 +38,11 @@ interface CreateTenantProps {
   navigate: ReturnType<typeof useNavigate>;
 }
 
-const CreateTenantComponent: React.FC<CreateTenantProps> = ({
+const CreateTenantComponent: React.FC<any> = ({
   register,
   errors,
   licenses,
+  allApps,
   FormStatus = { mode: null, tenant: null },
   CurrData = {},
   handleLicenseChange,
@@ -51,8 +52,6 @@ const CreateTenantComponent: React.FC<CreateTenantProps> = ({
   handleSubmit,
   BreadCrumbItems,
 }) => {
-  const allApps: any = useSelector<RootState>((state) => state.tenant.allApps);
-
   return (
     <>
       <div className="clear-both flex justify-between items-center mb-[40px] overflow-hidden">
@@ -436,26 +435,28 @@ const CreateTenantComponent: React.FC<CreateTenantProps> = ({
               </div>
             </div>
 
-            {allApps?.map((app) => (
-              <div className="table-row" key={app.id}>
-                <div className="row-application">{app.name}</div>
-                <div className="row-input">
-                  <input
-                    disabled={FormStatus?.mode === "view"}
-                    type="number"
-                    className="disabled:bg-[#ced4da] license-input"
-                    value={licenses[app.name] ?? 0}
-                    onChange={(e) =>
-                      handleLicenseChange(
-                        app.name as keyof any,
-                        Number(e.target.value)
-                      )
-                    }
-                    min="0"
-                  />
+            {licenses?.length > 0 &&
+              allApps?.map((app) => (
+                <div className="table-row" key={app.id}>
+                  <div className="row-application">{app.name}</div>
+                  <div className="row-input">
+                    <input
+                      disabled={FormStatus?.mode === "view"}
+                      type="number"
+                      className="disabled:bg-[#ced4da] license-input"
+                      value={
+                        licenses?.find(
+                          (license: any) => license.application_id == app.id
+                        )?.count || 0
+                      }
+                      onChange={(e) =>
+                        handleLicenseChange(app.id, Number(e.target.value))
+                      }
+                      min="0"
+                    />
+                  </div>
                 </div>
-              </div>
-            ))}
+              ))}
             {/* <div className="table-row">
               <div className="row-application">Microsoft Team</div>
               <div className="row-input">
