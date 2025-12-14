@@ -121,7 +121,8 @@ export default function CreateUserContainer({
   const onSubmit = async (data: UserFormValues) => {
     data.assigned_apps = assignedApps;
     const host = new URL(window.location.href).hostname.split(".")[0];
-
+    // debugger;
+    // return;
     if (!FormStatus?.mode) {
       await dispatch(createTenantUser({ payload: data, currentTenant: host }))
         .unwrap()

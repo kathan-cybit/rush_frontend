@@ -36,6 +36,26 @@ export const loginUser = createAsyncThunk<LoginResponse, LoginPayload>(
   }
 );
 
+export const verifyUser = createAsyncThunk<unknown, any>(
+  "auth/verifyUser",
+  async ({ tenant, token }) => {
+    try {
+      const res = await axiosInstance.get<any>(
+        `http://localhost:8080/auth/verify-email?token=${token}&tenant=${tenant}`
+      );
+
+      if (res?.data) {
+        success_toast(res.data.message || "Verifid in successfully");
+      }
+      return res.data;
+    } catch (err: any) {
+      const msg = err.response?.data?.error || err.message;
+      error_toast(msg);
+      return msg;
+    }
+  }
+);
+
 interface AuthState {
   user: any;
   token: string | null;
@@ -93,6 +113,15 @@ const authSlice = createSlice({
         localStorage.setItem("user_type", action.payload.tenantType);
       })
       .addCase(loginUser.rejected, (state) => {
+        state.loading = false;
+      })
+      .addCase(verifyUser.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(verifyUser.fulfilled, (state, action) => {
+        state.loading = false;
+      })
+      .addCase(verifyUser.rejected, (state) => {
         state.loading = false;
       });
   },
