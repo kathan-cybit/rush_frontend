@@ -333,7 +333,6 @@ export default function CreateUserComponent({
                 <input
                   disabled={FormStatus?.mode == "view"}
                   {...register("old_password", {
-                    required: "Password is required",
                     pattern: {
                       value:
                         /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/,
@@ -360,7 +359,6 @@ export default function CreateUserComponent({
                 <input
                   disabled={FormStatus?.mode == "view"}
                   {...register("new_password", {
-                    required: "Password is required",
                     pattern: {
                       value:
                         /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/,
