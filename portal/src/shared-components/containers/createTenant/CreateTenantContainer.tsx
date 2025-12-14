@@ -82,6 +82,17 @@ const CreateTenantContainer: React.FC<CreateTenantProps> = ({
     );
   }, []);
 
+  useEffect(() => {
+    if (allApps?.length > 0 && !FormStatus?.mode) {
+      // Create mode: Initialize with all apps with count 0
+      const initialLicenses = allApps.map((app: any) => ({
+        application_id: app.id,
+        count: 0,
+      }));
+      setLicenses(initialLicenses);
+    }
+  }, [allApps, FormStatus?.mode]);
+
   const {
     register,
     handleSubmit,
@@ -115,8 +126,37 @@ const CreateTenantContainer: React.FC<CreateTenantProps> = ({
       setValue("contactemail", CurrData.contactemail || "");
       setValue("phoneNumber", CurrData.phonenumber || "");
 
+      // if (allApps?.length) {
+      //   debugger;
+      //   const initialLicenses = allApps.map((app: any) => ({
+      //     application_id: app.id,
+      //     count: 0,
+      //   }));
+
+      //   setLicenses(CurrData?.licenses || initialLicenses);
+      // }
       if (allApps?.length) {
-        setLicenses(CurrData?.licenses || []);
+        const existingLicensesMap = new Map();
+        if (CurrData?.licenses && Array.isArray(CurrData.licenses)) {
+          CurrData.licenses.forEach((license) => {
+            existingLicensesMap.set(license.application_id, license);
+          });
+        }
+
+        const finalLicenses = allApps.map((app: any) => {
+          const existingLicense = existingLicensesMap.get(app.id);
+
+          if (existingLicense) {
+            return existingLicense;
+          } else {
+            return {
+              application_id: app.id,
+              count: 0,
+            };
+          }
+        });
+
+        setLicenses(finalLicenses);
       }
     }
   }, [FormStatus?.mode, allApps, CurrData, setValue]);
@@ -146,7 +186,11 @@ const CreateTenantContainer: React.FC<CreateTenantProps> = ({
         .unwrap()
         .then(() => {
           reset();
-          setLicenses([]);
+          const initialLicenses = allApps.map((app: any) => ({
+            application_id: app.id,
+            count: 0,
+          }));
+          setLicenses(initialLicenses);
           setFormStatus?.({ mode: null, tenant: null });
           navigate("/dashboard");
         })
@@ -169,7 +213,11 @@ const CreateTenantContainer: React.FC<CreateTenantProps> = ({
         .unwrap()
         .then(() => {
           reset();
-          setLicenses([]);
+          const initialLicenses = allApps.map((app: any) => ({
+            application_id: app.id,
+            count: 0,
+          }));
+          setLicenses(initialLicenses);
           setFormStatus?.({ mode: null, tenant: null });
           dispatch(fetchTenants(host));
           navigate("/dashboard");

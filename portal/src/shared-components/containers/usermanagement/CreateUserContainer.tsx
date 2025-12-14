@@ -11,7 +11,11 @@ import {
   getRoles,
   updateTenantUser,
 } from "../../../store/reducers/tenantSlice";
-import { getLicenseApps } from "../../../store/reducers/licenseSlice";
+import {
+  getAllLicenses,
+  getLicenseApps,
+  getLicensesCount,
+} from "../../../store/reducers/licenseSlice";
 
 interface UserFormValues {
   name: string;
@@ -42,7 +46,10 @@ export default function CreateUserContainer({
     useSelector((state: any) => state.tenant.allUsersRoles) || [];
   const [defaultUserRoleOptions, setDefaultUserRoleOptions] = useState([]);
 
-  const allApps = useSelector((state: RootState) => state.license.allApps);
+  const { allApps, allLicenseWithCounts, allLicenses } = useSelector(
+    (state: RootState) => state.license
+  );
+
   useEffect(() => {
     const host = new URL(window.location.href).hostname.split(".")[0];
     dispatch(
@@ -51,6 +58,19 @@ export default function CreateUserContainer({
         headers: { "x-tenant-id": host },
       })
     );
+    if (host != "public") {
+      dispatch(
+        getAllLicenses({
+          headers: { "x-tenant-id": host },
+        })
+      );
+
+      dispatch(
+        getLicensesCount({
+          headers: { "x-tenant-id": host },
+        })
+      );
+    }
   }, []);
 
   const {
@@ -90,13 +110,19 @@ export default function CreateUserContainer({
       setValue("pincode", CurrData.pincode);
       setValue("city", CurrData.city);
       setValue("country", CurrData.country);
-      setAssignedApps(CurrData.assigned_apps || []);
+      if (CurrData?.assigned_apps && CurrData?.assigned_apps?.length > 0) {
+        setAssignedApps(CurrData.assigned_apps.map((id: any) => Number(id)));
+      } else {
+        setAssignedApps([]);
+      }
     }
   }, [CurrData, FormStatus?.mode]);
 
   const onSubmit = async (data: UserFormValues) => {
+    debugger;
     data.assigned_apps = assignedApps;
     const host = new URL(window.location.href).hostname.split(".")[0];
+
     if (!FormStatus?.mode) {
       await dispatch(createTenantUser({ payload: data, currentTenant: host }))
         .unwrap()
@@ -232,6 +258,8 @@ export default function CreateUserContainer({
         control={control}
         allRoles={allRoles}
         allApps={allApps}
+        allLicenseWithCounts={allLicenseWithCounts}
+        allLicenses={allLicenses}
       />
     </div>
   );

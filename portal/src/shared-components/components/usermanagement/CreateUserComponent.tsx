@@ -1,10 +1,11 @@
-import React from "react";
+import React, { useMemo } from "react";
 import { BackIcon, EditIcon } from "../../../assets/svgs";
 import { Controller } from "react-hook-form";
 import Select from "react-select";
 import { CustomBreadCrumbs } from "../../ui";
 
 export default function CreateUserComponent({
+  allLicenseWithCounts,
   register,
   errors,
   navigate,
@@ -21,7 +22,24 @@ export default function CreateUserComponent({
   roleOptions,
   allApps,
   defaultUserRoleOptions,
+  allLicenses,
 }) {
+  const licensedAppIdSet = useMemo(() => {
+    const set = new Set<number>();
+    allLicenses?.forEach((l: any) => {
+      set.add(Number(l.application_id));
+    });
+    return set;
+  }, [allLicenses]);
+
+  const licenseCountMap = useMemo(() => {
+    const map: any = {};
+    allLicenseWithCounts?.forEach((l: any) => {
+      map[l.application_id] = l.count;
+    });
+    return map;
+  }, [allLicenseWithCounts]);
+  console.log(allLicenses, "allLicenses", allApps, "allApps");
   return (
     <>
       <div className="clear-both flex justify-between items-center mb-[40px] overflow-hidden">
@@ -334,28 +352,66 @@ export default function CreateUserComponent({
           </h3>
 
           <div className="flex flex-wrap justify-center mb-[20px] px-[12px] w-full">
-            {allApps?.length > 0 &&
-              allApps.map((app: any) => (
-                <div key={app.name} className="mb-[10px] w-[25%]">
-                  <label className="flex items-center gap-2 text-[#1f2937] text-[14px]">
-                    <input
-                      type="checkbox"
-                      disabled={FormStatus?.mode === "view"}
-                      checked={assignedApps.includes(app.name)}
-                      onChange={() => {
-                        if (assignedApps.includes(app.name)) {
-                          setAssignedApps(
-                            assignedApps.filter((x) => x !== app.name)
+            {/* {allApps?.length > 0 &&
+              allApps.map((app: any) => {
+                const availableCount = licenseCountMap[app.id] ?? 0;
+
+                return (
+                  <div key={app.id} className="mb-[10px] w-[25%]">
+                    <label className="flex items-center gap-2 text-[#1f2937] text-[14px]">
+                      <input
+                        type="checkbox"
+                        disabled={FormStatus?.mode == "view"}
+                        checked={assignedApps.includes(app.id)}
+                        onChange={() => {
+                          setAssignedApps((prev: number[]) =>
+                            prev.includes(app.id)
+                              ? prev.filter((x) => x != app.id)
+                              : [...prev, app.id]
                           );
-                        } else {
-                          setAssignedApps([...assignedApps, app.name]);
-                        }
-                      }}
-                    />
-                    {app.name}
-                  </label>
-                </div>
-              ))}
+                        }}
+                      />
+                      {app.name}
+                      <span className="text-gray-500 text-xs">
+                        ({availableCount} available)
+                      </span>
+                    </label>
+                  </div>
+                );
+              })} */}
+            {allApps?.length > 0 &&
+              allApps
+                .filter((app: any) => licensedAppIdSet.has(app.id))
+                .map((app: any) => {
+                  const availableCount = licenseCountMap[app.id] ?? 0;
+                  const isAssigned = assignedApps.includes(app.id);
+
+                  return (
+                    <div key={app.id} className="mb-[10px] w-[25%]">
+                      <label className="flex items-center gap-2 text-[#1f2937] text-[14px]">
+                        <input
+                          type="checkbox"
+                          disabled={
+                            FormStatus?.mode === "view" ||
+                            (!isAssigned && availableCount <= 0)
+                          }
+                          checked={isAssigned}
+                          onChange={() => {
+                            setAssignedApps((prev: number[]) =>
+                              prev.includes(app.id)
+                                ? prev.filter((x) => x !== app.id)
+                                : [...prev, app.id]
+                            );
+                          }}
+                        />
+                        {app.name}
+                        <span className="text-gray-500 text-xs">
+                          ({availableCount} available)
+                        </span>
+                      </label>
+                    </div>
+                  );
+                })}
           </div>
 
           {FormStatus?.mode != "view" && (

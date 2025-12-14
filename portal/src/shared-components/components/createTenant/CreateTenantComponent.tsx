@@ -441,7 +441,7 @@ const CreateTenantComponent: React.FC<any> = ({
                   <div className="row-application">{app.name}</div>
                   <div className="row-input">
                     <input
-                      disabled={FormStatus?.mode === "view"}
+                      disabled={FormStatus?.mode == "view"}
                       type="number"
                       className="disabled:bg-[#ced4da] license-input"
                       value={

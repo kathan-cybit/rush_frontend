@@ -8,6 +8,7 @@ import { DashboardComponent } from "../../components";
 import { EditIcon, EyeIcon } from "../../../assets/svgs";
 import {
   getAllLicenses,
+  getAllTenantsWithLicenses,
   getLicenseApps,
 } from "../../../store/reducers/licenseSlice";
 
@@ -51,7 +52,7 @@ export default function DashboardContainer() {
 
   const [CurrData, setCurrData] = useState<any>(null);
 
-  const { allApps, allLicenses } = useSelector(
+  const { allApps, allLicenses, allTenantWithLicenses } = useSelector(
     (state: RootState) => state.license
   );
 
@@ -67,6 +68,12 @@ export default function DashboardContainer() {
       dispatch(
         getAllLicenses({
           headers: { "x-tenant-id": host },
+        })
+      );
+    } else {
+      dispatch(
+        getAllTenantsWithLicenses({
+          headers: { "x-tenant-id": "public" },
         })
       );
     }
@@ -109,30 +116,7 @@ export default function DashboardContainer() {
       )
     )
   );
-  // const formattedTenants = useMemo(() => {
-  //   if (!tenants) return [];
 
-  //   const allLicenseKeys = Array.from(
-  //     new Set(
-  //       tenants.flatMap((t: any) => (t.licenses ? Object.keys(t.licenses) : []))
-  //     )
-  //   );
-
-  //   return tenants.map((tenant: any) => {
-  //     const row: any = {
-  //       id: tenant.id,
-  //       company: tenant.company_name,
-  //       domain: tenant.domain,
-  //       status: tenant.status,
-  //     };
-
-  //     allLicenseKeys.forEach((app) => {
-  //       row[app] = tenant.licenses?.[app] ?? 0;
-  //     });
-
-  //     return row;
-  //   });
-  // }, [tenants]);
   const formattedTenants = useMemo(() => {
     if (!tenants || !allApps) return [];
 
@@ -144,17 +128,26 @@ export default function DashboardContainer() {
         status: tenant.status,
       };
 
-      // Normalize licenses array for quick lookup
-      const licenseMap = new Map(
-        (tenant.licenses || []).map((l: any) => [
-          Number(l.application_id),
-          Number(l.count),
-        ])
-      );
+      if (Object.values(tenant?.licenses)?.length > 0) {
+        // Normalize licenses array for quick lookup
+        const licenseMap = new Map(
+          (tenant.licenses || []).map((l: any) => [
+            Number(l.application_id),
+            Number(l.count),
+          ])
+        );
 
-      allApps.forEach((app: any) => {
-        row[`app_${app.id}`] = licenseMap.get(app.id) ?? 0;
-      });
+        // allApps.forEach((app: any) => {
+        //   row[`${app.name}`] = licenseMap.get(app.id) ?? 0;
+        // });
+        allApps.forEach((app: any) => {
+          if (!licenseMap.has(app.id)) {
+            row[`${app.name}`] = "N/A";
+          } else {
+            row[`${app.name}`] = licenseMap.get(app.id) ?? 0;
+          }
+        });
+      }
 
       return row;
     });
