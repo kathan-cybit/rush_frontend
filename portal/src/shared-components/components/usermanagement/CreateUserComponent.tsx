@@ -39,7 +39,6 @@ export default function CreateUserComponent({
     });
     return map;
   }, [allLicenseWithCounts]);
-  console.log(allLicenses, "allLicenses", allApps, "allApps");
   return (
     <>
       <div className="clear-both flex justify-between items-center mb-[40px] overflow-hidden">

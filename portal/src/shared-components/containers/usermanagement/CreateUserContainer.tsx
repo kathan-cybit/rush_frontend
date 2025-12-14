@@ -119,7 +119,6 @@ export default function CreateUserContainer({
   }, [CurrData, FormStatus?.mode]);
 
   const onSubmit = async (data: UserFormValues) => {
-    debugger;
     data.assigned_apps = assignedApps;
     const host = new URL(window.location.href).hostname.split(".")[0];
 
