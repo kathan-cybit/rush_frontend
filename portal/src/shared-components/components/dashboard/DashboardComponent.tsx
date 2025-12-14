@@ -144,7 +144,10 @@ export default function DashboardComponent({
                   <div className="flex justify-between items-start p-[16px] border border-[#e4e5e7] border-[1.2px] rounded-[16px] h-[135px] text-center cursor-pointer">
                     <div className="flex flex-col">
                       <span className="font-fsecondary text-[400] text-[56px] text-textPrimary text-start">
-                        25
+                        {
+                          tenants?.filter((item) => item.status == "active")
+                            .length
+                        }
                       </span>
                       <span className="text-[#555555] text-[14px] text-[400] leading-[140%]">
                         Active tenants
@@ -164,17 +167,20 @@ export default function DashboardComponent({
                   <div className="flex justify-between items-start p-[16px] border border-[#e4e5e7] border-[1.2px] rounded-[16px] h-[135px] text-center cursor-pointer">
                     <div className="flex flex-col">
                       <span className="font-fsecondary text-[400] text-[56px] text-textPrimary text-start">
-                        13
+                        {
+                          tenants?.filter((item) => item.status != "active")
+                            .length
+                        }
                       </span>
                       <span className="text-[#555555] text-[14px] text-[400] leading-[140%]">
                         Inactive tenants
                       </span>
                     </div>
                     <div>
-                      <span className={`badge-parent active`}>
-                        <span className={`status-badge active`}>
+                      <span className={`badge-parent inactive`}>
+                        <span className={`status-badge inactive`}>
                           <span className="status-dot"></span>
-                          {"active"}
+                          {"Inactive"}
                         </span>
                       </span>
                     </div>
@@ -184,7 +190,7 @@ export default function DashboardComponent({
                   <div className="flex justify-between items-start p-[16px] border border-[#e4e5e7] border-[1.2px] rounded-[16px] h-[135px] text-center cursor-pointer">
                     <div className="flex flex-col">
                       <span className="font-fsecondary text-[400] text-[56px] text-textPrimary text-start">
-                        2
+                        0
                       </span>
                       <span className="text-[#555555] text-[14px] text-[400] leading-[140%]">
                         Renewals due next week

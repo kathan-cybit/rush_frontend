@@ -137,16 +137,16 @@ export default function DashboardContainer() {
           ])
         );
 
-        // allApps.forEach((app: any) => {
-        //   row[`${app.name}`] = licenseMap.get(app.id) ?? 0;
-        // });
         allApps.forEach((app: any) => {
-          if (!licenseMap.has(app.id)) {
-            row[`${app.name}`] = "N/A";
-          } else {
-            row[`${app.name}`] = licenseMap.get(app.id) ?? 0;
-          }
+          row[`${app.name}`] = licenseMap.get(app.id) ?? 0;
         });
+        // allApps.forEach((app: any) => {
+        //   if (!licenseMap.has(app.id)) {
+        //     row[`${app.name}`] = "N/A";
+        //   } else {
+        //     row[`${app.name}`] = licenseMap.get(app.id) ?? 0;
+        //   }
+        // });
       }
 
       return row;
