@@ -12,6 +12,7 @@ import {
   SimExpert,
   TeamsImg,
 } from "../../../assets/img";
+import { redirect } from "react-router-dom";
 
 interface DashboardProps {
   host: string | null;
@@ -32,6 +33,7 @@ interface DashboardProps {
 
 export default function DashboardComponent({
   allApps,
+  token,
   allLicenses,
   filteredApps,
   user,
@@ -49,6 +51,7 @@ export default function DashboardComponent({
   menuItems,
   formattedTenants,
 }: any) {
+  console.log(token, "token");
   return (
     <>
       {(isLoading || loading) && (
@@ -103,7 +106,11 @@ export default function DashboardComponent({
             filteredApps.map((e: any, index: number | string) => {
               return (
                 <div className="px-2 w-1/4">
-                  <div className="flex flex-col justify-between items-center hover:shadow-[0_12px_24px_rgba(0,0,0,0.12)] px-4 pt-12 pb-6 border border-[#e4e5e7] border-[1.2px] rounded-[16px] h-[280px] text-center transition-all hover:-translate-y-1.5 duration-200 cursor-pointer">
+                  <a
+                    href={`${e.url}?token=${token}&domain=${host}`}
+                    target="_blank"
+                    className="flex flex-col justify-between items-center hover:shadow-[0_12px_24px_rgba(0,0,0,0.12)] px-4 pt-12 pb-6 border border-[#e4e5e7] border-[1.2px] rounded-[16px] h-[280px] text-center transition-all hover:-translate-y-1.5 duration-200 cursor-pointer"
+                  >
                     <div className="max-w-[130px] max-h-[140px]">
                       <img
                         className="w-full h-full object-contain"
@@ -121,7 +128,7 @@ export default function DashboardComponent({
                       {e?.name}
                     </h2>
                     <h2>
-                      Licenses left:{" "}
+                      Licenurlses left:{" "}
                       {
                         allLicenses.filter(
                           (license): any =>
@@ -130,7 +137,7 @@ export default function DashboardComponent({
                         )?.length
                       }
                     </h2>
-                  </div>
+                  </a>
                 </div>
               );
             })}

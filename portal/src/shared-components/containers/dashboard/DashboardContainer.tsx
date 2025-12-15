@@ -40,7 +40,7 @@ export default function DashboardContainer() {
   const { tenants, isLoading } = useSelector(
     (state: RootState) => state.tenant
   );
-  const { user, loading, tenantType } = useSelector(
+  const { user, loading, tenantType, token } = useSelector(
     (state: RootState) => state.auth
   );
   const [host, setHost] = useState<string | null>(null);
@@ -178,6 +178,7 @@ export default function DashboardContainer() {
     statusColorMap,
     menuItems,
     formattedTenants,
+    token,
     filteredApps,
   };
 
