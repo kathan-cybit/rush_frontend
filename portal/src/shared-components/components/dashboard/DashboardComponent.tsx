@@ -32,6 +32,7 @@ interface DashboardProps {
 }
 
 export default function DashboardComponent({
+  hasManageOrgSettings,
   allApps,
   token,
   allLicenses,
@@ -50,6 +51,7 @@ export default function DashboardComponent({
   statusColorMap,
   menuItems,
   formattedTenants,
+  allTenantWithLicenses,
 }: any) {
   return (
     <>
@@ -82,29 +84,46 @@ export default function DashboardComponent({
             )}
           </>
         )}
-        <div>
-          {!FormStatus.mode && (
-            <div
-              onClick={handleCreateTenant}
-              className="px-[20px] py-[12px] rounded-[8px] max-w-[200px] primaryc-btn"
-            >
-              <div className="flex justify-between items-center gap-2">
-                <div>{host !== "public" ? <AuthIcn /> : "＋"}</div>
-                <span>
-                  {host !== "public" ? "Go to Admin Panel" : "New Tenant"}
-                </span>
+        {host != "public" &&
+        (hasManageOrgSettings || user?.is_default_admin) ? (
+          <div>
+            {!FormStatus.mode && (
+              <div
+                onClick={handleCreateTenant}
+                className="px-[20px] py-[12px] rounded-[8px] max-w-[200px] primaryc-btn"
+              >
+                <div className="flex justify-between items-center gap-2">
+                  <div>{<AuthIcn />}</div>
+                  <span>{"Go to Admin Panel"}</span>
+                </div>
               </div>
-            </div>
-          )}
-        </div>
+            )}
+          </div>
+        ) : host == "public" ? (
+          <div>
+            {!FormStatus.mode && (
+              <div
+                onClick={handleCreateTenant}
+                className="px-[20px] py-[12px] rounded-[8px] max-w-[200px] primaryc-btn"
+              >
+                <div className="flex justify-between items-center gap-2">
+                  <div>{"＋"}</div>
+                  <span>{"New Tenant"}</span>
+                </div>
+              </div>
+            )}
+          </div>
+        ) : (
+          <></>
+        )}
       </div>
 
-      {host != "public" ? (
+      {host != "public" && (hasManageOrgSettings || user?.is_default_admin) ? (
         <div className="flex flex-wrap justify-center -mx-3">
           {filteredApps?.length > 0 &&
             filteredApps.map((e: any, index: number | string) => {
               return (
-                <div className="px-2 w-1/4">
+                <div className="px-2 w-1/4" key={index}>
                   <a
                     href={`${e.url}?token=${token}&domain=${host}`}
                     target="_blank"
@@ -134,6 +153,12 @@ export default function DashboardComponent({
                             license.application_id == e?.id &&
                             license.status == "free"
                         )?.length
+                      }{" "}
+                      out of{" "}
+                      {
+                        allLicenses?.filter((f: any) => {
+                          return f?.application_id == e?.id;
+                        })?.length
                       }
                     </h2>
                   </a>
@@ -141,7 +166,7 @@ export default function DashboardComponent({
               );
             })}
         </div>
-      ) : (
+      ) : host == "public" ? (
         <>
           {!FormStatus.mode ? (
             <>
@@ -228,6 +253,8 @@ export default function DashboardComponent({
             </>
           )}
         </>
+      ) : (
+        <></>
       )}
     </>
   );

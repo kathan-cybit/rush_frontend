@@ -2,7 +2,10 @@ import React, { useEffect, useMemo, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 
-import { fetchTenants } from "../../../store/reducers/tenantSlice";
+import {
+  fetchTenants,
+  getAllUsersRolesPermissions,
+} from "../../../store/reducers/tenantSlice";
 import { AppDispatch, RootState } from "../../../store/store";
 import { DashboardComponent } from "../../components";
 import { EditIcon, EyeIcon } from "../../../assets/svgs";
@@ -37,7 +40,7 @@ export default function DashboardContainer() {
     inactive: "red",
   };
 
-  const { tenants, isLoading } = useSelector(
+  const { tenants, isLoading, allUsersRolesPermissions } = useSelector(
     (state: RootState) => state.tenant
   );
   const { user, loading, tenantType, token } = useSelector(
@@ -56,6 +59,14 @@ export default function DashboardContainer() {
     (state: RootState) => state.license
   );
 
+  const hasManageOrgSettings = useMemo(() => {
+    return allUsersRolesPermissions?.roles?.some((role) =>
+      role.permissions?.some(
+        (perm) => perm.name === "Manage Organization Settings"
+      )
+    );
+  }, [allUsersRolesPermissions]);
+
   useEffect(() => {
     const host = new URL(window.location.href).hostname.split(".")[0];
     dispatch(
@@ -70,6 +81,12 @@ export default function DashboardContainer() {
           headers: { "x-tenant-id": host },
         })
       );
+      dispatch(
+        getAllUsersRolesPermissions({
+          params: user?.id,
+          headers: { "x-tenant-id": host },
+        })
+      );
     } else {
       dispatch(
         getAllTenantsWithLicenses({
@@ -78,6 +95,7 @@ export default function DashboardContainer() {
       );
     }
   }, []);
+
   // ── Effects ------------------------------------------------------------
   useEffect(() => {
     const subDomain = new URL(window.location.href).hostname.split(".")[0];
@@ -138,7 +156,11 @@ export default function DashboardContainer() {
         );
 
         allApps.forEach((app: any) => {
-          row[`${app.name}`] = licenseMap.get(app.id) ?? 0;
+          row[`${app.name}`] = `${licenseMap.get(app.id) ?? 0}/${
+            allTenantWithLicenses[0]?.licenses?.filter((e: any) => {
+              return e?.application_id == app.id;
+            })?.length
+          }`;
         });
         // allApps.forEach((app: any) => {
         //   if (!licenseMap.has(app.id)) {
@@ -180,6 +202,8 @@ export default function DashboardContainer() {
     formattedTenants,
     token,
     filteredApps,
+    allTenantWithLicenses,
+    hasManageOrgSettings,
   };
 
   return <DashboardComponent {...componentProps} />;

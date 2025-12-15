@@ -77,7 +77,7 @@ interface licenseState {
   allLicenses: unknown[];
   allApps: unknown[];
   allLicenseWithCounts: unknown[];
-  allTenantWithLicenses: unknown[];
+  allTenantWithLicenses: any[];
 }
 
 const initialState: licenseState = {

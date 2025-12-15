@@ -17,7 +17,7 @@ export default function LicenseContainer() {
     if (currentTenantName) {
       dispatch(
         fetchUsers({
-          url: `http://localhost:8080/api/users?tenant=${currentTenantName}`,
+          url: `/users?tenant=${currentTenantName}`,
         })
       );
     }

@@ -20,7 +20,7 @@ export const loginUser = createAsyncThunk<LoginResponse, LoginPayload>(
   async ({ currentTenantName, email, password }) => {
     try {
       const res = await axiosInstance.post<LoginResponse>(
-        `http://localhost:8080/auth/login?tenant=${currentTenantName}`,
+        `/auth/login?tenant=${currentTenantName}`,
         { email, password }
       );
 
@@ -41,7 +41,7 @@ export const verifyUser = createAsyncThunk<unknown, any>(
   async ({ tenant, token }) => {
     try {
       const res = await axiosInstance.get<any>(
-        `http://localhost:8080/auth/verify-email?token=${token}&tenant=${tenant}`
+        `/auth/verify-email?token=${token}&tenant=${tenant}`
       );
 
       if (res?.data) {

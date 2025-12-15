@@ -149,7 +149,7 @@ export default function CreateUserContainer({
           setAssignedApps([]);
           dispatch(
             fetchUsers({
-              url: `http://localhost:8080/api/users?tenant=${host}`,
+              url: `/users?tenant=${host}`,
             })
           );
           navigate("/usermanagement");

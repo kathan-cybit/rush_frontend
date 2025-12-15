@@ -220,7 +220,7 @@ export const getRoles = createAsyncThunk<unknown, any>(
   async (props, { rejectWithValue }) => {
     try {
       const response = await axiosInstance.get(
-        props.role != "admin" ? `/users/addroles` : "/admin/addroles",
+        props.role != "admin" ? `/users/getroles` : "/admin/getroles",
         { headers: { ...props.headers } }
       );
       return response.data;
@@ -320,9 +320,9 @@ export const getAllUsersRolesPermissions = createAsyncThunk<unknown, any>(
   async (props, { rejectWithValue }) => {
     try {
       const response = await axiosInstance.get(
-        props.role != "admin"
-          ? `/users/getAllUsersRolesPermissions`
-          : `/admin/getAllUsersRolesPermissions`,
+        props.params
+          ? `/users/roles-permissions?id=${props.params}`
+          : `/users/roles-permissions`,
         { headers: { ...props.headers } }
       );
 
