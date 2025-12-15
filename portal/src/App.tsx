@@ -1,6 +1,6 @@
 import "./App.css";
 import { Route, Routes, Navigate } from "react-router-dom";
-import Layout from "./layout";
+import Layout from "./layout/Layout";
 import License from "./pages/license/License";
 import Users from "./pages/usermanagement/Users";
 import { useDispatch, useSelector } from "react-redux";
@@ -40,7 +40,7 @@ function App() {
                   element={<Navigate to="/dashboard" replace />}
                 />
                 <Route path="dashboard" element={<Dashboard />} />
-                <Route path="license" element={<License />} />
+                {/* <Route path="license" element={<License />} /> */}
                 <Route path="usermanagement" element={<Users />} />
                 <Route path="roles" element={<Roles />} />
                 <Route path="createUser" element={<CreateUser />} />

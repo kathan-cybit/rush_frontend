@@ -1,4 +1,4 @@
-import logo from "./Logo_Eiris.png";
+import logo from "./EIRIS Master.jpg";
 import ExcelImg from "./Excel.png";
 import OutlookImg from "./Outlook.png";
 import PpImg from "./PowerPoint.png";

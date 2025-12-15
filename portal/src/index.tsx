@@ -7,7 +7,8 @@ import { store } from "./store/store";
 import toast, { Toaster } from "react-hot-toast";
 import { MantineProvider } from "@mantine/core";
 import "@fortawesome/fontawesome-free/css/all.css";
-
+import "@mantine/dates/styles.css";
+import "@mantine/notifications/styles.css";
 import "@mantine/core/styles.css";
 import "./index.css";
 

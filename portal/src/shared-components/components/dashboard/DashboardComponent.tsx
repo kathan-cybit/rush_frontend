@@ -51,7 +51,6 @@ export default function DashboardComponent({
   menuItems,
   formattedTenants,
 }: any) {
-  console.log(token, "token");
   return (
     <>
       {(isLoading || loading) && (
@@ -128,7 +127,7 @@ export default function DashboardComponent({
                       {e?.name}
                     </h2>
                     <h2>
-                      Licenurlses left:{" "}
+                      Licenses left:{" "}
                       {
                         allLicenses.filter(
                           (license): any =>

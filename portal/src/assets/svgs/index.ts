@@ -6,6 +6,7 @@ import AuthIcn from "./AuthIcn";
 import EditIcon from "./EditIcn";
 import EyeIcon from "./EyeIcn";
 import BackIcon from "./BackIcn";
+import HomeIcn from "./HomeIcn";
 
 export {
   ErisLoginLogo,
@@ -15,5 +16,6 @@ export {
   AuthIcn,
   EditIcon,
   EyeIcon,
+  HomeIcn,
   BackIcon,
 };
