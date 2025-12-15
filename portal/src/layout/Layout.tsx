@@ -97,7 +97,7 @@ const Layout: React.FC = () => {
         })
       );
     }
-  });
+  }, []);
   return (
     <AppShell
       header={{ height: 60 }}
