@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import "./navbar.css";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "../../store/store";
-import { Group, Header } from "@eiris/common-ui-react";
+import { Group, Header } from "../../shared-components/ui";
 import { logo } from "../../assets/img";
 import { useNavigate } from "react-router-dom";
 import { setLogout } from "../../store/reducers/authSlice";

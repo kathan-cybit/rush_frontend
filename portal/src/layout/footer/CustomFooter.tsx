@@ -1,5 +1,5 @@
 import React from "react";
-import { Footer as ErisFooter } from "@eiris/common-ui-react";
+import { Footer as ErisFooter } from "../../shared-components/ui";
 
 export default function CustomFooter() {
   return (

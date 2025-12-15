@@ -4,7 +4,7 @@ import "./navbar.css";
 import { NavLink, useNavigate } from "react-router-dom";
 import { AppDispatch, RootState } from "../../store/store";
 import { useDispatch, useSelector } from "react-redux";
-import { Group, Header } from "@eiris/common-ui-react";
+import { Group, Header } from "../../shared-components/ui";
 import { setLogout } from "../../store/reducers/authSlice";
 
 export default function AdminNavbar({ toggleSidebar }: any) {
