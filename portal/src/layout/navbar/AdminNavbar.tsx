@@ -7,26 +7,14 @@ import { useDispatch, useSelector } from "react-redux";
 import { Group, Header } from "../../shared-components/ui";
 import { setLogout } from "../../store/reducers/authSlice";
 
-export default function AdminNavbar({ toggleSidebar }: any) {
-  const { tenantType, user } = useSelector((state: RootState) => state.auth);
-
-  const navigate = useNavigate();
-  const dispatch = useDispatch<AppDispatch>();
-  const handleNavigateHome = () => {
-    navigate("/");
-  };
-  const handleNavigateProfile = () => {
-    navigate("/");
-  };
-
-  const handleNavigateSettings = () => {
-    navigate("/");
-  };
-  const handleLogout = () => {
-    dispatch(setLogout());
-    navigate("/login");
-  };
-  const [isOpen, setIsOpen] = useState(false);
+export default function AdminNavbar({
+  handleLogout,
+  handleNavigateSettings,
+  handleNavigateHome,
+  handleNavigateProfile,
+  setIsOpen,
+  isOpen,
+}: any) {
   return (
     <Header
       logo={

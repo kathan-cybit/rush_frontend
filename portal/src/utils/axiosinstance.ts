@@ -1,8 +1,9 @@
 import axios from "axios";
 import { error_toast } from "./toaster";
 
-const baseURL = process.env.REACT_APP_BACKEND_URL;
-
+// const baseURL = process.env.REACT_APP_BACKEND_URL;
+const host = new URL(window.location.href).hostname;
+const baseURL = `http://${host}:8080/api`;
 const axiosInstance = axios.create({
   baseURL,
   headers: {

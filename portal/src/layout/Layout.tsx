@@ -1,24 +1,103 @@
-import React, { useState } from "react";
-import { useSelector } from "react-redux";
-import { Outlet, useLocation } from "react-router-dom";
+import React, { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { Outlet, useLocation, useNavigate } from "react-router-dom";
 
 import Sidebar from "./sidebar/Sidebar";
 import AdminNavbar from "./navbar/AdminNavbar";
 import "./layout.css";
-import { RootState } from "../store/store";
+import { AppDispatch, RootState } from "../store/store";
 import { AppShell, AppShellMain } from "../shared-components/ui";
 import CustomFooter from "./footer/CustomFooter";
-
+import { setLogout } from "../store/reducers/authSlice";
+import { HomeIcn, RoleIcn, UserIcn } from "../assets/svgs";
+import { useMediaQuery } from "@mantine/hooks";
+import { getAllUsersRolesPermissions } from "../store/reducers/tenantSlice";
 const Layout: React.FC = () => {
+  const navigate = useNavigate();
+  const dispatch = useDispatch<AppDispatch>();
   const location = useLocation();
-  const currentPathname = location.pathname;
 
-  const [isOpen, setIsOpen] = useState<boolean>(false);
-  const toggleSidebar = (): void => setIsOpen((prev) => !prev);
+  const { tenantType, user } = useSelector((state: RootState) => state.auth);
 
-  const { tenantType } = useSelector((state: RootState) => state.auth);
+  const { tenants, isLoading, allUsersRolesPermissions } = useSelector(
+    (state: RootState) => state.tenant
+  );
   const [collapsed, setCollapsed] = useState(true);
   const [opened, setOpened] = useState(false);
+
+  const handleNavigateHome = () => {
+    navigate("/");
+  };
+  const handleNavigateProfile = () => {
+    navigate("/");
+  };
+
+  const handleNavigateSettings = () => {
+    navigate("/");
+  };
+  const handleLogout = () => {
+    dispatch(setLogout());
+    navigate("/login");
+  };
+  const [isOpen, setIsOpen] = useState(false);
+
+  const toggleCollapsed = () => setCollapsed((c) => !c);
+
+  const isMobile = useMediaQuery("(max-width: 768px)");
+
+  const getActiveNavItem = () => {
+    const path = location.pathname;
+    if (path === "/") return "home";
+    return "dashboard";
+  };
+  const host = new URL(window.location.href).hostname.split(".")[0];
+
+  const navItems =
+    tenantType != "admin"
+      ? [
+          // {
+          //   key: "license",
+          //   label: "License Management",
+          //   icon: LicenseIcn,
+          // },
+          {
+            key: "home",
+            label: "Go Home",
+            icon: HomeIcn,
+          },
+          {
+            key: "usermanagement",
+            label: "User Management",
+            icon: UserIcn,
+          },
+          {
+            key: "roles",
+            label: "Role & Permissions",
+            icon: RoleIcn,
+          },
+        ]
+      : [
+          {
+            key: "roles",
+            label: "Role & Permissions",
+            icon: RoleIcn,
+          },
+          {
+            key: "home",
+            label: "Go Home",
+            icon: HomeIcn,
+          },
+        ];
+  useEffect(() => {
+    if (host != null && host != "" && host != "public" && host != "admin") {
+      dispatch(
+        getAllUsersRolesPermissions({
+          params: user?.id,
+          headers: { "x-tenant-id": host },
+        })
+      );
+    }
+  });
   return (
     <AppShell
       header={{ height: 60 }}
@@ -30,8 +109,22 @@ const Layout: React.FC = () => {
         collapsed: { mobile: !opened },
       }}
     >
-      <AdminNavbar toggleSidebar={toggleSidebar} />
-      <Sidebar tenantType={tenantType} />
+      <AdminNavbar
+        isOpen={isOpen}
+        setIsOpen={setIsOpen}
+        handleNavigateProfile={handleNavigateProfile}
+        handleNavigateHome={handleNavigateHome}
+        handleNavigateSettings={handleNavigateSettings}
+        handleLogout={handleLogout}
+      />
+      <Sidebar
+        tenantType={tenantType}
+        getActiveNavItem={getActiveNavItem}
+        toggleCollapsed={toggleCollapsed}
+        collapsed={collapsed}
+        navItems={navItems}
+        isMobile={isMobile}
+      />
 
       <AppShellMain
         className="flex flex-col h-full overflow-hidden"

@@ -23,66 +23,16 @@ import {
 import { useState } from "react";
 import BackIcn from "../../assets/svgs/BackIcn";
 
-export default function Sidebar({ tenantType }: any) {
-  const pathName = useLocation()?.pathname;
-  const navigate = useNavigate();
-  const theme = useMantineTheme();
-
-  const [collapsed, setCollapsed] = useState(true);
-  const [opened, setOpened] = useState(false);
-
-  const toggleCollapsed = () => setCollapsed((c) => !c);
-  const toggleOpened = () => setOpened((o) => !o);
-  const isMobile = useMediaQuery("(max-width: 768px)");
-
-  const getActiveNavItem = () => {
-    const path = location.pathname;
-    if (path === "/") return "home";
-    return "dashboard";
-  };
-
-  const navItems =
-    tenantType != "admin"
-      ? [
-          // {
-          //   key: "license",
-          //   label: "License Management",
-          //   icon: LicenseIcn,
-          // },
-          {
-            key: "home",
-            label: "Go Home",
-            icon: HomeIcn,
-          },
-          {
-            key: "usermanagement",
-            label: "User Management",
-            icon: UserIcn,
-          },
-          {
-            key: "roles",
-            label: "Role & Permissions",
-            icon: RoleIcn,
-          },
-        ]
-      : [
-          {
-            key: "roles",
-            label: "Role & Permissions",
-            icon: RoleIcn,
-          },
-          {
-            key: "home",
-            label: "Go Home",
-            icon: HomeIcn,
-          },
-        ];
-
+export default function Sidebar({
+  getActiveNavItem,
+  toggleCollapsed,
+  collapsed,
+  tenantType,
+  navItems,
+  isMobile,
+}: any) {
   const handleSidebarNavigate = (key: string) => {
     switch (key) {
-      // case "license":
-      //   navigate("/license");
-      //   break;
       case "usermanagement":
         navigate(`/usermanagement`);
         break;
@@ -93,6 +43,7 @@ export default function Sidebar({ tenantType }: any) {
         navigate(`/dashboard`);
     }
   };
+  const navigate = useNavigate();
 
   return (
     <EirisSidebar
