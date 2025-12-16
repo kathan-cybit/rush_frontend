@@ -111,7 +111,7 @@ export default function CreateUserContainer({
       setValue("city", CurrData.city);
       setValue("country", CurrData.country);
       if (CurrData?.assigned_apps && CurrData?.assigned_apps?.length > 0) {
-        setAssignedApps(CurrData.assigned_apps.map((id: any) => Number(id)));
+        setAssignedApps(CurrData.assigned_apps.map((id: any) => id));
       } else {
         setAssignedApps([]);
       }

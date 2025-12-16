@@ -25,9 +25,9 @@ export default function CreateUserComponent({
   allLicenses,
 }) {
   const licensedAppIdSet = useMemo(() => {
-    const set = new Set<number>();
+    const set = new Set<any>();
     allLicenses?.forEach((l: any) => {
-      set.add(Number(l.application_id));
+      set.add(l.application_id);
     });
     return set;
   }, [allLicenses]);

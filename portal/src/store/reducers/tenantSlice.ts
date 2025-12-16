@@ -329,7 +329,7 @@ export const getAllUsersRolesPermissions = createAsyncThunk<unknown, any>(
       return response.data;
     } catch (err: any) {
       const error = err.response?.data?.error || err.message;
-      error_toast(error);
+      // error_toast(error);
       return rejectWithValue({ error, status: err.response?.status });
     }
   }

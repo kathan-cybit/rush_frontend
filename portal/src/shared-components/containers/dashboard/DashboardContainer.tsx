@@ -59,13 +59,11 @@ export default function DashboardContainer() {
     (state: RootState) => state.license
   );
 
-  const hasManageOrgSettings = useMemo(() => {
-    return allUsersRolesPermissions?.roles?.some((role) =>
-      role.permissions?.some(
-        (perm) => perm.name === "Manage Organization Settings"
-      )
-    );
-  }, [allUsersRolesPermissions]);
+  const hasManageOrgSettings = allUsersRolesPermissions?.roles?.some((role) =>
+    role.permissions?.some(
+      (perm) => perm.name === "Manage Organization Settings"
+    )
+  );
 
   useEffect(() => {
     const host = new URL(window.location.href).hostname.split(".")[0];
@@ -94,7 +92,7 @@ export default function DashboardContainer() {
         })
       );
     }
-  }, []);
+  }, [FormStatus]);
 
   // ── Effects ------------------------------------------------------------
   useEffect(() => {
@@ -103,7 +101,7 @@ export default function DashboardContainer() {
     if (subDomain === "public") {
       dispatch(fetchTenants(subDomain));
     }
-  }, []);
+  }, [FormStatus]);
 
   useEffect(() => {
     if (
@@ -135,10 +133,50 @@ export default function DashboardContainer() {
     )
   );
 
-  const formattedTenants = useMemo(() => {
-    if (!tenants || !allApps) return [];
+  // const formattedTenants = useMemo(() => {
+  //   if (!tenants || !allApps) return [];
 
-    return tenants.map((tenant: any) => {
+  //   return tenants.map((tenant: any) => {
+  //     const row: any = {
+  //       id: tenant.id,
+  //       company: tenant.company_name,
+  //       domain: tenant.domain,
+  //       status: tenant.status,
+  //     };
+
+  //     if (Object.values(tenant?.licenses)?.length > 0) {
+  //       // Normalize licenses array for quick lookup
+  //       const licenseMap = new Map(
+  //         (tenant.licenses || []).map((l: any) => [
+  //           Number(l.application_id),
+  //           Number(l.count),
+  //         ])
+  //       );
+
+  //       allApps.forEach((app: any) => {
+  //         row[`${app.name}`] = `${licenseMap.get(app.id) ?? 0}/${
+  //           allTenantWithLicenses[0]?.licenses?.filter((e: any) => {
+  //             return e?.application_id == app.id;
+  //           })?.length
+  //         }`;
+  //       });
+  //       // allApps.forEach((app: any) => {
+  //       //   if (!licenseMap.has(app.id)) {
+  //       //     row[`${app.name}`] = "N/A";
+  //       //   } else {
+  //       //     row[`${app.name}`] = licenseMap.get(app.id) ?? 0;
+  //       //   }
+  //       // });
+  //     }
+
+  //     return row;
+  //   });
+  // }, [tenants, allApps]);
+
+  let formattedTenants: any[] = [];
+
+  if (tenants && allApps) {
+    formattedTenants = tenants.map((tenant: any) => {
       const row: any = {
         id: tenant.id,
         company: tenant.company_name,
@@ -146,34 +184,26 @@ export default function DashboardContainer() {
         status: tenant.status,
       };
 
-      if (Object.values(tenant?.licenses)?.length > 0) {
-        // Normalize licenses array for quick lookup
+      if (Array.isArray(tenant?.licenses) && tenant.licenses.length > 0) {
         const licenseMap = new Map(
-          (tenant.licenses || []).map((l: any) => [
-            Number(l.application_id),
-            Number(l.count),
-          ])
+          tenant.licenses.map((l: any) => [l.application_id, Number(l.count)])
         );
 
         allApps.forEach((app: any) => {
-          row[`${app.name}`] = `${licenseMap.get(app.id) ?? 0}/${
-            allTenantWithLicenses[0]?.licenses?.filter((e: any) => {
-              return e?.application_id == app.id;
-            })?.length
-          }`;
+          const totalLicenses =
+            allTenantWithLicenses?.[0]?.licenses?.filter(
+              (e: any) => e?.application_id === app.id
+            )?.length || 0;
+
+          const freeCount = licenseMap.get(app.id) ?? 0;
+
+          row[app.name] = `${freeCount}/${totalLicenses}`;
         });
-        // allApps.forEach((app: any) => {
-        //   if (!licenseMap.has(app.id)) {
-        //     row[`${app.name}`] = "N/A";
-        //   } else {
-        //     row[`${app.name}`] = licenseMap.get(app.id) ?? 0;
-        //   }
-        // });
       }
 
       return row;
     });
-  }, [tenants, allApps]);
+  }
 
   const licensedAppIds = new Set(
     allLicenses?.map((l: any) => l?.application_id)

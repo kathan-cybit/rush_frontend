@@ -436,7 +436,7 @@ const CreateTenantComponent: React.FC<any> = ({
             </div>
 
             {licenses?.length > 0 &&
-              allApps?.map((app) => (
+              allApps?.map((app: any) => (
                 <div className="table-row" key={app.id}>
                   <div className="row-application">{app.name}</div>
                   <div className="row-input">
@@ -450,7 +450,7 @@ const CreateTenantComponent: React.FC<any> = ({
                         )?.count || 0
                       }
                       onChange={(e) =>
-                        handleLicenseChange(app.id, Number(e.target.value))
+                        handleLicenseChange(app.id, e.target.value)
                       }
                       min="0"
                     />

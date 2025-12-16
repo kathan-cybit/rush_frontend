@@ -50,7 +50,7 @@ const CreateTenantContainer: React.FC<CreateTenantProps> = ({
   const dispatch = useDispatch<AppDispatch>();
 
   const [licenses, setLicenses] = useState<any>([]);
-  const handleLicenseChange = (applicationId: any, value: number) => {
+  const handleLicenseChange = (applicationId: any, value: any) => {
     setLicenses((prevLicenses: any) => {
       return prevLicenses.map((license: any) => {
         if (license.application_id == applicationId) {
@@ -87,7 +87,7 @@ const CreateTenantContainer: React.FC<CreateTenantProps> = ({
       // Create mode: Initialize with all apps with count 0
       const initialLicenses = allApps.map((app: any) => ({
         application_id: app.id,
-        count: 0,
+        count: "0",
       }));
       setLicenses(initialLicenses);
     }
@@ -112,7 +112,6 @@ const CreateTenantContainer: React.FC<CreateTenantProps> = ({
       phoneNumber: CurrData?.phonenumber || "",
     },
   });
-
   useEffect(() => {
     if (
       (FormStatus?.mode === "edit" || FormStatus?.mode === "view") &&
@@ -151,7 +150,7 @@ const CreateTenantContainer: React.FC<CreateTenantProps> = ({
           } else {
             return {
               application_id: app.id,
-              count: 0,
+              count: "0",
             };
           }
         });
@@ -177,7 +176,10 @@ const CreateTenantContainer: React.FC<CreateTenantProps> = ({
             phonenumber: data.phoneNumber,
             contactperson: data.contactperson,
             contactemail: data.contactemail,
-            licenses: licenses,
+            licenses: licenses?.map((lic: any) => ({
+              ...lic,
+              count: Number(lic.count),
+            })),
             schema_name: data.domainname,
           },
           currentTenant: host,
@@ -196,6 +198,7 @@ const CreateTenantContainer: React.FC<CreateTenantProps> = ({
         })
         .catch(() => {});
     } else if (FormStatus?.mode === "edit" && CurrData?.id) {
+      console.log(licenses, "licenses");
       await dispatch(
         updateTenant({
           payload: {
@@ -205,7 +208,10 @@ const CreateTenantContainer: React.FC<CreateTenantProps> = ({
             phonenumber: data.phoneNumber,
             contactperson: data.contactperson,
             contactemail: data.contactemail,
-            licenses: licenses,
+            licenses: licenses?.map((lic: any) => ({
+              ...lic,
+              count: Number(lic.count),
+            })),
           },
           id: CurrData.id,
         })

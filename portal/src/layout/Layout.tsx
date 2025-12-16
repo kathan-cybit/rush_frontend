@@ -88,16 +88,16 @@ const Layout: React.FC = () => {
             icon: HomeIcn,
           },
         ];
-  useEffect(() => {
-    if (host != null && host != "" && host != "public" && host != "admin") {
-      dispatch(
-        getAllUsersRolesPermissions({
-          params: user?.id,
-          headers: { "x-tenant-id": host },
-        })
-      );
-    }
-  }, []);
+  // useEffect(() => {
+  //   if (host != "public" && host != "admin") {
+  //     dispatch(
+  //       getAllUsersRolesPermissions({
+  //         params: user?.id,
+  //         headers: { "x-tenant-id": host },
+  //       })
+  //     );
+  //   }
+  // }, []);
   return (
     <AppShell
       header={{ height: 60 }}
@@ -117,15 +117,16 @@ const Layout: React.FC = () => {
         handleNavigateSettings={handleNavigateSettings}
         handleLogout={handleLogout}
       />
-      <Sidebar
-        tenantType={tenantType}
-        getActiveNavItem={getActiveNavItem}
-        toggleCollapsed={toggleCollapsed}
-        collapsed={collapsed}
-        navItems={navItems}
-        isMobile={isMobile}
-      />
-
+      {(user?.is_default_admin || tenantType == "admin") && (
+        <Sidebar
+          tenantType={tenantType}
+          getActiveNavItem={getActiveNavItem}
+          toggleCollapsed={toggleCollapsed}
+          collapsed={collapsed}
+          navItems={navItems}
+          isMobile={isMobile}
+        />
+      )}
       <AppShellMain
         className="flex flex-col h-full overflow-hidden"
         // className={

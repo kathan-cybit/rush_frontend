@@ -24,7 +24,9 @@ function App() {
     }
   }, []);
 
-  const { token, tenantType } = useSelector((state: RootState) => state.auth);
+  const { token, tenantType, user } = useSelector(
+    (state: RootState) => state.auth
+  );
   return (
     <>
       {token != "undefined" &&
@@ -41,9 +43,14 @@ function App() {
                 />
                 <Route path="dashboard" element={<Dashboard />} />
                 {/* <Route path="license" element={<License />} /> */}
-                <Route path="usermanagement" element={<Users />} />
-                <Route path="roles" element={<Roles />} />
-                <Route path="createUser" element={<CreateUser />} />
+                {user?.is_default_admin && (
+                  <>
+                    <Route path="usermanagement" element={<Users />} />
+                    <Route path="roles" element={<Roles />} />
+                    <Route path="createUser" element={<CreateUser />} />
+                  </>
+                )}
+
                 <Route
                   path="*"
                   element={<Navigate to="/dashboard" replace />}
