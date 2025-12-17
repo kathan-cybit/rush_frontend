@@ -325,58 +325,7 @@ export default function CreateUserComponent({
                 )}
               </div>
             )}
-            {FormStatus?.mode && (
-              <div className="float-left mb-[15px] px-[12px] w-[50%]">
-                <label className="block mb-[8px] font-[500] text-[#1f2937] text-[14px]">
-                  Old Password
-                </label>
-                <input
-                  disabled={FormStatus?.mode == "view"}
-                  {...register("old_password", {
-                    pattern: {
-                      value:
-                        /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/,
-                      message:
-                        "Min 8 chars, 1 uppercase, 1 lowercase, 1 number & 1 special character required",
-                    },
-                  })}
-                  type="password"
-                  className="disabled:bg-[#ced4da] px-3 py-2 border border-[#ced4da] focus:border-[#86b7fe] rounded-md outline-none w-full"
-                  placeholder="Enter Old password"
-                />
-                {errors.old_password && (
-                  <p className="mt-[4px] text-[12px] text-red-500">
-                    {errors.old_password.message}
-                  </p>
-                )}
-              </div>
-            )}
-            {FormStatus?.mode && (
-              <div className="float-left mb-[15px] px-[12px] w-[50%]">
-                <label className="block mb-[8px] font-[500] text-[#1f2937] text-[14px]">
-                  New Password
-                </label>
-                <input
-                  disabled={FormStatus?.mode == "view"}
-                  {...register("new_password", {
-                    pattern: {
-                      value:
-                        /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/,
-                      message:
-                        "Min 8 chars, 1 uppercase, 1 lowercase, 1 number & 1 special character required",
-                    },
-                  })}
-                  type="password"
-                  className="disabled:bg-[#ced4da] px-3 py-2 border border-[#ced4da] focus:border-[#86b7fe] rounded-md outline-none w-full"
-                  placeholder="Enter New password"
-                />
-                {errors.new_password && (
-                  <p className="mt-[4px] text-[12px] text-red-500">
-                    {errors.new_password.message}
-                  </p>
-                )}
-              </div>
-            )}
+
             <div className="float-left mt-[2px] px-[12px] w-[50%]">
               <label className="block mb-[8px] font-[500] text-[#1f2937] text-[14px]">
                 Select Roles

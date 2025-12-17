@@ -53,6 +53,7 @@ export default function DashboardComponent({
   formattedTenants,
   allTenantWithLicenses,
 }: any) {
+  console.log(user, "user");
   return (
     <>
       {(isLoading || loading) && (
@@ -84,8 +85,7 @@ export default function DashboardComponent({
             )}
           </>
         )}
-        {host != "public" &&
-        (hasManageOrgSettings || user?.is_default_admin) ? (
+        {host != "public" && user?.is_default_admin ? (
           <div>
             {!FormStatus.mode && (
               <div
@@ -118,7 +118,7 @@ export default function DashboardComponent({
         )}
       </div>
 
-      {host != "public" && (hasManageOrgSettings || user?.is_default_admin) ? (
+      {host != "public" && user?.is_default_admin ? (
         <div className="flex flex-wrap justify-center -mx-3">
           {filteredApps?.length > 0 &&
             filteredApps.map((e: any, index: number | string) => {
@@ -254,7 +254,42 @@ export default function DashboardComponent({
           )}
         </>
       ) : (
-        <></>
+        <>
+          <div className="flex flex-wrap justify-center -mx-3">
+            {filteredApps?.length > 0 &&
+              user?.assigned_apps?.length > 0 &&
+              filteredApps
+                .filter((app: any) => user?.assigned_apps.includes(app.id))
+                ?.map((e: any, index: number | string) => {
+                  return (
+                    <div className="px-2 w-1/4" key={index}>
+                      <a
+                        href={`${e.url}?token=${token}&domain=${host}`}
+                        target="_blank"
+                        className="flex flex-col justify-between items-center hover:shadow-[0_12px_24px_rgba(0,0,0,0.12)] px-4 pt-12 pb-6 border border-[#e4e5e7] border-[1.2px] rounded-[16px] h-[280px] text-center transition-all hover:-translate-y-1.5 duration-200 cursor-pointer"
+                      >
+                        <div className="max-w-[130px] max-h-[140px]">
+                          <img
+                            className="w-full h-full object-contain"
+                            src={
+                              index == 0
+                                ? ICExpert
+                                : index == 1
+                                ? PoleExpert
+                                : SimExpert
+                            }
+                            alt="Teams"
+                          />
+                        </div>
+                        <h2 className="mb-0 font-fsecondary text-[24px] text-[500] leading-[140%]">
+                          {e?.name}
+                        </h2>
+                      </a>
+                    </div>
+                  );
+                })}
+          </div>
+        </>
       )}
     </>
   );

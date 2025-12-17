@@ -45,7 +45,31 @@ export const verifyUser = createAsyncThunk<unknown, any>(
       );
 
       if (res?.data) {
-        success_toast(res.data.message || "Verifid in successfully");
+        success_toast(res.data.message || "Verifid successfully");
+      }
+      return res.data;
+    } catch (err: any) {
+      const msg = err.response?.data?.error || err.message;
+      error_toast(msg);
+      return msg;
+    }
+  }
+);
+
+export const updatePassword = createAsyncThunk<unknown, any>(
+  "auth/updatePassword",
+  async (props) => {
+    try {
+      const res = await axiosInstance.post<any>(
+        props.role == "admin"
+          ? `/admin/updatepassword`
+          : `/users/updatepassword`,
+        props.payload,
+        { headers: { ...props.headers } }
+      );
+
+      if (res?.data) {
+        success_toast(res.data.message || "Updated successfully");
       }
       return res.data;
     } catch (err: any) {
@@ -122,6 +146,15 @@ const authSlice = createSlice({
         state.loading = false;
       })
       .addCase(verifyUser.rejected, (state) => {
+        state.loading = false;
+      })
+      .addCase(updatePassword.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(updatePassword.fulfilled, (state, action) => {
+        state.loading = false;
+      })
+      .addCase(updatePassword.rejected, (state) => {
         state.loading = false;
       });
   },

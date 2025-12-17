@@ -11,7 +11,7 @@ import CustomFooter from "./footer/CustomFooter";
 import { setLogout } from "../store/reducers/authSlice";
 import { HomeIcn, RoleIcn, UserIcn } from "../assets/svgs";
 import { useMediaQuery } from "@mantine/hooks";
-import { getAllUsersRolesPermissions } from "../store/reducers/tenantSlice";
+
 const Layout: React.FC = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch<AppDispatch>();
@@ -88,16 +88,7 @@ const Layout: React.FC = () => {
             icon: HomeIcn,
           },
         ];
-  // useEffect(() => {
-  //   if (host != "public" && host != "admin") {
-  //     dispatch(
-  //       getAllUsersRolesPermissions({
-  //         params: user?.id,
-  //         headers: { "x-tenant-id": host },
-  //       })
-  //     );
-  //   }
-  // }, []);
+
   return (
     <AppShell
       header={{ height: 60 }}
