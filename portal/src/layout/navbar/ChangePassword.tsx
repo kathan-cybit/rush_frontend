@@ -47,7 +47,7 @@ export default function ChangePassword({ setIsOpen }) {
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="flex flex-wrap">
       {/* Old Password */}
-      <div className="float-left mb-[15px] px-[12px] w-[50%]">
+      <div className="float-left mb-[15px] px-[12px] w-full">
         <label className="block mb-[8px] font-[500] text-[#1f2937] text-[14px]">
           Old Password
         </label>
@@ -67,7 +67,7 @@ export default function ChangePassword({ setIsOpen }) {
       </div>
 
       {/* New Password */}
-      <div className="float-left mb-[15px] px-[12px] w-[50%]">
+      <div className="float-left mb-[15px] px-[12px] w-full">
         <label className="block mb-[8px] font-[500] text-[#1f2937] text-[14px]">
           New Password
         </label>

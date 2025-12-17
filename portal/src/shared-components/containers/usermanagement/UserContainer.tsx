@@ -67,7 +67,7 @@ export default function UserContainer() {
       username: e.first_name + " " + e?.last_name,
       status: e.status,
       email: e.email,
-      phonenumber: e.phonenumber,
+      "phone number": e.phonenumber,
     }));
   }, [userData]);
 
