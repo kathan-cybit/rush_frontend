@@ -53,7 +53,6 @@ export default function DashboardComponent({
   formattedTenants,
   allTenantWithLicenses,
 }: any) {
-  console.log(user, "user");
   return (
     <>
       {(isLoading || loading) && (
@@ -65,7 +64,7 @@ export default function DashboardComponent({
         {host !== "public" ? (
           <div>
             <h1 className="mb-0 font-fsecondary text-[32px] text-[500] leading-[140%] tracking-[0.25px]">
-              {"hi" + " " + user?.first_name + " " + user?.last_name}
+              {"Hi," + " " + user?.first_name + " " + user?.last_name}
             </h1>
             <span className="font-fsecondary text-[#adadad] text-[14px] text-[500] leading-[140%]">
               Continue to other apps
@@ -257,9 +256,16 @@ export default function DashboardComponent({
         <>
           <div className="flex flex-wrap justify-center -mx-3">
             {filteredApps?.length > 0 &&
-              user?.assigned_apps?.length > 0 &&
+              allLicenses
+                .filter((item) => item.assigned_to == user?.id)
+                .map((item) => item.application_id)?.length > 0 &&
               filteredApps
-                .filter((app: any) => user?.assigned_apps.includes(app.id))
+                .filter((app: any) =>
+                  allLicenses
+                    .filter((item) => item.assigned_to == user?.id)
+                    .map((item) => item.application_id)
+                    .includes(app.id)
+                )
                 ?.map((e: any, index: number | string) => {
                   return (
                     <div className="px-2 w-1/4" key={index}>

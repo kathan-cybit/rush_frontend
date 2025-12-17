@@ -198,7 +198,6 @@ const CreateTenantContainer: React.FC<CreateTenantProps> = ({
         })
         .catch(() => {});
     } else if (FormStatus?.mode === "edit" && CurrData?.id) {
-      console.log(licenses, "licenses");
       await dispatch(
         updateTenant({
           payload: {
