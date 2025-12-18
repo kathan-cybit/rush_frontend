@@ -180,7 +180,7 @@ export default function DashboardComponent({
                         }
                       </span>
                       <span className="text-[#555555] text-[14px] text-[400] leading-[140%]">
-                        Active tenants
+                        Active Tenants
                       </span>
                     </div>
                     <div>
@@ -203,7 +203,7 @@ export default function DashboardComponent({
                         }
                       </span>
                       <span className="text-[#555555] text-[14px] text-[400] leading-[140%]">
-                        Inactive tenants
+                        Inactive Tenants
                       </span>
                     </div>
                     <div>

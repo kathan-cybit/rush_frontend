@@ -116,7 +116,11 @@ export default function UserContainer() {
   };
   return (
     <div>
-      <UserComponent {...roleProps} />
+      <div className="mx-auto">
+        <div className="p-4">
+          <UserComponent {...roleProps} />
+        </div>
+      </div>
     </div>
   );
 }

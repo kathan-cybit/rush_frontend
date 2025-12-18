@@ -50,6 +50,7 @@ export default function ChangePassword({ setIsOpen }) {
       <div className="float-left mb-[15px] px-[12px] w-full">
         <label className="block mb-[8px] font-[500] text-[#1f2937] text-[14px]">
           Old Password
+          <span className="ml-1 text-red-500">*</span>
         </label>
         <input
           type="password"
@@ -70,6 +71,7 @@ export default function ChangePassword({ setIsOpen }) {
       <div className="float-left mb-[15px] px-[12px] w-full">
         <label className="block mb-[8px] font-[500] text-[#1f2937] text-[14px]">
           New Password
+          <span className="ml-1 text-red-500">*</span>
         </label>
         <input
           type="password"

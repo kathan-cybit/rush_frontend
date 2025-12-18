@@ -3,6 +3,15 @@ import { BackIcon, EditIcon } from "../../../assets/svgs";
 import { Controller } from "react-hook-form";
 import Select from "react-select";
 import { CustomBreadCrumbs } from "../../ui";
+const SELECT_ALL_OPTION = {
+  label: "Select All",
+  value: "__select_all__",
+};
+
+const DESELECT_ALL_OPTION = {
+  label: "",
+  value: "",
+};
 
 export default function CreateUserComponent({
   allLicenseWithCounts,
@@ -39,6 +48,16 @@ export default function CreateUserComponent({
     });
     return map;
   }, [allLicenseWithCounts]);
+
+  const allSelected =
+    roleOptions?.length > 0 &&
+    control._formValues?.role_ids?.length === roleOptions.length;
+
+  const selectOptions = [
+    allSelected ? DESELECT_ALL_OPTION : SELECT_ALL_OPTION,
+    ...roleOptions,
+  ];
+
   return (
     <>
       <div className="clear-both flex justify-between items-center mb-[40px] overflow-hidden">
@@ -367,16 +386,42 @@ export default function CreateUserComponent({
                 control={control}
                 defaultValue={defaultUserRoleOptions.map((x) => x.value)}
                 render={({ field }) => (
+                  // <Select
+                  //   {...field}
+                  //   isMulti
+                  //   options={roleOptions}
+                  //   isDisabled={FormStatus?.mode === "view"}
+                  //   value={roleOptions.filter((opt) =>
+                  //     field.value?.includes(opt.value)
+                  //   )}
+                  //   onChange={(val) => field.onChange(val.map((x) => x.value))}
+                  //   placeholder="Select roles..."
+                  // />
                   <Select
-                    {...field}
                     isMulti
-                    options={roleOptions}
+                    options={selectOptions}
                     isDisabled={FormStatus?.mode === "view"}
                     value={roleOptions.filter((opt) =>
                       field.value?.includes(opt.value)
                     )}
-                    onChange={(val) => field.onChange(val.map((x) => x.value))}
                     placeholder="Select roles..."
+                    onChange={(selected: any) => {
+                      if (!selected) {
+                        field.onChange([]);
+                        return;
+                      }
+
+                      if (
+                        selected.some(
+                          (opt: any) => opt.value === "__select_all__"
+                        )
+                      ) {
+                        field.onChange(roleOptions.map((r) => r.value));
+                        return;
+                      }
+
+                      field.onChange(selected.map((x: any) => x.value));
+                    }}
                   />
                 )}
               />

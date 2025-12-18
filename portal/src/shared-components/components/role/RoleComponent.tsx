@@ -33,7 +33,7 @@ export default function RoleComponent({
   isLoading,
 }: any) {
   const allSelected =
-    Roleform.permissions?.length === permissionOptions.length &&
+    Roleform.permissions?.length == permissionOptions.length &&
     permissionOptions.length > 0;
 
   const selectOptions = [
@@ -72,14 +72,14 @@ export default function RoleComponent({
         />
       </>
       {EditRole?.open && Object.values(CurrData)?.length > 0 && (
-        <Modal
+        <Dialog
+          title="Update Role"
           opened={EditRole?.open}
           onClose={() => {
             handleModalClose();
           }}
-          size="xl"
         >
-          <div className="min-h-[500px]">
+          <div className="p-[1.25rem] min-h-[700px]">
             <form
               onSubmit={handleSubmitAssign(submitAssign)}
               className="gap-4 grid"
@@ -107,12 +107,37 @@ export default function RoleComponent({
                   name="permission_ids"
                   control={controlAssign}
                   render={({ field }) => (
+                    // <Select
+                    //   {...field}
+                    //   isMulti
+                    //   options={permissionOptions}
+                    //   onChange={(val) => field.onChange(val)}
+                    //   placeholder="Select permissions..."
+                    // />
                     <Select
-                      {...field}
                       isMulti
-                      options={permissionOptions}
-                      onChange={(val) => field.onChange(val)}
+                      options={selectOptions}
                       placeholder="Select permissions..."
+                      value={field.value}
+                      onChange={(selected: any) => {
+                        if (!selected) {
+                          field.onChange([]);
+                          return;
+                        }
+
+                        // Select All clicked
+                        if (
+                          selected.some(
+                            (opt: any) => opt.value === "__select_all__"
+                          )
+                        ) {
+                          field.onChange(permissionOptions);
+                          return;
+                        }
+
+                        // Normal selection
+                        field.onChange(selected);
+                      }}
                     />
                   )}
                 />
@@ -128,7 +153,7 @@ export default function RoleComponent({
               </div>
             </form>
           </div>
-        </Modal>
+        </Dialog>
       )}
       {OpenCreateRole && (
         <Dialog
