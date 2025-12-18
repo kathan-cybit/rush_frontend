@@ -252,7 +252,7 @@ export default function RoleContainer() {
   return (
     <div className="">
       <div className="mx-auto">
-        <div className="bg-white shadow p-4 rounded-lg">
+        <div className="p-4">
           <RoleComponent
             permissionOptions={permissionOptions}
             menuItems={menuItems}

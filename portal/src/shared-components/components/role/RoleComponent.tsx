@@ -131,60 +131,19 @@ export default function RoleComponent({
         </Modal>
       )}
       {OpenCreateRole && (
-        // <Dialog
-        //   title="Create Role"
-        //   opened={OpenCreateRole}
-        //   onClose={() => {
-        //     setOpenCreateRole(false);
-        //   }}
-        // >
-        //   <div className="p-[1.25rem]">
-        //     <form className="gap-4 grid" onSubmit={handleSubmit}>
-        //       <div className="gap-1 grid">
-        //         <label className="font-medium text-sm">Role Name</label>
-        //         <input
-        //           className="px-3 py-2 border rounded"
-        //           name="name"
-        //           value={Roleform.name}
-        //           onChange={onChangeRoleForm}
-        //           placeholder="Enter role name"
-        //         />
-        //       </div>
-
-        //       <div className="gap-1 grid">
-        //         <label className="font-medium text-sm">Description</label>
-        //         <input
-        //           className="px-3 py-2 border rounded"
-        //           name="description"
-        //           value={Roleform.description}
-        //           onChange={onChangeRoleForm}
-        //           placeholder="Enter description"
-        //         />
-        //       </div>
-
-        //       <div className="flex justify-end mt-4">
-        //         <button
-        //           type="submit"
-        //           className="bg-bsecondary hover:opacity-80 px-5 py-2 rounded text-white"
-        //         >
-        //           Create Role
-        //         </button>
-        //       </div>
-        //     </form>
-        //   </div>
-        // </Dialog>
         <Dialog
           title="Create Role"
           opened={OpenCreateRole}
           onClose={() => setOpenCreateRole(false)}
         >
-          <div className="p-[1.25rem]">
+          <div className="p-[1.25rem] min-h-[700px]">
             <form className="gap-4 grid" onSubmit={handleSubmit}>
               <div className="gap-1 grid">
                 <label className="font-medium text-sm">
                   Role Name <span className="ml-1 text-red-500">*</span>
                 </label>
                 <input
+                  autoComplete="off"
                   className="px-3 py-2 border rounded"
                   name="name"
                   value={Roleform.name}
@@ -196,6 +155,7 @@ export default function RoleComponent({
               <div className="gap-1 grid">
                 <label className="font-medium text-sm">Description</label>
                 <input
+                  autoComplete="off"
                   className="px-3 py-2 border rounded"
                   name="description"
                   value={Roleform.description}

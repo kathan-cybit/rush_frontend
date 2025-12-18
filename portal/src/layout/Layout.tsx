@@ -52,6 +52,7 @@ const Layout: React.FC = () => {
     return "dashboard";
   };
   const host = new URL(window.location.href).hostname.split(".")[0];
+
   const hasManageOrgSettings = allUsersRolesPermissions?.roles?.some((role) =>
     role.permissions?.some((perm) => perm?.slug == "manage_org_settings")
   );
@@ -59,14 +60,9 @@ const Layout: React.FC = () => {
   const navItems =
     tenantType != "admin"
       ? [
-          // {
-          //   key: "license",
-          //   label: "License Management",
-          //   icon: LicenseIcn,
-          // },
           {
             key: "home",
-            label: "Go Home",
+            label: "Home",
             icon: HomeIcn,
           },
           {
@@ -82,14 +78,14 @@ const Layout: React.FC = () => {
         ]
       : [
           {
+            key: "home",
+            label: "Home",
+            icon: HomeIcn,
+          },
+          {
             key: "roles",
             label: "Role & Permissions",
             icon: RoleIcn,
-          },
-          {
-            key: "home",
-            label: "Go Home",
-            icon: HomeIcn,
           },
         ];
 
@@ -105,6 +101,7 @@ const Layout: React.FC = () => {
       }}
     >
       <AdminNavbar
+        user={user}
         isOpen={isOpen}
         setIsOpen={setIsOpen}
         handleNavigateProfile={handleNavigateProfile}

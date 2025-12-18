@@ -15,6 +15,7 @@ export default function AdminNavbar({
   handleNavigateProfile,
   setIsOpen,
   isOpen,
+  user,
 }: any) {
   return (
     <>
@@ -28,13 +29,12 @@ export default function AdminNavbar({
         onNavigateProfile={handleNavigateProfile}
         onNavigateSettings={handleNavigateSettings}
         onLogout={handleLogout}
-        email={"test@email.com"}
+        email={user?.email}
         appLauncher={<></>}
         appName={null}
         role={"Admin"}
         toggleOpened={() => setIsOpen((o: any) => !o)}
         opened={isOpen}
-        feedbackLogo={""}
         ChangePasswordComponent={
           <>
             <ChangePassword setIsOpen={setIsOpen} />

@@ -11,12 +11,7 @@ import {
 import { AppShellHeader } from "./AppShell";
 import { Group } from "./Layout";
 import { Avatar } from "./Avatar";
-import {
-  Menu,
-  MenuTarget,
-  MenuDropdown,
-  MenuItem,
-} from "./Navigation";
+import { Menu, MenuTarget, MenuDropdown, MenuItem } from "./Navigation";
 import { UnstyledButton } from "./Button";
 import { Text } from "./Typography";
 import { Burger } from "./Navigation";
@@ -37,8 +32,8 @@ interface HeaderProps {
   extraControls?: React.ReactNode; // ✅ NEW
   toggleOpened: () => void;
   opened: boolean;
-    /** ✅ NEW props injected from parent */
-  feedbackLogo: string;
+  /** ✅ NEW props injected from parent */
+  feedbackLogo?: string | null;
   ChangePasswordComponent: React.ReactNode;
 }
 
@@ -55,7 +50,7 @@ export function Header({
   extraControls, // ✅ NEW
   toggleOpened,
   opened,
-  feedbackLogo,
+  feedbackLogo = null,
   ChangePasswordComponent,
 }: HeaderProps) {
   const [userMenuOpened, setUserMenuOpened] = useState(false);
@@ -63,7 +58,12 @@ export function Header({
 
   return (
     <AppShellHeader>
-      <Group h="100%" px="md" justify="space-between" style={{ width: "100%", flexWrap: "nowrap" }}>
+      <Group
+        h="100%"
+        px="md"
+        justify="space-between"
+        style={{ width: "100%", flexWrap: "nowrap" }}
+      >
         {/* Left */}
         <Group style={{ flex: 1 }}>
           {toggleSidebar && (
@@ -142,6 +142,7 @@ export function Header({
             title="Support"
             p={0}
             mt={1}
+            className="hidden"
             styles={{
               root: {
                 "&:hover, &[data-hovered]": {
@@ -170,11 +171,13 @@ export function Header({
               },
             }}
           >
-            <img
-              src={feedbackLogo}
-              alt="Feedback Logo"
-              style={{ height: 25 }}
-            />
+            {feedbackLogo && (
+              <img
+                src={feedbackLogo}
+                alt="Feedback Logo"
+                style={{ height: 25 }}
+              />
+            )}
           </Button>
 
           <Menu
@@ -194,7 +197,12 @@ export function Header({
                 }}
               >
                 <Group gap={7}>
-                  <Avatar color="blue" radius="xl" size="sm" className="uppercase">
+                  <Avatar
+                    color="blue"
+                    radius="xl"
+                    size="sm"
+                    className="uppercase"
+                  >
                     {email?.charAt(0) || "?"}
                   </Avatar>
                   <IconChevronDown
@@ -207,7 +215,12 @@ export function Header({
             </MenuTarget>
             <MenuDropdown>
               <MenuItem
-                leftSection={<IconSettings style={{ width: rem(16), height: rem(16) }} stroke={1.5} />}
+                leftSection={
+                  <IconSettings
+                    style={{ width: rem(16), height: rem(16) }}
+                    stroke={1.5}
+                  />
+                }
                 onClick={toggleOpened}
                 c="black.6"
               >
@@ -229,14 +242,9 @@ export function Header({
           </Menu>
         </Group>
       </Group>
-      <Dialog
-        opened={opened}
-        onClose={toggleOpened}
-        title="Change Password"
-      >
+      <Dialog opened={opened} onClose={toggleOpened} title="Change Password">
         {ChangePasswordComponent}
       </Dialog>
     </AppShellHeader>
-
   );
 }
