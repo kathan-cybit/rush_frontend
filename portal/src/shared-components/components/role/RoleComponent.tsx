@@ -3,6 +3,16 @@ import { Controller } from "react-hook-form";
 import Select from "react-select";
 import { Dialog, Loader, Modal, TableV2 } from "../../ui";
 
+const SELECT_ALL_OPTION = {
+  label: "Select All",
+  value: "__select_all__",
+};
+
+const DESELECT_ALL_OPTION = {
+  label: "",
+  value: "",
+};
+
 export default function RoleComponent({
   handleModalClose,
   EditRole,
@@ -22,6 +32,15 @@ export default function RoleComponent({
   statusColorMap,
   isLoading,
 }: any) {
+  const allSelected =
+    Roleform.permissions?.length === permissionOptions.length &&
+    permissionOptions.length > 0;
+
+  const selectOptions = [
+    allSelected ? DESELECT_ALL_OPTION : SELECT_ALL_OPTION,
+    ...permissionOptions,
+  ];
+
   return (
     <div>
       {isLoading && (
@@ -162,7 +181,9 @@ export default function RoleComponent({
           <div className="p-[1.25rem]">
             <form className="gap-4 grid" onSubmit={handleSubmit}>
               <div className="gap-1 grid">
-                <label className="font-medium text-sm">Role Name</label>
+                <label className="font-medium text-sm">
+                  Role Name <span className="ml-1 text-red-500">*</span>
+                </label>
                 <input
                   className="px-3 py-2 border rounded"
                   name="name"
@@ -183,8 +204,7 @@ export default function RoleComponent({
                 />
               </div>
 
-              {/* 🔥 NEW: Permission Select while creating */}
-              <div className="gap-1 grid">
+              {/* <div className="gap-1 grid">
                 <label className="font-medium text-sm">
                   Select Permissions
                 </label>
@@ -199,6 +219,44 @@ export default function RoleComponent({
                     });
                   }}
                   placeholder="Select permissions..."
+                />
+              </div> */}
+
+              <div className="gap-1 grid">
+                <label className="font-medium text-sm">
+                  Select Permissions
+                </label>
+
+                <Select
+                  isMulti
+                  options={selectOptions}
+                  value={Roleform.permissions}
+                  placeholder="Select permissions..."
+                  onChange={(selected: any) => {
+                    if (!selected) {
+                      setRoleForm({ ...Roleform, permissions: [] });
+                      return;
+                    }
+
+                    // Select All clicked
+                    if (
+                      selected.some(
+                        (opt: any) => opt.value === "__select_all__"
+                      )
+                    ) {
+                      setRoleForm({
+                        ...Roleform,
+                        permissions: permissionOptions,
+                      });
+                      return;
+                    }
+
+                    // Normal selection
+                    setRoleForm({
+                      ...Roleform,
+                      permissions: selected,
+                    });
+                  }}
                 />
               </div>
 

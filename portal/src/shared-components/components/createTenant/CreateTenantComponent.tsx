@@ -129,6 +129,7 @@ const CreateTenantComponent: React.FC<any> = ({
               <span className="ml-1 text-red-500">*</span>
             </label>
             <input
+              autoComplete="off"
               disabled={!!FormStatus?.mode}
               type="text"
               className={` w-full px-3 py-2 border border-[#ced4da] rounded-md 
@@ -178,7 +179,6 @@ const CreateTenantComponent: React.FC<any> = ({
                   required: "Status is required",
                 })}
               >
-                <option value="">Select Status</option>
                 <option value="active">Active</option>
                 <option value="inactive">Inactive</option>
               </select>
@@ -202,6 +202,7 @@ const CreateTenantComponent: React.FC<any> = ({
               <span className="ml-1 text-red-500">*</span>
             </label>
             <input
+              autoComplete="off"
               disabled={FormStatus?.mode === "view"}
               type="text"
               className={` w-full px-3 py-2 border border-[#ced4da] rounded-md 
@@ -230,6 +231,7 @@ const CreateTenantComponent: React.FC<any> = ({
               <span className="ml-1 text-red-500">*</span>
             </label>
             <input
+              autoComplete="off"
               disabled={FormStatus?.mode === "view"}
               type="text"
               className={` w-full px-3 py-2 border border-[#ced4da] rounded-md 
@@ -271,7 +273,7 @@ const CreateTenantComponent: React.FC<any> = ({
                 </label>
                 <input
                   autocomplete="off"
-                  type="text"
+                  type="email"
                   className={` w-full px-3 py-2 border border-[#ced4da] rounded-md 
          focus:border-[#86b7fe]  focus:outline-none focus:border-[2px] disabled:bg-[#ced4da] ${
            errors.adminemail ? "is-invalid" : ""

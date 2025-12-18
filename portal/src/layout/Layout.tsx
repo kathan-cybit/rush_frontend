@@ -11,6 +11,7 @@ import CustomFooter from "./footer/CustomFooter";
 import { setLogout } from "../store/reducers/authSlice";
 import { HomeIcn, RoleIcn, UserIcn } from "../assets/svgs";
 import { useMediaQuery } from "@mantine/hooks";
+import { getAllUsersRolesPermissions } from "../store/reducers/tenantSlice";
 
 const Layout: React.FC = () => {
   const navigate = useNavigate();
@@ -51,6 +52,9 @@ const Layout: React.FC = () => {
     return "dashboard";
   };
   const host = new URL(window.location.href).hostname.split(".")[0];
+  const hasManageOrgSettings = allUsersRolesPermissions?.roles?.some((role) =>
+    role.permissions?.some((perm) => perm?.slug == "manage_org_settings")
+  );
 
   const navItems =
     tenantType != "admin"
@@ -108,7 +112,9 @@ const Layout: React.FC = () => {
         handleNavigateSettings={handleNavigateSettings}
         handleLogout={handleLogout}
       />
-      {(user?.is_default_admin || tenantType == "admin") && (
+      {(user?.is_default_admin ||
+        tenantType == "admin" ||
+        hasManageOrgSettings) && (
         <Sidebar
           tenantType={tenantType}
           getActiveNavItem={getActiveNavItem}

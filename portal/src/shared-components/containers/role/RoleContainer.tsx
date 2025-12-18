@@ -126,12 +126,19 @@ export default function RoleContainer() {
 
   const handleSubmit = async (e: any) => {
     e.preventDefault();
-
+    if (
+      Roleform?.name == "" ||
+      Roleform?.name == null ||
+      Roleform?.name == undefined
+    ) {
+      error_toast("Role name cannot be empty");
+      return;
+    }
     const payload = {
       name: Roleform.name.trim() || "-",
       description: Roleform.description.trim() || "-",
       organization_id: 1,
-      permission_ids: Roleform.permissions.map((p: any) => p.value), // 🔥 Add permissions
+      permission_ids: Roleform.permissions.map((p: any) => p.value),
     };
 
     await dispatch(

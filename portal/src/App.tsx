@@ -11,22 +11,38 @@ import { applyTenantTheme } from "./utils/applyTenantTheme";
 import Dashboard from "./pages/dashboard/Dashboard";
 import Roles from "./pages/role/Roles";
 import CreateTenant from "./pages/createTenant/CreateTenant";
-import { RootState } from "./store/store";
+import { AppDispatch, RootState } from "./store/store";
 import CreateUser from "./pages/usermanagement/components/CreateUser";
+import { getAllUsersRolesPermissions } from "./store/reducers/tenantSlice";
 
 function App() {
-  const dispatch = useDispatch();
+  const dispatch = useDispatch<AppDispatch>();
+  const { token, tenantType, user } = useSelector(
+    (state: RootState) => state.auth
+  );
+  const { tenants, isLoading, allUsersRolesPermissions } = useSelector(
+    (state: RootState) => state.tenant
+  );
   useEffect(() => {
     const host = new URL(window.location.href).hostname.split(".")[0];
     if (host) {
       applyTenantTheme(host);
       dispatch(setCurrentTenantName(host));
     }
+    if (host != "public") {
+      dispatch(
+        getAllUsersRolesPermissions({
+          params: user?.id,
+          headers: { "x-tenant-id": host },
+        })
+      );
+    }
   }, []);
 
-  const { token, tenantType, user } = useSelector(
-    (state: RootState) => state.auth
+  const hasManageOrgSettings = allUsersRolesPermissions?.roles?.some((role) =>
+    role.permissions?.some((perm) => perm?.slug == "manage_org_settings")
   );
+
   return (
     <>
       {token != "undefined" &&
@@ -43,7 +59,7 @@ function App() {
                 />
                 <Route path="dashboard" element={<Dashboard />} />
                 {/* <Route path="license" element={<License />} /> */}
-                {user?.is_default_admin && (
+                {(user?.is_default_admin || hasManageOrgSettings) && (
                   <>
                     <Route path="usermanagement" element={<Users />} />
                     <Route path="roles" element={<Roles />} />

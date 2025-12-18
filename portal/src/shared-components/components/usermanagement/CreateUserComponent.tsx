@@ -115,6 +115,7 @@ export default function CreateUserComponent({
                 <span className="ml-1 text-red-500">*</span>
               </label>
               <input
+                autoComplete="off"
                 {...register("first_name", {
                   required: "First name is required",
                 })}
@@ -134,6 +135,7 @@ export default function CreateUserComponent({
                 Last Name
               </label>
               <input
+                autoComplete="off"
                 {...register("last_name")}
                 disabled={FormStatus?.mode == "view"}
                 type="text"
@@ -153,6 +155,7 @@ export default function CreateUserComponent({
                 <span className="ml-1 text-red-500">*</span>
               </label>
               <input
+                autoComplete="off"
                 disabled={FormStatus?.mode == "view"}
                 {...register("email", {
                   required: "Email is required",
@@ -178,6 +181,7 @@ export default function CreateUserComponent({
                 <span className="ml-1 text-red-500">*</span>
               </label>
               <input
+                autoComplete="off"
                 disabled={FormStatus?.mode == "view"}
                 {...register("phonenumber", {
                   required: "Phone number is required",
@@ -216,6 +220,7 @@ export default function CreateUserComponent({
                 Address One
               </label>
               <input
+                autoComplete="off"
                 {...register("address_one")}
                 disabled={FormStatus?.mode == "view"}
                 type="text"
@@ -233,6 +238,7 @@ export default function CreateUserComponent({
                 Address Two
               </label>
               <input
+                autoComplete="off"
                 {...register("address_two")}
                 disabled={FormStatus?.mode == "view"}
                 type="text"
@@ -251,6 +257,7 @@ export default function CreateUserComponent({
                 <span className="ml-1 text-red-500">*</span>
               </label>
               <input
+                autoComplete="off"
                 {...register("country", {
                   required: "Country is required",
                   pattern: {
@@ -275,6 +282,7 @@ export default function CreateUserComponent({
                 <span className="ml-1 text-red-500">*</span>
               </label>
               <input
+                autoComplete="off"
                 {...register("city", {
                   required: "City is required",
                   pattern: {
@@ -299,6 +307,7 @@ export default function CreateUserComponent({
                 <span className="ml-1 text-red-500">*</span>
               </label>
               <input
+                autoComplete="off"
                 {...register("pincode", {
                   required: "Pincode is required",
                   pattern: {
@@ -325,6 +334,7 @@ export default function CreateUserComponent({
                   <span className="ml-1 text-red-500">*</span>
                 </label>
                 <input
+                  autoComplete="off"
                   disabled={FormStatus?.mode == "view"}
                   {...register("password", {
                     required: "Password is required",
