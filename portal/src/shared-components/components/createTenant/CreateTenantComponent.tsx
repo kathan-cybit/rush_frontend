@@ -126,6 +126,7 @@ const CreateTenantComponent: React.FC<any> = ({
               className="mb-[8px] text-[#1f2937] text-[14px] text-[500]"
             >
               Domain Name
+              <span className="ml-1 text-red-500">*</span>
             </label>
             <input
               disabled={!!FormStatus?.mode}
@@ -198,6 +199,7 @@ const CreateTenantComponent: React.FC<any> = ({
               className="mb-[8px] text-[#1f2937] text-[14px] text-[500]"
             >
               Full Legal Name
+              <span className="ml-1 text-red-500">*</span>
             </label>
             <input
               disabled={FormStatus?.mode === "view"}
@@ -225,6 +227,7 @@ const CreateTenantComponent: React.FC<any> = ({
               className="mb-[8px] text-[#1f2937] text-[14px] text-[500]"
             >
               GST Number
+              <span className="ml-1 text-red-500">*</span>
             </label>
             <input
               disabled={FormStatus?.mode === "view"}
@@ -264,8 +267,10 @@ const CreateTenantComponent: React.FC<any> = ({
                   className="mb-[8px] text-[#1f2937] text-[14px] text-[500]"
                 >
                   Admin Email
+                  <span className="ml-1 text-red-500">*</span>
                 </label>
                 <input
+                  autocomplete="off"
                   type="text"
                   className={` w-full px-3 py-2 border border-[#ced4da] rounded-md 
          focus:border-[#86b7fe]  focus:outline-none focus:border-[2px] disabled:bg-[#ced4da] ${
@@ -294,8 +299,10 @@ const CreateTenantComponent: React.FC<any> = ({
                   className="mb-[8px] text-[#1f2937] text-[14px] text-[500]"
                 >
                   Password
+                  <span className="ml-1 text-red-500">*</span>
                 </label>
                 <input
+                  autocomplete="off"
                   type="password"
                   className={` w-full px-3 py-2 border border-[#ced4da] rounded-md 
          focus:border-[#86b7fe]  focus:outline-none focus:border-[2px] disabled:bg-[#ced4da] ${
@@ -334,8 +341,10 @@ const CreateTenantComponent: React.FC<any> = ({
               className="mb-[8px] text-[#1f2937] text-[14px] text-[500]"
             >
               Contact person
+              <span className="ml-1 text-red-500">*</span>
             </label>
             <input
+              autocomplete="off"
               disabled={FormStatus?.mode === "view"}
               type="text"
               className={` w-full px-3 py-2 border border-[#ced4da] rounded-md 
@@ -361,8 +370,10 @@ const CreateTenantComponent: React.FC<any> = ({
               className="mb-[8px] text-[#1f2937] text-[14px] text-[500]"
             >
               Email
+              <span className="ml-1 text-red-500">*</span>
             </label>
             <input
+              autocomplete="off"
               disabled={FormStatus?.mode === "view"}
               type="text"
               className={` w-full px-3 py-2 border border-[#ced4da] rounded-md 
@@ -394,8 +405,10 @@ const CreateTenantComponent: React.FC<any> = ({
               className="mb-[8px] text-[#1f2937] text-[14px] text-[500]"
             >
               Phone Number
+              <span className="ml-1 text-red-500">*</span>
             </label>
             <input
+              autocomplete="off"
               disabled={FormStatus?.mode === "view"}
               type="tel"
               className={` w-full px-3 py-2 border border-[#ced4da] rounded-md 

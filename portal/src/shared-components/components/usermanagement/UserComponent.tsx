@@ -15,6 +15,7 @@ interface userProps {
 }
 
 export default function UserComponent({
+  allUsersRoles,
   loading,
   userData,
   CurrData,
@@ -63,6 +64,7 @@ export default function UserComponent({
       {FormStatus.mode && FormStatus.userId && CurrData && (
         <>
           <CreateUserContainer
+            allUsersRoles={allUsersRoles}
             setFormStatus={setFormStatus}
             FormStatus={FormStatus}
             CurrData={CurrData}

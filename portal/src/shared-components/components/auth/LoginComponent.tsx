@@ -25,6 +25,12 @@ export default function LoginComponent({
   onPasswordChange,
   onLogin,
 }: LoginProps) {
+  const handleKeyDown = (e: any) => {
+    if (e.key == "Enter") {
+      onLogin();
+    }
+  };
+
   return (
     <>
       {loading && (
@@ -52,6 +58,7 @@ export default function LoginComponent({
               {/* Email */}
               <div>
                 <input
+                  onKeyDown={handleKeyDown}
                   value={email}
                   className="shadow-sm px-3 py-2 border border-[#ced4da] focus:border-[#86b7fe] rounded-md focus:outline-none focus:ring-[#cfe2ff] focus:ring-4 w-full"
                   onChange={onEmailChange}
@@ -65,6 +72,7 @@ export default function LoginComponent({
               {/* Password */}
               <div>
                 <input
+                  onKeyDown={handleKeyDown}
                   value={password}
                   onChange={onPasswordChange}
                   className="shadow-sm px-3 py-2 border border-[#ced4da] focus:border-[#86b7fe] rounded-md focus:outline-none focus:ring-[#cfe2ff] focus:ring-4 w-full"
@@ -77,12 +85,12 @@ export default function LoginComponent({
 
               {/* Login Button */}
               <div className="flex justify-center mt-4">
-                <div
+                <button
                   className="rounded-[4px] w-[240px] h-[45px] primaryc-btn"
                   onClick={onLogin}
                 >
                   Login
-                </div>
+                </button>
               </div>
             </div>
 

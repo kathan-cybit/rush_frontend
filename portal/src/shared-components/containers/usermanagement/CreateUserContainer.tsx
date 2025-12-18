@@ -36,14 +36,15 @@ export default function CreateUserContainer({
   CurrData = {},
   FormStatus = { mode: null, userId: null },
   setFormStatus,
+  allUsersRoles,
 }: any) {
   const dispatch = useDispatch<AppDispatch>();
   const navigate = useNavigate();
   const { tenantType } = useSelector((state: RootState) => state.auth);
   const [assignedApps, setAssignedApps] = useState<string[]>([]);
   const allRoles = useSelector((state: any) => state.tenant.allRoles) || [];
-  const allUsersRoles =
-    useSelector((state: any) => state.tenant.allUsersRoles) || [];
+  // const allUsersRoles =
+  //   useSelector((state: any) => state.tenant.allUsersRoles) || [];
   const [defaultUserRoleOptions, setDefaultUserRoleOptions] = useState([]);
 
   const { allApps, allLicenseWithCounts, allLicenses } = useSelector(
@@ -202,14 +203,14 @@ export default function CreateUserContainer({
         },
       })
     );
-    dispatch(
-      getAllRoleUsers({
-        role: tenantType,
-        headers: {
-          "x-tenant-id": host,
-        },
-      })
-    );
+    // dispatch(
+    //   getAllRoleUsers({
+    //     role: tenantType,
+    //     headers: {
+    //       "x-tenant-id": host,
+    //     },
+    //   })
+    // );
   }, []);
 
   useEffect(() => {

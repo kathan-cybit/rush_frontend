@@ -1,6 +1,9 @@
 import React, { useEffect, useMemo, useState } from "react";
 import { EditIcon, EyeIcon } from "../../../assets/svgs";
-import { fetchUsers } from "../../../store/reducers/tenantSlice";
+import {
+  fetchUsers,
+  getAllRoleUsers,
+} from "../../../store/reducers/tenantSlice";
 import { AppDispatch, RootState } from "../../../store/store";
 import { useDispatch, useSelector } from "react-redux";
 import { UserComponent } from "../../components";
@@ -17,8 +20,11 @@ export default function UserContainer() {
   });
 
   const [CurrData, setCurrData] = useState<any>(null);
-
+  const host = new URL(window.location.href).hostname.split(".")[0];
   const { currentTenantName } = useSelector((state: RootState) => state.auth);
+  const { tenantType } = useSelector((state: RootState) => state.auth);
+  const allUsersRoles =
+    useSelector((state: any) => state.tenant.allUsersRoles) || [];
 
   const menuItems = [
     {
@@ -61,16 +67,6 @@ export default function UserContainer() {
     setFormStatus({ mode: "edit", userId: row.id });
   };
 
-  const formattedTenants = useMemo(() => {
-    return userData?.map((e: any) => ({
-      id: e?.id,
-      username: e.first_name + " " + e?.last_name,
-      status: e.status,
-      email: e.email,
-      "phone number": e.phonenumber,
-    }));
-  }, [userData]);
-
   useEffect(() => {
     if (currentTenantName) {
       dispatch(
@@ -80,6 +76,30 @@ export default function UserContainer() {
       );
     }
   }, [currentTenantName]);
+
+  useEffect(() => {
+    dispatch(
+      getAllRoleUsers({
+        role: tenantType,
+        headers: {
+          "x-tenant-id": host,
+        },
+      })
+    );
+  }, [FormStatus.mode, userData]);
+
+  const formattedTenants = userData?.map((e: any) => ({
+    id: e?.id,
+    username: e.first_name + " " + e?.last_name,
+    status: e.status,
+    email: e.email,
+    "phone number": e.phonenumber,
+    roles: allUsersRoles
+      .find((u) => u.user_id == e?.id)
+      ?.roles.map((role) => role.name)
+      .sort()
+      .join(", "),
+  }));
 
   const roleProps = {
     loading,
@@ -92,6 +112,7 @@ export default function UserContainer() {
     formattedTenants,
     statusColorMap,
     menuItems,
+    allUsersRoles,
   };
   return (
     <div>

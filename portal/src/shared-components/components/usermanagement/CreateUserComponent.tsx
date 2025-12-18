@@ -112,9 +112,12 @@ export default function CreateUserComponent({
             <div className="float-left mb-[15px] px-[12px] w-[50%]">
               <label className="block mb-[8px] font-[500] text-[#1f2937] text-[14px]">
                 First Name
+                <span className="ml-1 text-red-500">*</span>
               </label>
               <input
-                {...register("first_name")}
+                {...register("first_name", {
+                  required: "First name is required",
+                })}
                 disabled={FormStatus?.mode == "view"}
                 type="text"
                 className="disabled:bg-[#ced4da] px-3 py-2 border border-[#ced4da] focus:border-[#86b7fe] rounded-md outline-none w-full transition-all"
@@ -147,10 +150,17 @@ export default function CreateUserComponent({
             <div className="float-left mb-[15px] px-[12px] w-[50%]">
               <label className="block mb-[8px] font-[500] text-[#1f2937] text-[14px]">
                 Email
+                <span className="ml-1 text-red-500">*</span>
               </label>
               <input
                 disabled={FormStatus?.mode == "view"}
-                {...register("email")}
+                {...register("email", {
+                  required: "Email is required",
+                  pattern: {
+                    value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
+                    message: "Invalid email address",
+                  },
+                })}
                 type="email"
                 className="disabled:bg-[#ced4da] px-3 py-2 border border-[#ced4da] focus:border-[#86b7fe] rounded-md outline-none w-full"
                 placeholder="Enter user email"
@@ -165,10 +175,17 @@ export default function CreateUserComponent({
             <div className="float-left mb-[15px] px-[12px] w-[50%]">
               <label className="block mb-[8px] font-[500] text-[#1f2937] text-[14px]">
                 Phone Number
+                <span className="ml-1 text-red-500">*</span>
               </label>
               <input
                 disabled={FormStatus?.mode == "view"}
-                {...register("phonenumber")}
+                {...register("phonenumber", {
+                  required: "Phone number is required",
+                  pattern: {
+                    value: /^[0-9]{10}$/,
+                    message: "Phone number must be 10 digits",
+                  },
+                })}
                 type="text"
                 className="disabled:bg-[#ced4da] px-3 py-2 border border-[#ced4da] focus:border-[#86b7fe] rounded-md outline-none w-full"
                 placeholder="Enter phone number"
@@ -182,7 +199,7 @@ export default function CreateUserComponent({
 
             <div className="float-left mb-[15px] px-[12px] w-[50%]">
               <label className="block mb-[8px] font-[500] text-[#1f2937] text-[14px]">
-                Status
+                Status <span className="ml-1 text-red-500">*</span>
               </label>
               <select
                 disabled={FormStatus?.mode == "view"}
@@ -231,6 +248,7 @@ export default function CreateUserComponent({
             <div className="float-left mb-[15px] px-[12px] w-[50%]">
               <label className="block mb-[8px] font-[500] text-[#1f2937] text-[14px]">
                 Country
+                <span className="ml-1 text-red-500">*</span>
               </label>
               <input
                 {...register("country", {
@@ -254,6 +272,7 @@ export default function CreateUserComponent({
             <div className="float-left mb-[15px] px-[12px] w-[50%]">
               <label className="block mb-[8px] font-[500] text-[#1f2937] text-[14px]">
                 City
+                <span className="ml-1 text-red-500">*</span>
               </label>
               <input
                 {...register("city", {
@@ -277,6 +296,7 @@ export default function CreateUserComponent({
             <div className="float-left mb-[15px] px-[12px] w-[50%]">
               <label className="block mb-[8px] font-[500] text-[#1f2937] text-[14px]">
                 Pincode
+                <span className="ml-1 text-red-500">*</span>
               </label>
               <input
                 {...register("pincode", {
@@ -302,6 +322,7 @@ export default function CreateUserComponent({
               <div className="float-left mb-[15px] px-[12px] w-[50%]">
                 <label className="block mb-[8px] font-[500] text-[#1f2937] text-[14px]">
                   Password
+                  <span className="ml-1 text-red-500">*</span>
                 </label>
                 <input
                   disabled={FormStatus?.mode == "view"}
