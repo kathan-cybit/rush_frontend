@@ -7,22 +7,25 @@ import {
 import { AppDispatch, RootState } from "../../../store/store";
 import { useDispatch, useSelector } from "react-redux";
 import { UserComponent } from "../../components";
+import { useNavigate } from "react-router-dom";
 
 export default function UserContainer() {
+  const navigate = useNavigate();
   const dispatch = useDispatch<AppDispatch>();
   const { users: userData, isLoading: loading } = useSelector(
     (state: RootState) => state.tenant
   );
 
+  const { tenantType, user } = useSelector((state: RootState) => state.auth);
   const [FormStatus, setFormStatus] = useState({
     mode: null,
     userId: null,
   });
 
   const [CurrData, setCurrData] = useState<any>(null);
+  const [OpenForm, setOpenForm] = useState(false);
   const host = new URL(window.location.href).hostname.split(".")[0];
   const { currentTenantName } = useSelector((state: RootState) => state.auth);
-  const { tenantType } = useSelector((state: RootState) => state.auth);
   const allUsersRoles =
     useSelector((state: any) => state.tenant.allUsersRoles) || [];
 
@@ -75,7 +78,7 @@ export default function UserContainer() {
         })
       );
     }
-  }, [currentTenantName]);
+  }, [currentTenantName, OpenForm]);
 
   useEffect(() => {
     dispatch(
@@ -86,7 +89,7 @@ export default function UserContainer() {
         },
       })
     );
-  }, [FormStatus.mode, userData]);
+  }, [FormStatus.mode, userData, OpenForm]);
 
   const formattedTenants = userData?.map((e: any) => ({
     id: e?.id,
@@ -101,6 +104,18 @@ export default function UserContainer() {
       .join(", "),
   }));
 
+  const BreadCrumbItems = [
+    {
+      title: "Home",
+      onClick: () => {
+        navigate("/dashboard");
+      },
+    },
+    {
+      title: "User Management",
+    },
+  ];
+  const [displayAlert, setdisplayAlert] = useState(false);
   const roleProps = {
     loading,
     userData,
@@ -113,7 +128,15 @@ export default function UserContainer() {
     statusColorMap,
     menuItems,
     allUsersRoles,
+    user,
+    host,
+    OpenForm,
+    setOpenForm,
+    displayAlert,
+    setdisplayAlert,
+    BreadCrumbItems,
   };
+
   return (
     <div>
       <div className="mx-auto">

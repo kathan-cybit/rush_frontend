@@ -1,7 +1,15 @@
-import React from "react";
+import React, { useState } from "react";
 import { Controller } from "react-hook-form";
 import Select from "react-select";
-import { Dialog, Loader, Modal, TableV2 } from "../../ui";
+import {
+  Alert,
+  CustomBreadCrumbs,
+  Dialog,
+  Loader,
+  Modal,
+  TableV2,
+} from "../../ui";
+import UploadExcelForm from "../usermanagement/UploadExcelForm";
 
 const SELECT_ALL_OPTION = {
   label: "Select All",
@@ -14,6 +22,7 @@ const DESELECT_ALL_OPTION = {
 };
 
 export default function RoleComponent({
+  BreadCrumbItems,
   handleModalClose,
   EditRole,
   CurrData = {},
@@ -31,7 +40,14 @@ export default function RoleComponent({
   menuItems,
   statusColorMap,
   isLoading,
+  user,
+  OpenForm,
+  setOpenForm,
+  subDomain,
+  displayAlert,
+  setdisplayAlert,
 }: any) {
+  const [ErrorAlert, setErrorAlert] = useState("");
   const allSelected =
     Roleform.permissions?.length == permissionOptions.length &&
     permissionOptions.length > 0;
@@ -50,20 +66,53 @@ export default function RoleComponent({
       )}
       <>
         <div className="flex flex-col">
-          <div className="mb-8">
-            <button
-              onClick={() => {
-                setOpenCreateRole(true);
-              }}
-              type="submit"
-              className="inline-flex float-end items-center gap-2 bg-bsecondary hover:opacity-[0.75] px-7 py-3 border-none rounded-lg font-medium text-white text-sm transition-all duration-200 cursor-pointer"
-            >
-              Create New Role
-            </button>
+          <div className="flex justify-between mb-8">
+            <div>
+              <h1 className="mb-0 font-fsecondary text-[32px] text-[500] leading-[140%] tracking-[0.25px]">
+                {"Hi," + " " + user?.first_name + " " + user?.last_name}
+              </h1>
+              <>
+                <CustomBreadCrumbs
+                  separator=">"
+                  items={BreadCrumbItems}
+                  className="font-[500] font-fsecondary text-[#adadad] text-[14px] leading-[140%] tracking-[0.25px]"
+                />
+              </>
+            </div>
+            <div className="flex gap-2">
+              <button
+                onClick={() => {
+                  setOpenForm(true);
+                }}
+                type="submit"
+                className="inline-flex float-end items-center gap-2 bg-bsecondary hover:opacity-[0.75] px-7 py-3 border-none rounded-lg h-[45px] font-medium text-white text-sm transition-all duration-200 cursor-pointer"
+              >
+                Upload .XLS file
+              </button>
+              <button
+                onClick={() => {
+                  setOpenCreateRole(true);
+                }}
+                type="submit"
+                className="inline-flex float-end items-center gap-2 bg-bsecondary hover:opacity-[0.75] px-7 py-3 border-none rounded-lg h-[45px] font-medium text-white text-sm transition-all duration-200 cursor-pointer"
+              >
+                Create New Role
+              </button>
+            </div>
           </div>
         </div>
       </>
       <>
+        {displayAlert && (
+          <Alert
+            withCloseButton
+            onClick={() => {
+              setdisplayAlert(false);
+            }}
+          >
+            {ErrorAlert}
+          </Alert>
+        )}
         <TableV2
           data={formattedRoles}
           menuItems={menuItems}
@@ -189,24 +238,6 @@ export default function RoleComponent({
                 />
               </div>
 
-              {/* <div className="gap-1 grid">
-                <label className="font-medium text-sm">
-                  Select Permissions
-                </label>
-                <Select
-                  isMulti
-                  options={permissionOptions}
-                  value={Roleform.permissions}
-                  onChange={(val) => {
-                    setRoleForm({
-                      ...Roleform,
-                      permissions: val,
-                    });
-                  }}
-                  placeholder="Select permissions..."
-                />
-              </div> */}
-
               <div className="gap-1 grid">
                 <label className="font-medium text-sm">
                   Select Permissions
@@ -256,6 +287,22 @@ export default function RoleComponent({
             </form>
           </div>
         </Dialog>
+      )}
+      {OpenForm && (
+        <Modal
+          // title="Create Users"
+          size={"xl"}
+          opened={OpenForm}
+          onClose={() => setOpenForm(false)}
+        >
+          <UploadExcelForm
+            uploader="role"
+            host={subDomain}
+            setOpenForm={setOpenForm}
+            setdisplayAlert={setdisplayAlert}
+            setErrorAlert={setErrorAlert}
+          />
+        </Modal>
       )}
     </div>
   );

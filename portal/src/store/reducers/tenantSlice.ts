@@ -2,6 +2,7 @@ import { createSlice, createAsyncThunk, PayloadAction } from "@reduxjs/toolkit";
 import axiosInstance from "../../utils/axiosinstance";
 import { error_toast, success_toast } from "../../utils/toaster";
 import { AxiosResponse } from "axios";
+import { Alert } from "@eiris/common-ui-react";
 
 type ApiResponse<T = unknown> = {
   data: T;
@@ -223,6 +224,7 @@ export const getRoles = createAsyncThunk<unknown, any>(
         props.role != "admin" ? `/users/getroles` : "/admin/getroles",
         { headers: { ...props.headers } }
       );
+
       return response.data;
     } catch (err: any) {
       const error = err.response?.data?.error || err.message;
@@ -335,6 +337,52 @@ export const getAllUsersRolesPermissions = createAsyncThunk<unknown, any>(
   }
 );
 
+export const addUsersExcel = createAsyncThunk<unknown, any>(
+  "tenant/addUsersExcel",
+  async (props, { rejectWithValue }) => {
+    try {
+      const response = await axiosInstance.post(
+        `/users/import`,
+        props?.payload,
+        { headers: { ...props.headers } }
+      );
+      if (response.data?.success == true || response.data?.success == "true") {
+        success_toast(response.data.message || "users uploaded successfully");
+      } else {
+        return rejectWithValue({ response: response.data });
+      }
+      return response.data;
+    } catch (err: any) {
+      const error = err.response?.data?.error || err.message;
+      error_toast(error);
+      return rejectWithValue({ error, status: err.response?.status });
+    }
+  }
+);
+
+export const addRolesExcel = createAsyncThunk<unknown, any>(
+  "tenant/addRolesExcel",
+  async (props, { rejectWithValue }) => {
+    try {
+      const response = await axiosInstance.post(
+        `/roles/import`,
+        props?.payload,
+        { headers: { ...props.headers } }
+      );
+      if (response.data?.success == true || response.data?.success == "true") {
+        success_toast(response.data.message || "roles uploaded successfully");
+      } else {
+        return rejectWithValue({ response: response.data });
+      }
+      return response.data;
+    } catch (err: any) {
+      const error = err.response?.data?.error || err.message;
+      error_toast(error);
+      return rejectWithValue({ error, status: err.response?.status });
+    }
+  }
+);
+
 interface TenantState {
   users: unknown[];
   tenants: unknown[];
@@ -344,7 +392,8 @@ interface TenantState {
   allpermissions: unknown[];
   permissionsRoles: unknown[];
   allpermissionsroles: unknown[];
-
+  usersUploaded: boolean;
+  rolesuploaded: boolean;
   allUsersRolesPermissions: unknown[];
 }
 
@@ -356,7 +405,8 @@ const initialState: TenantState = {
   permissionsRoles: [],
   allUsersRoles: [],
   allpermissionsroles: [],
-
+  usersUploaded: false,
+  rolesuploaded: false,
   allUsersRolesPermissions: [],
   isLoading: false,
 };
@@ -364,7 +414,14 @@ const initialState: TenantState = {
 const tenantSlice = createSlice({
   name: "tenant",
   initialState,
-  reducers: {},
+  reducers: {
+    resetUsersUpload(state) {
+      state.usersUploaded = false;
+    },
+    resetRolesUpload(state) {
+      state.rolesuploaded = false;
+    },
+  },
   extraReducers: (builder) => {
     builder
       .addCase(fetchUsers.pending, (state) => {
@@ -518,18 +575,28 @@ const tenantSlice = createSlice({
       })
       .addCase(getAllUsersRolesPermissions.rejected, (state) => {
         state.isLoading = false;
+      })
+      .addCase(addUsersExcel.pending, (state) => {
+        state.isLoading = true;
+      })
+      .addCase(addUsersExcel.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.usersUploaded = true;
+      })
+      .addCase(addUsersExcel.rejected, (state) => {
+        state.isLoading = false;
+      })
+      .addCase(addRolesExcel.pending, (state) => {
+        state.isLoading = true;
+      })
+      .addCase(addRolesExcel.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.rolesuploaded = true;
+      })
+      .addCase(addRolesExcel.rejected, (state) => {
+        state.isLoading = false;
       });
-    // .addCase(getApps.pending, (state) => {
-    //   state.isLoading = true;
-    // })
-    // .addCase(getApps.fulfilled, (state, action) => {
-    //   state.isLoading = false;
-    //   state.allApps = action.payload as unknown[];
-    // })
-    // .addCase(getApps.rejected, (state) => {
-    //   state.isLoading = false;
-    // });
   },
 });
-
+export const { resetRolesUpload, resetUsersUpload } = tenantSlice.actions;
 export default tenantSlice.reducer;

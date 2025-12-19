@@ -236,5 +236,11 @@ export default function DashboardContainer() {
     hasManageOrgSettings,
   };
 
-  return <DashboardComponent {...componentProps} />;
+  return (
+    <>
+      <div className="p-4">
+        <DashboardComponent {...componentProps} />
+      </div>
+    </>
+  );
 }

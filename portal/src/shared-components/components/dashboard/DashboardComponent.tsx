@@ -60,7 +60,7 @@ export default function DashboardComponent({
           <Loader />
         </div>
       )}
-      <div className="flex justify-between items-center mb-5">
+      <div className="flex justify-between mb-5">
         {host !== "public" ? (
           <div>
             <h1 className="mb-0 font-fsecondary text-[32px] text-[500] leading-[140%] tracking-[0.25px]">
@@ -89,7 +89,7 @@ export default function DashboardComponent({
             {!FormStatus.mode && (
               <div
                 onClick={handleCreateTenant}
-                className="px-[20px] py-[12px] rounded-[8px] max-w-[200px] primaryc-btn"
+                className="px-[20px] py-[12px] rounded-[8px] max-w-[200px] h-[45px] primaryc-btn"
               >
                 <div className="flex justify-between items-center gap-2">
                   <div>{<AuthIcn />}</div>
@@ -103,7 +103,7 @@ export default function DashboardComponent({
             {!FormStatus.mode && (
               <div
                 onClick={handleCreateTenant}
-                className="px-[20px] py-[12px] rounded-[8px] max-w-[200px] primaryc-btn"
+                className="px-[20px] py-[12px] rounded-[8px] max-w-[200px] h-[45px] primaryc-btn"
               >
                 <div className="flex justify-between items-center gap-2">
                   <div>{"＋"}</div>

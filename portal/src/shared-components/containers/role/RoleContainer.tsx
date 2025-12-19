@@ -14,10 +14,12 @@ import { AppDispatch, RootState } from "../../../store/store";
 import { useForm } from "react-hook-form";
 import { error_toast } from "../../../utils/toaster";
 import EditIcn from "../../../assets/svgs/EditIcn";
+import { useNavigate } from "react-router-dom";
 
 export default function RoleContainer() {
+  const navigate = useNavigate();
   const dispatch = useDispatch<AppDispatch>();
-  const { tenantType } = useSelector((state: RootState) => state.auth);
+  const { tenantType, user } = useSelector((state: RootState) => state.auth);
   const subDomain = new URL(window.location.href).hostname.split(".")[0];
 
   const isLoading = useSelector((state: any) => state.tenant.isLoading);
@@ -62,6 +64,8 @@ export default function RoleContainer() {
     organization_id: 1,
   });
 
+  const [displayAlert, setdisplayAlert] = useState(false);
+  const [OpenForm, setOpenForm] = useState(false);
   const [EditRole, setEditRole] = useState({ open: false, roleId: null });
   const [OpenCreateRole, setOpenCreateRole] = useState(false);
   const [CurrData, setCurrData] = useState<any>({});
@@ -95,34 +99,6 @@ export default function RoleContainer() {
       })
       .catch(() => {});
   };
-
-  // const handleSubmit = async (e: any) => {
-  //   e.preventDefault();
-
-  //   const payload = {
-  //     name: Roleform.name || "-",
-  //     description: Roleform.description || "-",
-  //     organization_id: 1,
-  //   };
-
-  //   await dispatch(
-  //     addRole({
-  //       role: tenantType,
-  //       payload,
-  //       headers: { "x-tenant-id": subDomain },
-  //     })
-  //   )
-  //     .unwrap()
-  //     .then(() => {
-  //       setRoleForm({
-  //         name: "",
-  //         description: "",
-  //         organization_id: 1,
-  //       });
-  //       setOpenCreateRole(false);
-  //     })
-  //     .catch(() => {});
-  // };
 
   const handleSubmit = async (e: any) => {
     e.preventDefault();
@@ -197,7 +173,7 @@ export default function RoleContainer() {
         })
       );
     }
-  }, [EditRole, OpenCreateRole]);
+  }, [EditRole, OpenCreateRole, OpenForm]);
 
   useEffect(() => {
     dispatch(
@@ -208,7 +184,7 @@ export default function RoleContainer() {
         },
       })
     );
-  }, [OpenCreateRole]);
+  }, [OpenCreateRole, OpenForm]);
 
   const selectedPermissionIds = useMemo(() => {
     return (permissionsRoles || []).map((item) => item.Permission?.id);
@@ -249,6 +225,18 @@ export default function RoleContainer() {
     setValue("permission_ids", preSelectedOptions);
   }, [permissionsRoles, allPermissions]);
 
+  const BreadCrumbItems = [
+    {
+      title: "Home",
+      onClick: () => {
+        navigate("/dashboard");
+      },
+    },
+    {
+      title: "Roles & Permissions",
+    },
+  ];
+
   return (
     <div className="">
       <div className="mx-auto">
@@ -271,6 +259,13 @@ export default function RoleContainer() {
             handleSubmit={handleSubmit}
             onChangeRoleForm={onChangeRoleForm}
             isLoading={isLoading}
+            user={user}
+            OpenForm={OpenForm}
+            setOpenForm={setOpenForm}
+            subDomain={subDomain}
+            BreadCrumbItems={BreadCrumbItems}
+            setdisplayAlert={setdisplayAlert}
+            displayAlert={displayAlert}
           />
         </div>
       </div>
