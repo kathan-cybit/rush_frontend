@@ -242,6 +242,7 @@ export default function RoleContainer() {
       <div className="mx-auto">
         <div className="p-4">
           <RoleComponent
+            allRoles={allRoles}
             permissionOptions={permissionOptions}
             menuItems={menuItems}
             statusColorMap={statusColorMap}

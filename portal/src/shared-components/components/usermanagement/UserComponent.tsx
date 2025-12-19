@@ -10,7 +10,10 @@ import {
 } from "../../ui";
 import { CreateUserContainer } from "../../containers";
 import { useNavigate } from "react-router-dom";
-import UploadExcelForm from "./UploadExcelForm";
+import UploadExcelForm from "../UploadExcelComponent/UploadExcelForm";
+import { DownloadIcn } from "../../../assets/svgs";
+import { exportToCSV } from "../../../utils/exports";
+import { USersFile } from "../../../assets/img";
 
 interface userProps {
   loading: boolean;
@@ -44,6 +47,7 @@ export default function UserComponent({
 }: any) {
   const navigate: any = useNavigate();
   const [ErrorAlert, setErrorAlert] = useState("");
+
   return (
     <div>
       {loading && (
@@ -58,11 +62,12 @@ export default function UserComponent({
               <div className="flex justify-between mb-8">
                 <div>
                   <h1 className="mb-0 font-fsecondary text-[32px] text-[500] leading-[140%] tracking-[0.25px]">
-                    {"Hi," + " " + user?.first_name + " " + user?.last_name}
+                    {"Hi," +
+                      " " +
+                      (user?.first_name || user?.username || "") +
+                      " " +
+                      (user?.last_name || "")}
                   </h1>
-                  {/* <span className="font-fsecondary text-[#adadad] text-[14px] text-[500] leading-[140%]">
-                    Continue to other apps
-                  </span> */}
                   <>
                     <CustomBreadCrumbs
                       separator=">"
@@ -72,14 +77,20 @@ export default function UserComponent({
                   </>
                 </div>
                 <div className="flex gap-2">
+                  <a
+                    href={USersFile}
+                    className="inline-flex float-end items-center gap-2 bg-bsecondary hover:opacity-[0.75] px-7 py-3 border-none rounded-lg h-[45px] font-medium text-white text-sm transition-all duration-200 cursor-pointer"
+                  >
+                    <DownloadIcn />
+                    <span>Download Sample File</span>
+                  </a>
                   <button
                     onClick={() => {
                       setOpenForm(true);
                     }}
-                    type="submit"
                     className="inline-flex float-end items-center gap-2 bg-bsecondary hover:opacity-[0.75] px-7 py-3 border-none rounded-lg h-[45px] font-medium text-white text-sm transition-all duration-200 cursor-pointer"
                   >
-                    Upload .XLS file
+                    Bulk upload
                   </button>
                   <button
                     onClick={() => {

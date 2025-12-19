@@ -6,6 +6,8 @@ import TeamsImg from "./Teams.png";
 import ICExpert from "./ICExpert.png";
 import PoleExpert from "./PoleExpert.png";
 import SimExpert from "./SimExpert.png";
+import USersFile from "../files/users.xlsx";
+import RolesFile from "../files/roles.xlsx";
 
 export {
   logo,
@@ -16,4 +18,6 @@ export {
   ICExpert,
   PoleExpert,
   SimExpert,
+  USersFile,
+  RolesFile,
 };

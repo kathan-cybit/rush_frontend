@@ -7,6 +7,7 @@ import EditIcon from "./EditIcn";
 import EyeIcon from "./EyeIcn";
 import BackIcon from "./BackIcn";
 import HomeIcn from "./HomeIcn";
+import DownloadIcn from "./DownloadIcn";
 
 export {
   ErisLoginLogo,
@@ -18,4 +19,5 @@ export {
   EyeIcon,
   HomeIcn,
   BackIcon,
+  DownloadIcn,
 };

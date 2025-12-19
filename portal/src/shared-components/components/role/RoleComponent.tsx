@@ -9,7 +9,10 @@ import {
   Modal,
   TableV2,
 } from "../../ui";
-import UploadExcelForm from "../usermanagement/UploadExcelForm";
+import UploadExcelForm from "../UploadExcelComponent/UploadExcelForm";
+import { DownloadIcn } from "../../../assets/svgs";
+import { exportToCSV } from "../../../utils/exports";
+import { RolesFile } from "../../../assets/img";
 
 const SELECT_ALL_OPTION = {
   label: "Select All",
@@ -22,6 +25,7 @@ const DESELECT_ALL_OPTION = {
 };
 
 export default function RoleComponent({
+  allRoles,
   BreadCrumbItems,
   handleModalClose,
   EditRole,
@@ -69,7 +73,11 @@ export default function RoleComponent({
           <div className="flex justify-between mb-8">
             <div>
               <h1 className="mb-0 font-fsecondary text-[32px] text-[500] leading-[140%] tracking-[0.25px]">
-                {"Hi," + " " + user?.first_name + " " + user?.last_name}
+                {"Hi," +
+                  " " +
+                  (user?.first_name || user?.username || "") +
+                  " " +
+                  (user?.last_name || "")}
               </h1>
               <>
                 <CustomBreadCrumbs
@@ -80,6 +88,13 @@ export default function RoleComponent({
               </>
             </div>
             <div className="flex gap-2">
+              <a
+                href={RolesFile}
+                className="inline-flex float-end items-center gap-2 bg-bsecondary hover:opacity-[0.75] px-7 py-3 border-none rounded-lg h-[45px] font-medium text-white text-sm transition-all duration-200 cursor-pointer"
+              >
+                <DownloadIcn />
+                <span>Download Sample File</span>
+              </a>
               <button
                 onClick={() => {
                   setOpenForm(true);
@@ -87,7 +102,7 @@ export default function RoleComponent({
                 type="submit"
                 className="inline-flex float-end items-center gap-2 bg-bsecondary hover:opacity-[0.75] px-7 py-3 border-none rounded-lg h-[45px] font-medium text-white text-sm transition-all duration-200 cursor-pointer"
               >
-                Upload .XLS file
+                Bulk upload
               </button>
               <button
                 onClick={() => {
