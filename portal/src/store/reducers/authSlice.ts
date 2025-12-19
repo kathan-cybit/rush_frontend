@@ -17,7 +17,7 @@ interface LoginPayload {
 
 export const loginUser = createAsyncThunk<LoginResponse, LoginPayload>(
   "auth/loginUser",
-  async ({ currentTenantName, email, password }) => {
+  async ({ currentTenantName, email, password }, { rejectWithValue }) => {
     try {
       const res = await axiosInstance.post<LoginResponse>(
         `/auth/login?tenant=${currentTenantName}`,
@@ -31,14 +31,14 @@ export const loginUser = createAsyncThunk<LoginResponse, LoginPayload>(
     } catch (err: any) {
       const msg = err.response?.data?.error || err.message;
       error_toast(msg);
-      return msg;
+      return rejectWithValue({ err, status: err.response?.status });
     }
   }
 );
 
 export const verifyUser = createAsyncThunk<unknown, any>(
   "auth/verifyUser",
-  async ({ tenant, token }) => {
+  async ({ tenant, token }, { rejectWithValue }) => {
     try {
       const res = await axiosInstance.get<any>(
         `/auth/verify-email?token=${token}&tenant=${tenant}`
@@ -51,14 +51,14 @@ export const verifyUser = createAsyncThunk<unknown, any>(
     } catch (err: any) {
       const msg = err.response?.data?.error || err.message;
       error_toast(msg);
-      return msg;
+      return rejectWithValue({ err, status: err.response?.status });
     }
   }
 );
 
 export const updatePassword = createAsyncThunk<unknown, any>(
   "auth/updatePassword",
-  async (props) => {
+  async (props, { rejectWithValue }) => {
     try {
       const res = await axiosInstance.post<any>(
         props.role == "admin"
@@ -75,7 +75,73 @@ export const updatePassword = createAsyncThunk<unknown, any>(
     } catch (err: any) {
       const msg = err.response?.data?.error || err.message;
       error_toast(msg);
-      return msg;
+      return rejectWithValue({ err, status: err.response?.status });
+    }
+  }
+);
+
+export const forgotPassword = createAsyncThunk<unknown, any>(
+  "auth/forgotPassword",
+  async (props, { rejectWithValue }) => {
+    try {
+      const res = await axiosInstance.post<any>(
+        `/auth/changepassword`,
+        props.payload,
+        { headers: { ...props.headers } }
+      );
+
+      if (res?.data) {
+        success_toast(res.data.message || "Verified successfully");
+      }
+      return res.data;
+    } catch (err: any) {
+      const msg = err.response?.data?.error || err.message;
+      error_toast(msg);
+      return rejectWithValue({ err, status: err.response?.status });
+    }
+  }
+);
+
+export const verifytokenPasswdLink = createAsyncThunk<unknown, any>(
+  "auth/verifytokenPasswdLink",
+  async (props, { rejectWithValue }) => {
+    try {
+      const res = await axiosInstance.post<any>(
+        `/auth/verify-changepasword-email`,
+        props.payload,
+        { headers: { ...props.headers } }
+      );
+
+      if (res?.data) {
+        success_toast(res.data.message || "Verified successfully");
+      }
+      return res.data;
+    } catch (err: any) {
+      const msg = err.response?.data?.error || err.message;
+      error_toast(msg);
+      return rejectWithValue({ err, status: err.response?.status });
+    }
+  }
+);
+
+export const resetPassword = createAsyncThunk<unknown, any>(
+  "auth/resetPassword",
+  async (props, { rejectWithValue }) => {
+    try {
+      const res = await axiosInstance.post<any>(
+        `/auth/reset-password`,
+        props.payload,
+        { headers: { ...props.headers } }
+      );
+
+      if (res?.data) {
+        success_toast(res.data.message || "Changed password ccessfully");
+      }
+      return res.data;
+    } catch (err: any) {
+      const msg = err.response?.data?.error || err.message;
+      error_toast(msg);
+      return rejectWithValue({ err, status: err.response?.status });
     }
   }
 );
@@ -155,6 +221,33 @@ const authSlice = createSlice({
         state.loading = false;
       })
       .addCase(updatePassword.rejected, (state) => {
+        state.loading = false;
+      })
+      .addCase(forgotPassword.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(forgotPassword.fulfilled, (state, action) => {
+        state.loading = false;
+      })
+      .addCase(forgotPassword.rejected, (state) => {
+        state.loading = false;
+      })
+      .addCase(verifytokenPasswdLink.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(verifytokenPasswdLink.fulfilled, (state, action) => {
+        state.loading = false;
+      })
+      .addCase(verifytokenPasswdLink.rejected, (state) => {
+        state.loading = false;
+      })
+      .addCase(resetPassword.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(resetPassword.fulfilled, (state, action) => {
+        state.loading = false;
+      })
+      .addCase(resetPassword.rejected, (state) => {
         state.loading = false;
       });
   },

@@ -1,5 +1,5 @@
 import "./App.css";
-import { Route, Routes, Navigate } from "react-router-dom";
+import { Route, Routes, Navigate, useLocation } from "react-router-dom";
 import Layout from "./layout/Layout";
 import License from "./pages/license/License";
 import Users from "./pages/usermanagement/Users";
@@ -16,6 +16,7 @@ import CreateUser from "./pages/usermanagement/components/CreateUser";
 import { getAllUsersRolesPermissions } from "./store/reducers/tenantSlice";
 
 function App() {
+  const location = useLocation();
   const dispatch = useDispatch<AppDispatch>();
   const { token, tenantType, user } = useSelector(
     (state: RootState) => state.auth
@@ -29,7 +30,12 @@ function App() {
       applyTenantTheme(host);
       dispatch(setCurrentTenantName(host));
     }
-    if (host != "public") {
+    if (
+      host != "public" &&
+      location?.pathname != "/login" &&
+      location?.pathname != "/forget-password" &&
+      location?.pathname != "/reset-password"
+    ) {
       dispatch(
         getAllUsersRolesPermissions({
           params: user?.id,
@@ -96,6 +102,8 @@ function App() {
               <Routes>
                 <Route path="/" element={<Navigate to="/login" replace />} />
                 <Route path="/login" element={<Login />} />
+                <Route path="/forget-password" element={<Login />} />
+                <Route path="/reset-password" element={<Login />} />
                 <Route path="*" element={<Navigate to="/login" replace />} />
               </Routes>
             </>
@@ -106,6 +114,8 @@ function App() {
           <Routes>
             <Route path="/" element={<Navigate to="/login" replace />} />
             <Route path="/login" element={<Login />} />
+            <Route path="/forget-password" element={<Login />} />
+            <Route path="/reset-password" element={<Login />} />
             <Route path="*" element={<Navigate to="/login" replace />} />
           </Routes>
         </>
