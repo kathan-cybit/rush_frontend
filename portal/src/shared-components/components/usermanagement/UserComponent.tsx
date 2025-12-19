@@ -7,6 +7,7 @@ import {
   Loader,
   Modal,
   TableV2,
+  Tooltip,
 } from "../../ui";
 import { CreateUserContainer } from "../../containers";
 import { useNavigate } from "react-router-dom";
@@ -77,13 +78,15 @@ export default function UserComponent({
                   </>
                 </div>
                 <div className="flex gap-2">
-                  <a
-                    href={USersFile}
-                    className="inline-flex float-end items-center gap-2 bg-bsecondary hover:opacity-[0.75] px-7 py-3 border-none rounded-lg h-[45px] font-medium text-white text-sm transition-all duration-200 cursor-pointer"
-                  >
-                    <DownloadIcn />
-                    <span>Download Sample File</span>
-                  </a>
+                  <Tooltip label="Download Sample File">
+                    <a
+                      href={USersFile}
+                      className="inline-flex float-end items-center gap-2 bg-bsecondary hover:opacity-[0.75] px-7 py-3 border-none rounded-lg h-[45px] font-medium text-white text-sm transition-all duration-200 cursor-pointer"
+                    >
+                      <DownloadIcn />
+                      {/* <span>Download Sample File</span> */}
+                    </a>
+                  </Tooltip>
                   <button
                     onClick={() => {
                       setOpenForm(true);
@@ -136,9 +139,9 @@ export default function UserComponent({
         </>
       )}
       {OpenForm && (
-        <Modal
-          // title="Create Users"
-          size={"xl"}
+        <Dialog
+          title="Create Users"
+          // size={"xl"}
           opened={OpenForm}
           onClose={() => setOpenForm(false)}
         >
@@ -149,7 +152,7 @@ export default function UserComponent({
             setdisplayAlert={setdisplayAlert}
             setErrorAlert={setErrorAlert}
           />
-        </Modal>
+        </Dialog>
       )}
     </div>
   );

@@ -169,7 +169,9 @@ const UploadExcelForm: React.FC = ({
             className="block hover:file:bg-blue-100 file:bg-blue-50 file:mr-4 file:px-4 file:py-2 file:border-0 file:rounded-md w-full file:font-medium text-gray-600 file:text-blue-700 text-sm file:text-sm"
           />
         </div>
-
+        <span className="font-fsecondary text-[#adadad] text-[13px] text-[500] leading-[140%]">
+          upload .xlsx file
+        </span>
         {file && (
           <p className="text-gray-600 text-sm">
             Selected: <strong>{file.name}</strong>

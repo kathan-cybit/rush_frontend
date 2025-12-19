@@ -8,6 +8,7 @@ import {
   Loader,
   Modal,
   TableV2,
+  Tooltip,
 } from "../../ui";
 import UploadExcelForm from "../UploadExcelComponent/UploadExcelForm";
 import { DownloadIcn } from "../../../assets/svgs";
@@ -88,13 +89,15 @@ export default function RoleComponent({
               </>
             </div>
             <div className="flex gap-2">
-              <a
-                href={RolesFile}
-                className="inline-flex float-end items-center gap-2 bg-bsecondary hover:opacity-[0.75] px-7 py-3 border-none rounded-lg h-[45px] font-medium text-white text-sm transition-all duration-200 cursor-pointer"
-              >
-                <DownloadIcn />
-                <span>Download Sample File</span>
-              </a>
+              <Tooltip label="Download Sample File">
+                <a
+                  href={RolesFile}
+                  className="inline-flex float-end items-center gap-2 bg-bsecondary hover:opacity-[0.75] px-7 py-3 border-none rounded-lg h-[45px] font-medium text-white text-sm transition-all duration-200 cursor-pointer"
+                >
+                  <DownloadIcn />
+                  {/* <span>Download Sample File</span> */}
+                </a>
+              </Tooltip>
               <button
                 onClick={() => {
                   setOpenForm(true);
@@ -304,9 +307,9 @@ export default function RoleComponent({
         </Dialog>
       )}
       {OpenForm && (
-        <Modal
-          // title="Create Users"
-          size={"xl"}
+        <Dialog
+          title="Create Roles"
+          // size={"xl"}
           opened={OpenForm}
           onClose={() => setOpenForm(false)}
         >
@@ -317,7 +320,7 @@ export default function RoleComponent({
             setdisplayAlert={setdisplayAlert}
             setErrorAlert={setErrorAlert}
           />
-        </Modal>
+        </Dialog>
       )}
     </div>
   );
