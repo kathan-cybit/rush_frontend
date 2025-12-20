@@ -23,6 +23,7 @@ export default function UserContainer() {
   });
 
   const [CurrData, setCurrData] = useState<any>(null);
+  const [displayAlert, setdisplayAlert] = useState(false);
   const [OpenForm, setOpenForm] = useState(false);
   const host = new URL(window.location.href).hostname.split(".")[0];
   const { currentTenantName } = useSelector((state: RootState) => state.auth);
@@ -116,7 +117,7 @@ export default function UserContainer() {
       title: "User Management",
     },
   ];
-  const [displayAlert, setdisplayAlert] = useState(false);
+
   const roleProps = {
     loading,
     userData,

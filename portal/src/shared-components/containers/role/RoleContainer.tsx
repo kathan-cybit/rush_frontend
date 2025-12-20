@@ -133,6 +133,7 @@ export default function RoleContainer() {
           organization_id: 1,
         });
         setOpenCreateRole(false);
+        setdisplayAlert(false);
       })
       .catch(() => {});
   };

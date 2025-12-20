@@ -16,6 +16,7 @@ import {
   getLicenseApps,
   getLicensesCount,
 } from "../../../store/reducers/licenseSlice";
+import { Loader } from "../../ui";
 
 interface UserFormValues {
   name: string;
@@ -36,6 +37,7 @@ export default function CreateUserContainer({
   CurrData = {},
   FormStatus = { mode: null, userId: null },
   setFormStatus,
+  setdisplayAlert,
   allUsersRoles,
 }: any) {
   const dispatch = useDispatch<AppDispatch>();
@@ -43,6 +45,7 @@ export default function CreateUserContainer({
   const { tenantType } = useSelector((state: RootState) => state.auth);
   const [assignedApps, setAssignedApps] = useState<string[]>([]);
   const allRoles = useSelector((state: any) => state.tenant.allRoles) || [];
+  const loading = useSelector((state: any) => state.tenant.isLoading);
   // const allUsersRoles =
   //   useSelector((state: any) => state.tenant.allUsersRoles) || [];
   const [defaultUserRoleOptions, setDefaultUserRoleOptions] = useState([]);
@@ -127,12 +130,21 @@ export default function CreateUserContainer({
     if (!FormStatus?.mode) {
       await dispatch(createTenantUser({ payload: data, currentTenant: host }))
         .unwrap()
-        .then(() => {
+        .then((res) => {
           reset();
           setAssignedApps([]);
+          if (setFormStatus) {
+            setFormStatus({ mode: null, userId: null });
+          }
+          dispatch(
+            fetchUsers({
+              url: `/users?tenant=${host}`,
+            })
+          );
+          setdisplayAlert(false);
           navigate("/usermanagement");
         })
-        .catch(() => {});
+        .catch((res) => {});
     } else {
       await dispatch(
         updateTenantUser({
@@ -153,6 +165,7 @@ export default function CreateUserContainer({
               url: `/users?tenant=${host}`,
             })
           );
+          setdisplayAlert(false);
           navigate("/usermanagement");
         })
         .catch(() => {});
@@ -242,6 +255,11 @@ export default function CreateUserContainer({
 
   return (
     <div>
+      {loading && (
+        <div className="loader-overlay">
+          <Loader />
+        </div>
+      )}
       <CreateUserComponent
         roleOptions={roleOptions}
         defaultUserRoleOptions={defaultUserRoleOptions}

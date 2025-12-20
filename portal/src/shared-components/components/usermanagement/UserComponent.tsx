@@ -136,6 +136,7 @@ export default function UserComponent({
             setFormStatus={setFormStatus}
             FormStatus={FormStatus}
             CurrData={CurrData}
+            setdisplayAlert={setdisplayAlert}
           />
         </>
       )}
