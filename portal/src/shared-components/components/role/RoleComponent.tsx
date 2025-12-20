@@ -48,7 +48,7 @@ export default function RoleComponent({
   user,
   OpenForm,
   setOpenForm,
-  subDomain,
+  host,
   displayAlert,
   setdisplayAlert,
 }: any) {
@@ -315,7 +315,7 @@ export default function RoleComponent({
         >
           <UploadExcelForm
             uploader="role"
-            host={subDomain}
+            host={host}
             setOpenForm={setOpenForm}
             setdisplayAlert={setdisplayAlert}
             setErrorAlert={setErrorAlert}

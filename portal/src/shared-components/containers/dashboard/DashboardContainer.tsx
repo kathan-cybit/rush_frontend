@@ -96,10 +96,10 @@ export default function DashboardContainer() {
 
   // ── Effects ------------------------------------------------------------
   useEffect(() => {
-    const subDomain = new URL(window.location.href).hostname.split(".")[0];
-    setHost(subDomain);
-    if (subDomain === "public") {
-      dispatch(fetchTenants(subDomain));
+    const host = new URL(window.location.href).hostname.split(".")[0];
+    setHost(host);
+    if (host == "public") {
+      dispatch(fetchTenants(host));
     }
   }, [FormStatus]);
 
@@ -114,7 +114,7 @@ export default function DashboardContainer() {
   }, [FormStatus, tenants]);
 
   const handleCreateTenant = () => {
-    navigate(host !== "public" ? "/usermanagement" : "/createtenant");
+    navigate(host != "public" ? "/usermanagement" : "/createtenant");
   };
 
   const handleViewTenant = (row: any) => {

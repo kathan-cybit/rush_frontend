@@ -20,7 +20,7 @@ export default function RoleContainer() {
   const navigate = useNavigate();
   const dispatch = useDispatch<AppDispatch>();
   const { tenantType, user } = useSelector((state: RootState) => state.auth);
-  const subDomain = new URL(window.location.href).hostname.split(".")[0];
+  const host = new URL(window.location.href).hostname.split(".")[0];
 
   const isLoading = useSelector((state: any) => state.tenant.isLoading);
 
@@ -89,7 +89,7 @@ export default function RoleContainer() {
       addPermissonRole({
         role: tenantType,
         payload,
-        headers: { "x-tenant-id": subDomain },
+        headers: { "x-tenant-id": host },
       })
     )
       .unwrap()
@@ -121,7 +121,7 @@ export default function RoleContainer() {
       addRole({
         role: tenantType,
         payload,
-        headers: { "x-tenant-id": subDomain },
+        headers: { "x-tenant-id": host },
       })
     )
       .unwrap()
@@ -142,33 +142,34 @@ export default function RoleContainer() {
   };
 
   useEffect(() => {
-    if (EditRole?.open || OpenCreateRole) {
+    if ((EditRole?.open || OpenCreateRole) && !OpenForm) {
       dispatch(
         getPermssion({
           role: tenantType,
           headers: {
-            "x-tenant-id": subDomain,
+            "x-tenant-id": host,
+          },
+        })
+      );
+    }
+    if (!OpenForm) {
+      dispatch(
+        getAllPermissonRole({
+          role: tenantType,
+          headers: {
+            "x-tenant-id": host,
           },
         })
       );
     }
 
-    dispatch(
-      getAllPermissonRole({
-        role: tenantType,
-        headers: {
-          "x-tenant-id": subDomain,
-        },
-      })
-    );
-
-    if (EditRole?.open && EditRole?.roleId) {
+    if (EditRole?.open && EditRole?.roleId && !OpenForm) {
       dispatch(
         getPermissonRole({
           role: tenantType,
           id: EditRole?.roleId,
           headers: {
-            "x-tenant-id": subDomain,
+            "x-tenant-id": host,
           },
         })
       );
@@ -176,14 +177,16 @@ export default function RoleContainer() {
   }, [EditRole, OpenCreateRole, OpenForm]);
 
   useEffect(() => {
-    dispatch(
-      getRoles({
-        role: tenantType,
-        headers: {
-          "x-tenant-id": subDomain,
-        },
-      })
-    );
+    if (!OpenForm) {
+      dispatch(
+        getRoles({
+          role: tenantType,
+          headers: {
+            "x-tenant-id": host,
+          },
+        })
+      );
+    }
   }, [OpenCreateRole, OpenForm]);
 
   const selectedPermissionIds = useMemo(() => {
@@ -263,7 +266,7 @@ export default function RoleContainer() {
             user={user}
             OpenForm={OpenForm}
             setOpenForm={setOpenForm}
-            subDomain={subDomain}
+            host={host}
             BreadCrumbItems={BreadCrumbItems}
             setdisplayAlert={setdisplayAlert}
             displayAlert={displayAlert}

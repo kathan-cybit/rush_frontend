@@ -71,7 +71,7 @@ export default function UserContainer() {
   };
 
   useEffect(() => {
-    if (currentTenantName) {
+    if (currentTenantName && !OpenForm) {
       dispatch(
         fetchUsers({
           url: `/users?tenant=${currentTenantName}`,
@@ -81,14 +81,15 @@ export default function UserContainer() {
   }, [currentTenantName, OpenForm]);
 
   useEffect(() => {
-    dispatch(
-      getAllRoleUsers({
-        role: tenantType,
-        headers: {
-          "x-tenant-id": host,
-        },
-      })
-    );
+    if (!OpenForm)
+      dispatch(
+        getAllRoleUsers({
+          role: tenantType,
+          headers: {
+            "x-tenant-id": host,
+          },
+        })
+      );
   }, [FormStatus.mode, userData, OpenForm]);
 
   const formattedTenants = userData?.map((e: any) => ({
