@@ -394,7 +394,7 @@ interface TenantState {
   allpermissionsroles: unknown[];
   usersUploaded: boolean;
   rolesuploaded: boolean;
-  allUsersRolesPermissions: unknown[];
+  allUsersRolesPermissions: Array<any> | any | unknown[];
 }
 
 const initialState: TenantState = {

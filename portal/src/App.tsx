@@ -6,7 +6,7 @@ import Users from "./pages/usermanagement/Users";
 import { useDispatch, useSelector } from "react-redux";
 import Login from "./pages/auth/Login";
 import { useEffect } from "react";
-import { setCurrentTenantName } from "./store/reducers/authSlice";
+import { setCurrentTenantName, setLogout } from "./store/reducers/authSlice";
 import { applyTenantTheme } from "./utils/applyTenantTheme";
 import Dashboard from "./pages/dashboard/Dashboard";
 import Roles from "./pages/role/Roles";
@@ -42,6 +42,9 @@ function App() {
           headers: { "x-tenant-id": host },
         })
       );
+    }
+    if (location?.pathname == "/reset-password") {
+      dispatch(setLogout());
     }
   }, []);
 
@@ -100,7 +103,7 @@ function App() {
           ) : (
             <>
               <Routes>
-                <Route path="/" element={<Navigate to="/login" replace />} />
+                {/* <Route path="/" element={<Navigate to="/login" replace />} /> */}
                 <Route path="/login" element={<Login />} />
                 <Route path="/forget-password" element={<Login />} />
                 <Route path="/reset-password" element={<Login />} />
@@ -112,7 +115,7 @@ function App() {
       ) : (
         <>
           <Routes>
-            <Route path="/" element={<Navigate to="/login" replace />} />
+            {/* <Route path="/" element={<Navigate to="/login" replace />} /> */}
             <Route path="/login" element={<Login />} />
             <Route path="/forget-password" element={<Login />} />
             <Route path="/reset-password" element={<Login />} />

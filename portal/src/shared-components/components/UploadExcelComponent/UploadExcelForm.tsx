@@ -8,7 +8,7 @@ import {
   resetUsersUpload,
 } from "../../../store/reducers/tenantSlice";
 
-const UploadExcelForm: React.FC = ({
+const UploadExcelForm = ({
   host,
   setOpenForm,
   uploader,

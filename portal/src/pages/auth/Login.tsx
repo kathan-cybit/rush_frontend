@@ -4,7 +4,10 @@ import { useLocation, useNavigate } from "react-router-dom";
 import { error_toast } from "../../utils/toaster";
 import { useDispatch } from "react-redux";
 import { AppDispatch } from "../../store/store";
-import { verifytokenPasswdLink } from "../../store/reducers/authSlice";
+import {
+  setLogout,
+  verifytokenPasswdLink,
+} from "../../store/reducers/authSlice";
 
 export default function LoginPage() {
   const location = useLocation();
@@ -35,6 +38,7 @@ export default function LoginPage() {
             res?.payload?.verified == true ||
             res?.payload?.verified == "true"
           ) {
+            dispatch(setLogout());
             setIsVerified(true);
           } else {
             navigate("/login");
