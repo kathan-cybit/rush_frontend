@@ -5,6 +5,7 @@ import LicenseComponent from "./license/LicenseComponent";
 import RoleComponent from "./role/RoleComponent";
 import UserComponent from "./usermanagement/UserComponent";
 import CreateUserComponent from "./usermanagement/CreateUserComponent";
+import UploadExcelForm from "./UploadExcelComponent/UploadExcelForm";
 
 export {
   LoginComponent,
@@ -14,4 +15,5 @@ export {
   RoleComponent,
   UserComponent,
   CreateUserComponent,
+  UploadExcelForm,
 };

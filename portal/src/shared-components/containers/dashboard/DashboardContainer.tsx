@@ -94,7 +94,6 @@ export default function DashboardContainer() {
     }
   }, [FormStatus]);
 
-  // ── Effects ------------------------------------------------------------
   useEffect(() => {
     const host = new URL(window.location.href).hostname.split(".")[0];
     setHost(host);

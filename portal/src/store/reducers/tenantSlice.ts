@@ -1,8 +1,6 @@
 import { createSlice, createAsyncThunk, PayloadAction } from "@reduxjs/toolkit";
 import axiosInstance from "../../utils/axiosinstance";
 import { error_toast, success_toast } from "../../utils/toaster";
-import { AxiosResponse } from "axios";
-import { Alert } from "@eiris/common-ui-react";
 
 type ApiResponse<T = unknown> = {
   data: T;

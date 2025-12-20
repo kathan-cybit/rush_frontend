@@ -3,16 +3,7 @@ import React from "react";
 import { CreateTenantContainer } from "../../containers";
 import { Loader, TableV2 } from "../../ui";
 import { AuthIcn } from "../../../assets/svgs";
-import {
-  ExcelImg,
-  ICExpert,
-  OutlookImg,
-  PoleExpert,
-  PpImg,
-  SimExpert,
-  TeamsImg,
-} from "../../../assets/img";
-import { redirect } from "react-router-dom";
+import { ICExpert, PoleExpert, SimExpert } from "../../../assets/img";
 
 interface DashboardProps {
   host: string | null;

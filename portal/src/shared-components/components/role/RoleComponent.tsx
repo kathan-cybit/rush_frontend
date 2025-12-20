@@ -10,10 +10,10 @@ import {
   TableV2,
   Tooltip,
 } from "../../ui";
-import UploadExcelForm from "../UploadExcelComponent/UploadExcelForm";
 import { DownloadIcn } from "../../../assets/svgs";
 import { exportToCSV } from "../../../utils/exports";
 import { RolesFile } from "../../../assets/img";
+import { UploadExcelForm } from "../index";
 
 const SELECT_ALL_OPTION = {
   label: "Select All",

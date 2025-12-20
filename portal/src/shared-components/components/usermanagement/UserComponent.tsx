@@ -11,7 +11,7 @@ import {
 } from "../../ui";
 import { CreateUserContainer } from "../../containers";
 import { useNavigate } from "react-router-dom";
-import UploadExcelForm from "../UploadExcelComponent/UploadExcelForm";
+import { UploadExcelForm } from "../index";
 import { DownloadIcn } from "../../../assets/svgs";
 import { exportToCSV } from "../../../utils/exports";
 import { USersFile } from "../../../assets/img";
