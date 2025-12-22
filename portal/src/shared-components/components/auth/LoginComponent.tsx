@@ -32,7 +32,6 @@ export default function LoginComponent({
   setNewPassword,
   setConfirmPassword,
 }: any) {
-  console.log(location);
   const handleKeyDown = (e: any) => {
     if (e.key == "Enter") {
       onLogin();
@@ -147,12 +146,20 @@ export default function LoginComponent({
                   </div>
 
                   {/* Login Button */}
-                  <div className="flex justify-center mt-4">
+                  <div className="flex flex-col justify-center gap-3 mt-4">
                     <button
-                      className="rounded-[4px] w-[240px] h-[45px] primaryc-btn"
+                      className="rounded-[4px] w-full h-[45px] primaryc-btn"
                       onClick={onLogin}
                     >
                       Enter
+                    </button>
+                    <button
+                      className="rounded-[4px] w-full h-[45px] primaryc-btn"
+                      onClick={() => {
+                        navigate("/login");
+                      }}
+                    >
+                      Go to Login
                     </button>
                   </div>
                 </div>
