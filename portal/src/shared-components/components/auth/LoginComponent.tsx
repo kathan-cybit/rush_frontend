@@ -1,7 +1,8 @@
-import React from "react";
+import React, { useState } from "react";
 
 import { logo } from "../../../assets/img";
 import { Loader } from "../../ui";
+import { EyeIcon2, EyeSlashIcon } from "../../../assets/svgs";
 
 interface LoginProps {
   email: string;
@@ -32,6 +33,10 @@ export default function LoginComponent({
   setNewPassword,
   setConfirmPassword,
 }: any) {
+  const [showPassword, setShowPassword] = useState(false);
+  const [showNewPassword, setShowNewPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+
   const handleKeyDown = (e: any) => {
     if (e.key == "Enter") {
       onLogin();
@@ -70,7 +75,6 @@ export default function LoginComponent({
                     value={email}
                     className="shadow-sm px-3 py-2 border border-[#ced4da] focus:border-[#86b7fe] rounded-md focus:outline-none focus:ring-[#cfe2ff] focus:ring-4 w-full"
                     onChange={onEmailChange}
-                    // className="px-3 py-2 border border-bprimary focus:border-textPrimary rounded focus:outline-none focus:ring-2 focus:ring-bprimary/20 w-full h-[45px] font-[400] text-[#555] text-[14px] leading-[140%]"
                     placeholder="Email"
                     type="text"
                   />
@@ -79,15 +83,23 @@ export default function LoginComponent({
 
                 {/* Password */}
                 <div>
-                  <input
-                    onKeyDown={handleKeyDown}
-                    value={password}
-                    onChange={onPasswordChange}
-                    className="shadow-sm px-3 py-2 border border-[#ced4da] focus:border-[#86b7fe] rounded-md focus:outline-none focus:ring-[#cfe2ff] focus:ring-4 w-full"
-                    // className="px-3 py-2 border border-textPrimary focus:border-textPrimary rounded focus:outline-none focus:ring-2 focus:ring-textPrimary/20 w-full h-[45px] font-[400] text-[#555] text-[14px] leading-[140%]"
-                    placeholder="Password"
-                    type="password"
-                  />
+                  <div className="relative">
+                    <input
+                      onKeyDown={handleKeyDown}
+                      value={password}
+                      onChange={onPasswordChange}
+                      className="shadow-sm px-3 py-2 pr-10 border border-[#ced4da] focus:border-[#86b7fe] rounded-md focus:outline-none focus:ring-[#cfe2ff] focus:ring-4 w-full"
+                      placeholder="Password"
+                      type={showPassword ? "text" : "password"}
+                    />
+                    <button
+                      type="button"
+                      onClick={() => setShowPassword(!showPassword)}
+                      className="top-1/2 right-3 absolute hover:opacity-70 transition-opacity -translate-y-1/2"
+                    >
+                      {showPassword ? <EyeSlashIcon /> : <EyeIcon2 />}
+                    </button>
+                  </div>
                   <div className="text-red-500 text-xs">{error.passwd}</div>
                 </div>
 
@@ -169,7 +181,6 @@ export default function LoginComponent({
         </>
       ) : location?.pathname == "/reset-password" ? (
         <>
-          {" "}
           <div className="flex justify-center items-center px-4 w-screen h-screen auth-bg">
             <div className="flex flex-col bg-white p-[50px] rounded-[16px] w-full max-w-[385px]">
               <div className="mb-4 text-center">
@@ -182,27 +193,47 @@ export default function LoginComponent({
               <div className="flex flex-col gap-3 mx-auto w-[240px]">
                 {/* New Password */}
                 <div>
-                  <input
-                    type="password"
-                    value={newPassword}
-                    onChange={(e) => setNewPassword(e.target.value)}
-                    onKeyDown={handleKeyDown}
-                    placeholder="New Password"
-                    className="shadow-sm px-3 py-2 border rounded-md w-full"
-                  />
+                  <div className="relative">
+                    <input
+                      type={showNewPassword ? "text" : "password"}
+                      value={newPassword}
+                      onChange={(e) => setNewPassword(e.target.value)}
+                      onKeyDown={handleKeyDown}
+                      placeholder="New Password"
+                      className="shadow-sm px-3 py-2 pr-10 border rounded-md w-full"
+                    />
+                    <button
+                      type="button"
+                      onClick={() => setShowNewPassword(!showNewPassword)}
+                      className="top-1/2 right-3 absolute hover:opacity-70 transition-opacity -translate-y-1/2"
+                    >
+                      {showNewPassword ? <EyeSlashIcon /> : <EyeIcon2 />}
+                    </button>
+                  </div>
                   <div className="text-red-500 text-xs">{error.newPass}</div>
                 </div>
 
                 {/* Confirm Password */}
                 <div>
-                  <input
-                    type="password"
-                    value={confirmPassword}
-                    onChange={(e) => setConfirmPassword(e.target.value)}
-                    onKeyDown={handleKeyDown}
-                    placeholder="Confirm Password"
-                    className="shadow-sm px-3 py-2 border rounded-md w-full"
-                  />
+                  <div className="relative">
+                    <input
+                      type={showConfirmPassword ? "text" : "password"}
+                      value={confirmPassword}
+                      onChange={(e) => setConfirmPassword(e.target.value)}
+                      onKeyDown={handleKeyDown}
+                      placeholder="Confirm Password"
+                      className="shadow-sm px-3 py-2 pr-10 border rounded-md w-full"
+                    />
+                    <button
+                      type="button"
+                      onClick={() =>
+                        setShowConfirmPassword(!showConfirmPassword)
+                      }
+                      className="top-1/2 right-3 absolute hover:opacity-70 transition-opacity -translate-y-1/2"
+                    >
+                      {showConfirmPassword ? <EyeSlashIcon /> : <EyeIcon2 />}
+                    </button>
+                  </div>
                   <div className="text-red-500 text-xs">
                     {error.confirmPass}
                   </div>

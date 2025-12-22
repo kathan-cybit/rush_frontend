@@ -157,7 +157,7 @@ const UploadExcelForm = ({
   };
 
   return (
-    <div className="bg-white shadow mx-auto p-6 rounded-lg max-w-md">
+    <div className="bg-white mx-auto p-6 rounded-lg max-w-md">
       <h2 className="mb-4 font-semibold text-lg">Upload Excel File</h2>
 
       <form onSubmit={handleSubmit} className="space-y-4">

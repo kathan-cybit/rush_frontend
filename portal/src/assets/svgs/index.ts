@@ -8,8 +8,11 @@ import EyeIcon from "./EyeIcn";
 import BackIcon from "./BackIcn";
 import HomeIcn from "./HomeIcn";
 import DownloadIcn from "./DownloadIcn";
+import EyeIcon2 from "./EyeIcon";
+import EyeSlashIcon from "./EyeSlashIcon";
 
 export {
+  EyeSlashIcon,
   ErisLoginLogo,
   UserIcn,
   RoleIcn,
@@ -17,6 +20,7 @@ export {
   AuthIcn,
   EditIcon,
   EyeIcon,
+  EyeIcon2,
   HomeIcn,
   BackIcon,
   DownloadIcn,
