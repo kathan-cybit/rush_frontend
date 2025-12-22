@@ -42,7 +42,11 @@ export default function CreateUserContainer({
 }: any) {
   const dispatch = useDispatch<AppDispatch>();
   const navigate = useNavigate();
-  const { tenantType } = useSelector((state: RootState) => state.auth);
+  const {
+    tenantType,
+    allDetails,
+    loading: loading2,
+  } = useSelector((state: RootState) => state.auth);
   const [assignedApps, setAssignedApps] = useState<string[]>([]);
   const allRoles = useSelector((state: any) => state.tenant.allRoles) || [];
   const loading = useSelector((state: any) => state.tenant.isLoading);
@@ -255,7 +259,7 @@ export default function CreateUserContainer({
 
   return (
     <div>
-      {loading && (
+      {(loading || loading2) && (
         <div className="loader-overlay">
           <Loader />
         </div>
@@ -279,6 +283,7 @@ export default function CreateUserContainer({
         allApps={allApps}
         allLicenseWithCounts={allLicenseWithCounts}
         allLicenses={allLicenses}
+        allDetails={allDetails}
       />
     </div>
   );

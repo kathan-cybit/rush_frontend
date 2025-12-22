@@ -8,6 +8,7 @@ import { AppDispatch, RootState } from "../../../store/store";
 import { useDispatch, useSelector } from "react-redux";
 import { UserComponent } from "../../components";
 import { useNavigate } from "react-router-dom";
+import { getUserDetails } from "../../../store/reducers/authSlice";
 
 export default function UserContainer() {
   const navigate = useNavigate();
@@ -16,7 +17,12 @@ export default function UserContainer() {
     (state: RootState) => state.tenant
   );
 
-  const { tenantType, user } = useSelector((state: RootState) => state.auth);
+  const {
+    tenantType,
+    user,
+    allDetails,
+    loading: loading2,
+  } = useSelector((state: RootState) => state.auth);
   const [FormStatus, setFormStatus] = useState({
     mode: null,
     userId: null,
@@ -79,6 +85,13 @@ export default function UserContainer() {
         })
       );
     }
+    if (host != "public") {
+      dispatch(
+        getUserDetails({
+          headers: { "x-tenant-id": host },
+        })
+      );
+    }
   }, [currentTenantName, OpenForm]);
 
   useEffect(() => {
@@ -136,6 +149,8 @@ export default function UserContainer() {
     setOpenForm,
     displayAlert,
     setdisplayAlert,
+    allDetails,
+    loading2,
     BreadCrumbItems,
   };
 

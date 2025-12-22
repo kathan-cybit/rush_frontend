@@ -70,6 +70,7 @@ const CreateTenantContainer: React.FC<CreateTenantProps> = ({
     (state: RootState) => state.license
   );
   const { tenantType } = useSelector((state: RootState) => state.auth);
+  const { isLoading } = useSelector((state: RootState) => state.tenant);
 
   useEffect(() => {
     const host = new URL(window.location.href).hostname.split(".")[0];
@@ -93,7 +94,7 @@ const CreateTenantContainer: React.FC<CreateTenantProps> = ({
       setLicenses(initialLicenses);
     }
   }, [allApps, FormStatus?.mode]);
-  console.log(CurrData, "CurrData");
+
   const {
     register,
     handleSubmit,
@@ -111,7 +112,7 @@ const CreateTenantContainer: React.FC<CreateTenantProps> = ({
       contactperson: CurrData?.contactperson || "",
       contactemail: CurrData?.contactemail || "",
       phoneNumber: CurrData?.phonenumber || "",
-      singleOrganization: !!CurrData?.is_single_org,
+      singleOrganization: CurrData?.is_single_org === true ? "true" : "false",
     },
   });
   useEffect(() => {
@@ -126,7 +127,10 @@ const CreateTenantContainer: React.FC<CreateTenantProps> = ({
       setValue("contactperson", CurrData.contactperson || "");
       setValue("contactemail", CurrData.contactemail || "");
       setValue("phoneNumber", CurrData.phonenumber || "");
-      setValue("singleOrganization", !!CurrData?.is_single_org);
+      setValue(
+        "singleOrganization",
+        CurrData?.is_single_org === true ? "true" : "false"
+      );
 
       // if (allApps?.length) {
       //   debugger;
@@ -273,6 +277,7 @@ const CreateTenantContainer: React.FC<CreateTenantProps> = ({
   ];
 
   const componentProps = {
+    isLoading,
     register,
     errors,
     licenses,

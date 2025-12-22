@@ -6,7 +6,11 @@ import Users from "./pages/usermanagement/Users";
 import { useDispatch, useSelector } from "react-redux";
 import Login from "./pages/auth/Login";
 import { useEffect } from "react";
-import { setCurrentTenantName, setLogout } from "./store/reducers/authSlice";
+import {
+  getUserDetails,
+  setCurrentTenantName,
+  setLogout,
+} from "./store/reducers/authSlice";
 import { applyTenantTheme } from "./utils/applyTenantTheme";
 import Dashboard from "./pages/dashboard/Dashboard";
 import Roles from "./pages/role/Roles";
@@ -18,7 +22,7 @@ import { getAllUsersRolesPermissions } from "./store/reducers/tenantSlice";
 function App() {
   const location = useLocation();
   const dispatch = useDispatch<AppDispatch>();
-  const { token, tenantType, user } = useSelector(
+  const { token, tenantType, user, allDetails } = useSelector(
     (state: RootState) => state.auth
   );
   const { tenants, isLoading, allUsersRolesPermissions } = useSelector(
@@ -39,6 +43,11 @@ function App() {
       dispatch(
         getAllUsersRolesPermissions({
           params: user?.id,
+          headers: { "x-tenant-id": host },
+        })
+      );
+      dispatch(
+        getUserDetails({
           headers: { "x-tenant-id": host },
         })
       );
@@ -72,7 +81,10 @@ function App() {
                   <>
                     <Route path="usermanagement" element={<Users />} />
                     <Route path="roles" element={<Roles />} />
-                    <Route path="createUser" element={<CreateUser />} />
+                    {(allDetails?.is_single_org == "false" ||
+                      allDetails?.is_single_org === false) && (
+                      <Route path="createUser" element={<CreateUser />} />
+                    )}
                   </>
                 )}
 

@@ -3,7 +3,7 @@ import { UseFormRegister, FieldErrors } from "react-hook-form";
 
 import { BackIcon, EditIcon } from "../../../assets/svgs";
 import { useNavigate } from "react-router-dom";
-import { CustomBreadCrumbs } from "../../ui";
+import { CustomBreadCrumbs, Loader } from "../../ui";
 
 interface TenantFormValues {
   domainname: string;
@@ -37,6 +37,7 @@ interface CreateTenantProps {
 }
 
 const CreateTenantComponent: React.FC<any> = ({
+  isLoading,
   register,
   errors,
   licenses,
@@ -52,6 +53,11 @@ const CreateTenantComponent: React.FC<any> = ({
 }) => {
   return (
     <>
+      {isLoading && (
+        <>
+          <Loader />
+        </>
+      )}
       <div className="clear-both flex justify-between items-center mb-[40px] overflow-hidden">
         <div>
           <div className="flex gap-2">
@@ -443,7 +449,6 @@ const CreateTenantComponent: React.FC<any> = ({
                   type="radio"
                   value="true"
                   disabled={FormStatus?.mode === "view"}
-                  checked={!!CurrData?.is_single_org === true}
                   {...register("singleOrganization")}
                 />
                 <span>Yes</span>
@@ -454,7 +459,6 @@ const CreateTenantComponent: React.FC<any> = ({
                   type="radio"
                   value="false"
                   disabled={FormStatus?.mode === "view"}
-                  checked={!!CurrData?.is_single_org === false}
                   {...register("singleOrganization")}
                 />
                 <span>No</span>

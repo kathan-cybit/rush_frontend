@@ -29,6 +29,8 @@ interface userProps {
 export default function UserComponent({
   allUsersRoles,
   loading,
+  loading2,
+  allDetails,
   userData,
   CurrData,
   FormStatus,
@@ -51,7 +53,7 @@ export default function UserComponent({
 
   return (
     <div>
-      {loading && (
+      {(loading || loading2) && (
         <div className="loader-overlay">
           <Loader />
         </div>
@@ -96,15 +98,17 @@ export default function UserComponent({
                   >
                     Bulk upload
                   </button>
-                  <button
-                    onClick={() => {
-                      navigate("/createUser");
-                    }}
-                    type="submit"
-                    className="inline-flex float-end items-center gap-2 bg-bsecondary hover:opacity-[0.75] px-7 py-3 border-none rounded-lg h-[45px] font-medium text-white text-sm transition-all duration-200 cursor-pointer"
-                  >
-                    Create New User
-                  </button>
+                  {!allDetails?.is_single_org && (
+                    <button
+                      onClick={() => {
+                        navigate("/createUser");
+                      }}
+                      type="submit"
+                      className="inline-flex float-end items-center gap-2 bg-bsecondary hover:opacity-[0.75] px-7 py-3 border-none rounded-lg h-[45px] font-medium text-white text-sm transition-all duration-200 cursor-pointer"
+                    >
+                      Create New User
+                    </button>
+                  )}
                 </div>
               </div>
               <>

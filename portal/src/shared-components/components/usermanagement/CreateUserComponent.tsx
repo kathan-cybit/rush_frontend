@@ -14,6 +14,7 @@ const DESELECT_ALL_OPTION = {
 };
 
 export default function CreateUserComponent({
+  allDetails,
   allLicenseWithCounts,
   register,
   errors,

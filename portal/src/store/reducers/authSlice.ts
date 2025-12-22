@@ -56,6 +56,22 @@ export const verifyUser = createAsyncThunk<unknown, any>(
   }
 );
 
+export const getUserDetails = createAsyncThunk<unknown, any>(
+  "auth/getUserDetails",
+  async (props, { rejectWithValue }) => {
+    try {
+      const res = await axiosInstance.get<any>(`/users/details`, {
+        headers: { ...props.headers },
+      });
+      return res.data;
+    } catch (err: any) {
+      const msg = err.response?.data?.error || err.message;
+      error_toast(msg);
+      return rejectWithValue({ err, status: err.response?.status });
+    }
+  }
+);
+
 export const updatePassword = createAsyncThunk<unknown, any>(
   "auth/updatePassword",
   async (props, { rejectWithValue }) => {
@@ -154,6 +170,7 @@ interface AuthState {
   currentTenantName: string | null;
   currentTenantId: string | null;
   tenantType: string;
+  allDetails: any;
 }
 const userString = localStorage.getItem("user");
 
@@ -168,6 +185,7 @@ const initialState: AuthState = {
   currentTenantName: null,
   currentTenantId: null,
   tenantType: localStorage.getItem("user_type") || "tenant",
+  allDetails: null,
 };
 
 const authSlice = createSlice({
@@ -248,6 +266,16 @@ const authSlice = createSlice({
         state.loading = false;
       })
       .addCase(resetPassword.rejected, (state) => {
+        state.loading = false;
+      })
+      .addCase(getUserDetails.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(getUserDetails.fulfilled, (state, action) => {
+        state.loading = false;
+        state.allDetails = action.payload;
+      })
+      .addCase(getUserDetails.rejected, (state) => {
         state.loading = false;
       });
   },
