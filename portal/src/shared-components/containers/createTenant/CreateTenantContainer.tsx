@@ -21,6 +21,7 @@ interface TenantFormValues {
   contactperson: any;
   contactemail: any;
   phoneNumber: any;
+  singleOrganization: boolean | string | any;
 }
 
 interface LicensesState {
@@ -92,7 +93,7 @@ const CreateTenantContainer: React.FC<CreateTenantProps> = ({
       setLicenses(initialLicenses);
     }
   }, [allApps, FormStatus?.mode]);
-
+  console.log(CurrData, "CurrData");
   const {
     register,
     handleSubmit,
@@ -110,6 +111,7 @@ const CreateTenantContainer: React.FC<CreateTenantProps> = ({
       contactperson: CurrData?.contactperson || "",
       contactemail: CurrData?.contactemail || "",
       phoneNumber: CurrData?.phonenumber || "",
+      singleOrganization: !!CurrData?.is_single_org,
     },
   });
   useEffect(() => {
@@ -124,6 +126,7 @@ const CreateTenantContainer: React.FC<CreateTenantProps> = ({
       setValue("contactperson", CurrData.contactperson || "");
       setValue("contactemail", CurrData.contactemail || "");
       setValue("phoneNumber", CurrData.phonenumber || "");
+      setValue("singleOrganization", !!CurrData?.is_single_org);
 
       // if (allApps?.length) {
       //   debugger;
@@ -176,6 +179,11 @@ const CreateTenantContainer: React.FC<CreateTenantProps> = ({
             phonenumber: data.phoneNumber,
             contactperson: data.contactperson,
             contactemail: data.contactemail,
+            singleOrganization:
+              data.singleOrganization == "true" ||
+              data.singleOrganization === true
+                ? true
+                : false,
             licenses: licenses?.map((lic: any) => ({
               ...lic,
               count: Number(lic.count),
@@ -207,6 +215,8 @@ const CreateTenantContainer: React.FC<CreateTenantProps> = ({
             phonenumber: data.phoneNumber,
             contactperson: data.contactperson,
             contactemail: data.contactemail,
+            singleOrganization:
+              data.singleOrganization == "true" ? true : false,
             licenses: licenses?.map((lic: any) => ({
               ...lic,
               count: Number(lic.count),

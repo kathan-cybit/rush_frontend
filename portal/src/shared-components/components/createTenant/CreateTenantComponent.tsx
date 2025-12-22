@@ -431,6 +431,42 @@ const CreateTenantComponent: React.FC<any> = ({
               </div>
             )}
           </div>
+          <div className="float-left mt-[5px] px-[12px] w-[50%]">
+            <label className="text-[#1f2937] text-[14px] text-[500]">
+              Single Organization
+              <span className="ml-1 text-red-500">*</span>
+            </label>
+
+            <div className="flex gap-6 mt-[8px]">
+              <label className="flex items-center gap-2 cursor-pointer">
+                <input
+                  type="radio"
+                  value="true"
+                  disabled={FormStatus?.mode === "view"}
+                  checked={!!CurrData?.is_single_org === true}
+                  {...register("singleOrganization")}
+                />
+                <span>Yes</span>
+              </label>
+
+              <label className="flex items-center gap-2 cursor-pointer">
+                <input
+                  type="radio"
+                  value="false"
+                  disabled={FormStatus?.mode === "view"}
+                  checked={!!CurrData?.is_single_org === false}
+                  {...register("singleOrganization")}
+                />
+                <span>No</span>
+              </label>
+            </div>
+
+            {errors.singleOrganization && (
+              <div className="block mt-[4px] text-[#ef4444] text-[12px]">
+                {errors.singleOrganization.message}
+              </div>
+            )}
+          </div>
         </div>
 
         <div className="m-auto w-full text-center">

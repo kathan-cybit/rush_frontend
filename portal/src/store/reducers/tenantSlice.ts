@@ -39,7 +39,7 @@ interface CreateTenantParams {
 type UpdateTenantParams = unknown;
 type FetchTenantsParams = string | null;
 
-export const fetchUsers = createAsyncThunk<unknown, FetchUsersParams>(
+export const fetchUsers = createAsyncThunk<unknown, any>(
   "tenant/fetchUsers",
   async (params, { rejectWithValue }) => {
     try {
@@ -53,7 +53,7 @@ export const fetchUsers = createAsyncThunk<unknown, FetchUsersParams>(
   }
 );
 
-export const createTenant = createAsyncThunk<unknown, CreateTenantParams>(
+export const createTenant = createAsyncThunk<unknown, any>(
   "tenant/createTenant",
   async (params, { rejectWithValue }) => {
     try {
@@ -71,7 +71,7 @@ export const createTenant = createAsyncThunk<unknown, CreateTenantParams>(
   }
 );
 
-export const updateTenant = createAsyncThunk<unknown, UpdateTenantParams>(
+export const updateTenant = createAsyncThunk<unknown, any>(
   "tenant/updateTenant",
   async (params, { rejectWithValue }) => {
     try {
@@ -89,7 +89,7 @@ export const updateTenant = createAsyncThunk<unknown, UpdateTenantParams>(
   }
 );
 
-export const fetchTenants = createAsyncThunk<unknown, FetchTenantsParams>(
+export const fetchTenants = createAsyncThunk<unknown, any>(
   "tenant/fetchTenants",
   async (currentTenant = null, { rejectWithValue }) => {
     try {
