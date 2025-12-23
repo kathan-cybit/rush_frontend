@@ -9,6 +9,7 @@ const passwordRegex =
 
 interface ChangePasswordForm {
   old_password: string;
+  confirm_password: string;
   new_password: string;
 }
 
@@ -22,8 +23,9 @@ export default function ChangePassword({ setIsOpen }) {
     handleSubmit,
     formState: { errors, isSubmitting },
     reset,
+    watch,
   } = useForm<ChangePasswordForm>();
-
+  const newPassword = watch("new_password");
   const onSubmit: SubmitHandler<ChangePasswordForm> = async (data) => {
     try {
       await dispatch(
@@ -49,7 +51,7 @@ export default function ChangePassword({ setIsOpen }) {
       {/* Old Password */}
       <div className="float-left mb-[15px] px-[12px] w-full">
         <label className="block mb-[8px] font-[500] text-[#1f2937] text-[14px]">
-          Old Password
+          Current Password
           <span className="ml-1 text-red-500">*</span>
         </label>
         <input
@@ -89,6 +91,30 @@ export default function ChangePassword({ setIsOpen }) {
         {errors.new_password && (
           <p className="mt-[4px] text-[12px] text-red-500">
             {errors.new_password.message}
+          </p>
+        )}
+      </div>
+      {/* Confirm Password */}
+      <div className="float-left mb-[15px] px-[12px] w-full">
+        <label className="block mb-[8px] font-[500] text-[#1f2937] text-[14px]">
+          Confirm Password
+          <span className="ml-1 text-red-500">*</span>
+        </label>
+
+        <input
+          type="password"
+          placeholder="Confirm new password"
+          {...register("confirm_password", {
+            required: "Confirm password is required",
+            validate: (value) =>
+              value === newPassword || "Passwords do not match",
+          })}
+          className="px-3 py-2 border border-[#ced4da] focus:border-[#86b7fe] rounded-md outline-none w-full"
+        />
+
+        {errors.confirm_password && (
+          <p className="mt-[4px] text-[12px] text-red-500">
+            {errors.confirm_password.message}
           </p>
         )}
       </div>

@@ -10,6 +10,13 @@ import { LoginComponent } from "../../components";
 import { useLocation, useNavigate } from "react-router-dom";
 import { error_toast } from "../../../utils/toaster";
 
+const normalizeEmail = (email: string) => {
+  if (!email.includes("@")) return email;
+
+  const [localPart, domainPart] = email.split("@");
+  return `${localPart.toLowerCase()}@${domainPart}`;
+};
+
 export default function LoginContainer({ token = null }) {
   const host = new URL(window.location.href).hostname.split(".")[0];
   const location = useLocation();
@@ -38,6 +45,7 @@ export default function LoginContainer({ token = null }) {
     setPassword(e.target.value);
 
   const onLogin = () => {
+    const normalizedEmail = email ? normalizeEmail(email) : email;
     if (location?.pathname == "/login") {
       if (!email || !password) {
         let emEr = "";
@@ -49,7 +57,9 @@ export default function LoginContainer({ token = null }) {
       }
 
       if (currentTenantName) {
-        dispatch(loginUser({ currentTenantName, email, password }));
+        dispatch(
+          loginUser({ currentTenantName, email: normalizedEmail, password })
+        );
       }
     } else if (location?.pathname == "/forget-password") {
       if (!email) {
@@ -62,7 +72,7 @@ export default function LoginContainer({ token = null }) {
       if (currentTenantName) {
         dispatch(
           forgotPassword({
-            payload: { email: email },
+            payload: { email: normalizedEmail },
             headers: { "x-tenant-id": host },
           })
         )

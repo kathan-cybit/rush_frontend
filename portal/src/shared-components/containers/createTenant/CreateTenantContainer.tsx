@@ -238,6 +238,7 @@ const CreateTenantContainer: React.FC<CreateTenantProps> = ({
       await dispatch(
         updateTenant({
           payload: {
+            updated_at: new Date(),
             company_name: data.company_name,
             gst: data.gstNumber,
             status: data.status,
