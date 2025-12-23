@@ -9,7 +9,10 @@ import {
   updateTenant,
 } from "../../../store/reducers/tenantSlice";
 import { CreateTenantComponent } from "../../components";
-import { getLicenseApps } from "../../../store/reducers/licenseSlice";
+import {
+  getAllTenantsWithLicenses,
+  getLicenseApps,
+} from "../../../store/reducers/licenseSlice";
 
 interface TenantFormValues {
   domainname: any;
@@ -51,22 +54,32 @@ const CreateTenantContainer: React.FC<CreateTenantProps> = ({
   const dispatch = useDispatch<AppDispatch>();
 
   const [licenses, setLicenses] = useState<any>([]);
-  const handleLicenseChange = (applicationId: any, value: any) => {
-    setLicenses((prevLicenses: any) => {
-      return prevLicenses.map((license: any) => {
-        if (license.application_id == applicationId) {
-          return {
-            ...license,
-            count: value,
-          };
-        }
+  // const handleLicenseChange = (applicationId: any, value: any) => {
+  //   setLicenses((prevLicenses: any) => {
+  //     return prevLicenses.map((license: any) => {
+  //       if (license.application_id == applicationId) {
+  //         return {
+  //           ...license,
+  //           count: value,
+  //         };
+  //       }
 
-        return license;
-      });
-    });
+  //       return license;
+  //     });
+  //   });
+  // };
+  const handleLicenseChange = (
+    applicationId: any | string,
+    value: number | string
+  ) => {
+    setLicenses((prev: any[]) =>
+      prev.map((l) =>
+        l.application_id == applicationId ? { ...l, count: value } : l
+      )
+    );
   };
 
-  const { allApps, allLicenses } = useSelector(
+  const { allApps, allLicenses, allTenantWithLicenses } = useSelector(
     (state: RootState) => state.license
   );
   const { tenantType } = useSelector((state: RootState) => state.auth);
@@ -82,6 +95,13 @@ const CreateTenantContainer: React.FC<CreateTenantProps> = ({
         },
       })
     );
+    if (host == "public") {
+      dispatch(
+        getAllTenantsWithLicenses({
+          headers: { "x-tenant-id": "public" },
+        })
+      );
+    }
   }, []);
 
   useEffect(() => {
@@ -133,39 +153,44 @@ const CreateTenantContainer: React.FC<CreateTenantProps> = ({
       );
 
       // if (allApps?.length) {
-      //   debugger;
-      //   const initialLicenses = allApps.map((app: any) => ({
-      //     application_id: app.id,
-      //     count: 0,
-      //   }));
+      //   const existingLicensesMap = new Map();
+      //   if (CurrData?.licenses && Array.isArray(CurrData.licenses)) {
+      //     CurrData.licenses.forEach((license) => {
+      //       existingLicensesMap.set(license.application_id, license);
+      //     });
+      //   }
 
-      //   setLicenses(CurrData?.licenses || initialLicenses);
+      //   const finalLicenses = allApps.map((app: any) => {
+      //     const existingLicense = existingLicensesMap.get(app.id);
+
+      //     if (existingLicense) {
+      //       return existingLicense;
+      //     } else {
+      //       return {
+      //         application_id: app.id,
+      //         count: "0",
+      //       };
+      //     }
+      //   });
+
+      //   setLicenses(finalLicenses);
       // }
-      if (allApps?.length) {
-        const existingLicensesMap = new Map();
-        if (CurrData?.licenses && Array.isArray(CurrData.licenses)) {
-          CurrData.licenses.forEach((license) => {
-            existingLicensesMap.set(license.application_id, license);
-          });
-        }
+      if (allApps?.length && allTenantWithLicenses?.length && CurrData?.id) {
+        const tenant = allTenantWithLicenses.find(
+          (t: any) => t.tenant_id === CurrData.id
+        );
 
-        const finalLicenses = allApps.map((app: any) => {
-          const existingLicense = existingLicensesMap.get(app.id);
+        const initialLicenses = allApps.map((app: any) => ({
+          application_id: app.id,
+          count:
+            tenant?.licenses?.filter((l: any) => l.application_id == app.id)
+              ?.length || 0,
+        }));
 
-          if (existingLicense) {
-            return existingLicense;
-          } else {
-            return {
-              application_id: app.id,
-              count: "0",
-            };
-          }
-        });
-
-        setLicenses(finalLicenses);
+        setLicenses(initialLicenses);
       }
     }
-  }, [FormStatus?.mode, allApps, CurrData, setValue]);
+  }, [FormStatus?.mode, allApps, CurrData, setValue, allTenantWithLicenses]);
 
   const onSubmit = async (data: TenantFormValues) => {
     const host = new URL(window.location.href).hostname.split(".")[0];
@@ -290,6 +315,7 @@ const CreateTenantContainer: React.FC<CreateTenantProps> = ({
     navigate: navigate,
     handleReset,
     BreadCrumbItems,
+    allTenantWithLicenses,
   };
 
   return <CreateTenantComponent {...(componentProps as any)} />;

@@ -190,9 +190,10 @@ export default function DashboardContainer() {
 
         allApps.forEach((app: any) => {
           const totalLicenses =
-            allTenantWithLicenses?.[0]?.licenses?.filter(
-              (e: any) => e?.application_id === app.id
-            )?.length || 0;
+            allTenantWithLicenses
+              ?.find((t: any) => t?.tenant_id == tenant?.id)
+              ?.licenses?.filter((e: any) => e?.application_id == app.id)
+              ?.length || 0;
 
           const freeCount = licenseMap.get(app.id) ?? 0;
 
