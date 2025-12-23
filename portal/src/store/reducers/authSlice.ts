@@ -162,6 +162,28 @@ export const resetPassword = createAsyncThunk<unknown, any>(
   }
 );
 
+export const resenndVerifyEmail = createAsyncThunk<unknown, any>(
+  "auth/resenndVerifyEmail",
+  async (props, { rejectWithValue }) => {
+    try {
+      const res = await axiosInstance.post<any>(
+        `/auth/resend-verify-email`,
+        props.payload,
+        { headers: { ...props.headers } }
+      );
+
+      if (res?.data) {
+        success_toast(res.data.message || "Email sent successfully");
+      }
+      return res.data;
+    } catch (err: any) {
+      const msg = err.response?.data?.error || err.message;
+      error_toast(msg);
+      return rejectWithValue({ err, status: err.response?.status });
+    }
+  }
+);
+
 interface AuthState {
   user: any;
   token: string | null;
@@ -276,6 +298,15 @@ const authSlice = createSlice({
         state.allDetails = action.payload;
       })
       .addCase(getUserDetails.rejected, (state) => {
+        state.loading = false;
+      })
+      .addCase(resenndVerifyEmail.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(resenndVerifyEmail.fulfilled, (state, action) => {
+        state.loading = false;
+      })
+      .addCase(resenndVerifyEmail.rejected, (state) => {
         state.loading = false;
       });
   },

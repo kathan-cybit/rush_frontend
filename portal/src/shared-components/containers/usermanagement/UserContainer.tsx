@@ -8,7 +8,10 @@ import { AppDispatch, RootState } from "../../../store/store";
 import { useDispatch, useSelector } from "react-redux";
 import { UserComponent } from "../../components";
 import { useNavigate } from "react-router-dom";
-import { getUserDetails } from "../../../store/reducers/authSlice";
+import {
+  getUserDetails,
+  resenndVerifyEmail,
+} from "../../../store/reducers/authSlice";
 
 export default function UserContainer() {
   const navigate = useNavigate();
@@ -117,6 +120,37 @@ export default function UserContainer() {
       ?.roles.map((role) => role.name)
       .sort()
       .join(", "),
+    isVerified:
+      (e?.is_default_admin === false || e?.is_default_admin == "false") &&
+      (e?.is_verified === false || e?.is_verified == "false") ? (
+        <>
+          <button
+            className="inline-flex float-end float-left items-center gap-2 bg-bsecondary hover:opacity-[0.75] px-7 py-3 border-none rounded-lg h-[45px] font-medium text-white text-sm transition-all duration-200 cursor-pointer"
+            onClick={() => {
+              dispatch(
+                resenndVerifyEmail({
+                  payload: { email: e?.email || "" },
+                  headers: {
+                    "x-tenant-id": host,
+                  },
+                })
+              )
+                .then((res: any) => {
+                  dispatch(
+                    fetchUsers({
+                      url: `/users?tenant=${currentTenantName}`,
+                    })
+                  );
+                })
+                .catch((err) => {});
+            }}
+          >
+            Resend Verification email
+          </button>
+        </>
+      ) : (
+        "Verified"
+      ),
   }));
 
   const BreadCrumbItems = [
