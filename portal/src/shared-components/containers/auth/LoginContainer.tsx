@@ -11,9 +11,13 @@ import { useLocation, useNavigate } from "react-router-dom";
 import { error_toast } from "../../../utils/toaster";
 
 const normalizeEmail = (email: string) => {
-  if (!email.includes("@")) return email;
+  if (!email) return email;
 
-  const [localPart, domainPart] = email.split("@");
+  const trimmed = email.trim();
+
+  if (!trimmed.includes("@")) return trimmed;
+
+  const [localPart, domainPart] = trimmed.split("@");
   return `${localPart.toLowerCase()}@${domainPart}`;
 };
 

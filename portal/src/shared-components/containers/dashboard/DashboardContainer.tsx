@@ -166,6 +166,7 @@ export default function DashboardContainer() {
         }
 
         // formatted value for UI
+        row["Created At"] = formatUtcToIST(tenant?.created_at);
         row["Last Updated"] = formatUtcToIST(tenant?.updated_at);
 
         return row;

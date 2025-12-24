@@ -13,6 +13,7 @@ import {
   getAllTenantsWithLicenses,
   getLicenseApps,
 } from "../../../store/reducers/licenseSlice";
+import { Loader } from "../../ui";
 
 interface TenantFormValues {
   domainname: any;
@@ -319,7 +320,11 @@ const CreateTenantContainer: React.FC<CreateTenantProps> = ({
     allTenantWithLicenses,
   };
 
-  return <CreateTenantComponent {...(componentProps as any)} />;
+  return (
+    <>
+      <CreateTenantComponent {...(componentProps as any)} />
+    </>
+  );
 };
 
 export default CreateTenantContainer;

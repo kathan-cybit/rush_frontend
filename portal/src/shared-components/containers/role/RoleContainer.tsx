@@ -245,6 +245,7 @@ export default function RoleContainer() {
 
         _updatedAtRaw: role.updated_at,
 
+        "Created At": formatUtcToIST(role?.created_at),
         "Last Updated": formatUtcToIST(role.updated_at),
       }))
 

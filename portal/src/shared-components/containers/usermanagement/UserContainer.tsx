@@ -14,6 +14,7 @@ import {
 } from "../../../store/reducers/authSlice";
 import { formatUtcToIST } from "../../../utils/commonFunctions";
 import { getLicenseApps } from "../../../store/reducers/licenseSlice";
+import { Tooltip } from "../../ui";
 
 export default function UserContainer() {
   const navigate = useNavigate();
@@ -126,6 +127,7 @@ export default function UserContainer() {
       status: e.status,
       email: e.email,
       "phone number": e.phonenumber,
+      "Created At": formatUtcToIST(e.created_at),
       "Last Updated": formatUtcToIST(e.updated_at),
       "Assigned Apps":
         Array.isArray(e?.assigned_apps) && Array.isArray(allApps)
@@ -144,8 +146,9 @@ export default function UserContainer() {
         (e?.is_default_admin === false || e?.is_default_admin == "false") &&
         (e?.is_verified === false || e?.is_verified == "false") ? (
           <>
+            {/* <Tooltip label="Resend verification email"> */}
             <button
-              className="inline-flex float-end float-left items-center gap-2 bg-bsecondary hover:opacity-[0.75] px-7 py-3 border-none rounded-lg h-[45px] font-medium text-white text-sm transition-all duration-200 cursor-pointer"
+              // className="inline-flex float-end float-left items-center gap-2 bg-bsecondary hover:opacity-[0.75] px-7 py-3 border-none rounded-lg h-[45px] font-medium text-white text-sm transition-all duration-200 cursor-pointer"
               onClick={() => {
                 dispatch(
                   resenndVerifyEmail({
@@ -165,8 +168,9 @@ export default function UserContainer() {
                   .catch(() => {});
               }}
             >
-              <ResendIconSimple />
+              <ResendIconSimple color={"#666"} />
             </button>
+            {/* </Tooltip> */}
           </>
         ) : (
           "Verified"
