@@ -125,19 +125,11 @@ export default function DashboardContainer() {
     setFormStatus({ mode: "edit", tenant: row.id });
   };
 
-  const allLicenseKeys = Array.from(
-    new Set(
-      tenants?.flatMap((tenant: any) =>
-        tenant?.licenses ? Object.keys(tenant.licenses) : []
-      )
-    )
-  );
-
   let formattedTenants: any[] = [];
 
   if (tenants && allApps) {
     formattedTenants = tenants
-      .map((tenant: any) => {
+      ?.map((tenant: any) => {
         const row: any = {
           id: tenant.id,
           company: tenant.company_name,

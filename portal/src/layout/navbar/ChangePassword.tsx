@@ -124,7 +124,7 @@ export default function ChangePassword({ setIsOpen }) {
         <button
           type="submit"
           disabled={isSubmitting}
-          className="px-[20px] py-[12px] rounded-[8px] max-w-[200px] primaryc-btn"
+          className="px-[20px] py-[12px] rounded-[8px] w-full primaryc-btn"
         >
           {isSubmitting ? "Updating..." : "Change Password"}
         </button>

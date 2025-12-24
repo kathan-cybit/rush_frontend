@@ -127,8 +127,7 @@ export default function UserContainer() {
       status: e.status,
       email: e.email,
       "phone number": e.phonenumber,
-      "Created At": formatUtcToIST(e.created_at),
-      "Last Updated": formatUtcToIST(e.updated_at),
+
       "Assigned Apps":
         Array.isArray(e?.assigned_apps) && Array.isArray(allApps)
           ? allApps
@@ -175,7 +174,8 @@ export default function UserContainer() {
         ) : (
           "Verified"
         ),
-
+      "Created At": formatUtcToIST(e.created_at),
+      "Last Updated": formatUtcToIST(e.updated_at),
       // 🔹 helper field for sorting (not changing UI)
       _updatedAtRaw: e?.updated_at,
     }))
