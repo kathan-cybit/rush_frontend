@@ -226,7 +226,6 @@ export default function DashboardComponent({
                     data={formattedTenants}
                     menuItems={menuItems}
                     statusColorMap={statusColorMap}
-                    defaultSort={{ key: "company", direction: "asc" }}
                   />
                 )}
               </div>

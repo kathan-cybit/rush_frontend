@@ -15,6 +15,7 @@ import { useForm } from "react-hook-form";
 import { error_toast } from "../../../utils/toaster";
 import EditIcn from "../../../assets/svgs/EditIcn";
 import { useNavigate } from "react-router-dom";
+import { formatUtcToIST } from "../../../utils/commonFunctions";
 
 export default function RoleContainer() {
   const navigate = useNavigate();
@@ -94,6 +95,14 @@ export default function RoleContainer() {
     )
       .unwrap()
       .then(() => {
+        dispatch(
+          getRoles({
+            role: tenantType,
+            headers: {
+              "x-tenant-id": host,
+            },
+          })
+        );
         reset();
         handleModalClose();
       })
@@ -126,6 +135,14 @@ export default function RoleContainer() {
     )
       .unwrap()
       .then(() => {
+        dispatch(
+          getRoles({
+            role: tenantType,
+            headers: {
+              "x-tenant-id": host,
+            },
+          })
+        );
         setRoleForm({
           name: "",
           description: "",
@@ -217,12 +234,27 @@ export default function RoleContainer() {
   }, [allpermissionsroles, EditRole]);
 
   const formattedRoles = useMemo(() => {
-    return allRoles?.map((role) => ({
-      id: role.id,
-      role: role.name,
-      description: role.description,
-      permissions: permissionMap[role.id] || "None",
-    }));
+    if (!allRoles) return [];
+
+    return allRoles
+      .map((role) => ({
+        id: role.id,
+        role: role.name,
+        description: role.description,
+        permissions: permissionMap[role.id] || "None",
+
+        _updatedAtRaw: role.updated_at,
+
+        "Last Updated": formatUtcToIST(role.updated_at),
+      }))
+
+      .sort(
+        (a, b) =>
+          new Date(b._updatedAtRaw).getTime() -
+          new Date(a._updatedAtRaw).getTime()
+      )
+
+      .map(({ _updatedAtRaw, ...rest }) => rest);
   }, [allRoles, permissionMap]);
 
   useEffect(() => {

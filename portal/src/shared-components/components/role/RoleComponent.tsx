@@ -135,7 +135,6 @@ export default function RoleComponent({
           data={formattedRoles}
           menuItems={menuItems}
           statusColorMap={statusColorMap}
-          defaultSort={{ key: "name", direction: "asc" }}
         />
       </>
       {EditRole?.open && Object.values(CurrData)?.length > 0 && (
@@ -213,7 +212,7 @@ export default function RoleComponent({
               <div className="flex justify-end gap-2">
                 <button
                   type="submit"
-                  className="bg-green-600 px-4 py-2 rounded text-white"
+                  className="inline-flex float-end items-center gap-2 bg-bsecondary hover:opacity-[0.75] px-7 py-3 border-none rounded-lg h-[45px] font-medium text-white text-sm transition-all duration-200 cursor-pointer"
                 >
                   Save Assignments
                 </button>

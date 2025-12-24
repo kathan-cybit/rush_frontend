@@ -14,6 +14,7 @@ import {
   getAllTenantsWithLicenses,
   getLicenseApps,
 } from "../../../store/reducers/licenseSlice";
+import { formatUtcToIST } from "../../../utils/commonFunctions";
 
 export default function DashboardContainer() {
   const dispatch = useDispatch<AppDispatch>();
@@ -132,77 +133,50 @@ export default function DashboardContainer() {
     )
   );
 
-  // const formattedTenants = useMemo(() => {
-  //   if (!tenants || !allApps) return [];
-
-  //   return tenants.map((tenant: any) => {
-  //     const row: any = {
-  //       id: tenant.id,
-  //       company: tenant.company_name,
-  //       domain: tenant.domain,
-  //       status: tenant.status,
-  //     };
-
-  //     if (Object.values(tenant?.licenses)?.length > 0) {
-  //       // Normalize licenses array for quick lookup
-  //       const licenseMap = new Map(
-  //         (tenant.licenses || []).map((l: any) => [
-  //           Number(l.application_id),
-  //           Number(l.count),
-  //         ])
-  //       );
-
-  //       allApps.forEach((app: any) => {
-  //         row[`${app.name}`] = `${licenseMap.get(app.id) ?? 0}/${
-  //           allTenantWithLicenses[0]?.licenses?.filter((e: any) => {
-  //             return e?.application_id == app.id;
-  //           })?.length
-  //         }`;
-  //       });
-  //       // allApps.forEach((app: any) => {
-  //       //   if (!licenseMap.has(app.id)) {
-  //       //     row[`${app.name}`] = "N/A";
-  //       //   } else {
-  //       //     row[`${app.name}`] = licenseMap.get(app.id) ?? 0;
-  //       //   }
-  //       // });
-  //     }
-
-  //     return row;
-  //   });
-  // }, [tenants, allApps]);
-
   let formattedTenants: any[] = [];
 
   if (tenants && allApps) {
-    formattedTenants = tenants.map((tenant: any) => {
-      const row: any = {
-        id: tenant.id,
-        company: tenant.company_name,
-        domain: tenant.domain,
-        status: tenant.status,
-      };
+    formattedTenants = tenants
+      .map((tenant: any) => {
+        const row: any = {
+          id: tenant.id,
+          company: tenant.company_name,
+          domain: tenant.domain,
+          status: tenant.status,
 
-      if (Array.isArray(tenant?.licenses) && tenant.licenses.length > 0) {
-        const licenseMap = new Map(
-          tenant.licenses.map((l: any) => [l.application_id, Number(l.count)])
-        );
+          // keep raw date ONLY for sorting
+          _updatedAtRaw: tenant?.updated_at,
+        };
 
-        allApps.forEach((app: any) => {
-          const totalLicenses =
-            allTenantWithLicenses
-              ?.find((t: any) => t?.tenant_id == tenant?.id)
-              ?.licenses?.filter((e: any) => e?.application_id == app.id)
-              ?.length || 0;
+        if (Array.isArray(tenant?.licenses) && tenant.licenses.length > 0) {
+          const licenseMap = new Map(
+            tenant.licenses.map((l: any) => [l.application_id, Number(l.count)])
+          );
 
-          const freeCount = licenseMap.get(app.id) ?? 0;
+          allApps.forEach((app: any) => {
+            const totalLicenses =
+              allTenantWithLicenses
+                ?.find((t: any) => t?.tenant_id == tenant?.id)
+                ?.licenses?.filter((e: any) => e?.application_id == app.id)
+                ?.length || 0;
 
-          row[app.name] = `${freeCount}/${totalLicenses}`;
-        });
-      }
+            const freeCount = licenseMap.get(app.id) ?? 0;
+            row[app.name] = `${freeCount}/${totalLicenses}`;
+          });
+        }
 
-      return row;
-    });
+        // formatted value for UI
+        row["Last Updated"] = formatUtcToIST(tenant?.updated_at);
+
+        return row;
+      })
+      .sort(
+        (a: any, b: any) =>
+          new Date(b._updatedAtRaw).getTime() -
+          new Date(a._updatedAtRaw).getTime()
+      )
+
+      .map(({ _updatedAtRaw, ...rest }: any) => rest);
   }
 
   const licensedAppIds = new Set(

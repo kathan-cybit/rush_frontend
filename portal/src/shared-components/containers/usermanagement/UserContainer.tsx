@@ -1,5 +1,5 @@
 import React, { useEffect, useMemo, useState } from "react";
-import { EditIcon, EyeIcon } from "../../../assets/svgs";
+import { EditIcon, EyeIcon, ResendIconSimple } from "../../../assets/svgs";
 import {
   fetchUsers,
   getAllRoleUsers,
@@ -12,6 +12,8 @@ import {
   getUserDetails,
   resenndVerifyEmail,
 } from "../../../store/reducers/authSlice";
+import { formatUtcToIST } from "../../../utils/commonFunctions";
+import { getLicenseApps } from "../../../store/reducers/licenseSlice";
 
 export default function UserContainer() {
   const navigate = useNavigate();
@@ -38,6 +40,8 @@ export default function UserContainer() {
   const { currentTenantName } = useSelector((state: RootState) => state.auth);
   const allUsersRoles =
     useSelector((state: any) => state.tenant.allUsersRoles) || [];
+
+  const { allApps } = useSelector((state: RootState) => state.license);
 
   const menuItems = [
     {
@@ -88,6 +92,12 @@ export default function UserContainer() {
         })
       );
     }
+    dispatch(
+      getLicenseApps({
+        role: tenantType,
+        headers: { "x-tenant-id": host },
+      })
+    );
     if (host != "public") {
       dispatch(
         getUserDetails({
@@ -109,49 +119,68 @@ export default function UserContainer() {
       );
   }, [FormStatus.mode, userData, OpenForm]);
 
-  const formattedTenants = userData?.map((e: any) => ({
-    id: e?.id,
-    username: e.first_name + " " + e?.last_name,
-    status: e.status,
-    email: e.email,
-    "phone number": e.phonenumber,
-    roles: allUsersRoles
-      .find((u) => u.user_id == e?.id)
-      ?.roles.map((role) => role.name)
-      .sort()
-      .join(", "),
-    isVerified:
-      (e?.is_default_admin === false || e?.is_default_admin == "false") &&
-      (e?.is_verified === false || e?.is_verified == "false") ? (
-        <>
-          <button
-            className="inline-flex float-end float-left items-center gap-2 bg-bsecondary hover:opacity-[0.75] px-7 py-3 border-none rounded-lg h-[45px] font-medium text-white text-sm transition-all duration-200 cursor-pointer"
-            onClick={() => {
-              dispatch(
-                resenndVerifyEmail({
-                  payload: { email: e?.email || "" },
-                  headers: {
-                    "x-tenant-id": host,
-                  },
-                })
-              )
-                .then((res: any) => {
-                  dispatch(
-                    fetchUsers({
-                      url: `/users?tenant=${currentTenantName}`,
-                    })
-                  );
-                })
-                .catch((err) => {});
-            }}
-          >
-            Resend Verification email
-          </button>
-        </>
-      ) : (
-        "Verified"
-      ),
-  }));
+  const formattedTenants = userData
+    ?.map((e: any) => ({
+      id: e?.id,
+      username: e.first_name + " " + e?.last_name,
+      status: e.status,
+      email: e.email,
+      "phone number": e.phonenumber,
+      "Last Updated": formatUtcToIST(e.updated_at),
+      "Assigned Apps":
+        Array.isArray(e?.assigned_apps) && Array.isArray(allApps)
+          ? allApps
+              .filter((app: any) => e.assigned_apps.includes(app.id))
+              .map((app: any) => app.name)
+              .sort()
+              .join(", ") || "N/A"
+          : "N/A",
+      roles: allUsersRoles
+        .find((u) => u.user_id == e?.id)
+        ?.roles.map((role) => role.name)
+        .sort()
+        .join(", "),
+      isVerified:
+        (e?.is_default_admin === false || e?.is_default_admin == "false") &&
+        (e?.is_verified === false || e?.is_verified == "false") ? (
+          <>
+            <button
+              className="inline-flex float-end float-left items-center gap-2 bg-bsecondary hover:opacity-[0.75] px-7 py-3 border-none rounded-lg h-[45px] font-medium text-white text-sm transition-all duration-200 cursor-pointer"
+              onClick={() => {
+                dispatch(
+                  resenndVerifyEmail({
+                    payload: { email: e?.email || "" },
+                    headers: {
+                      "x-tenant-id": host,
+                    },
+                  })
+                )
+                  .then(() => {
+                    dispatch(
+                      fetchUsers({
+                        url: `/users?tenant=${currentTenantName}`,
+                      })
+                    );
+                  })
+                  .catch(() => {});
+              }}
+            >
+              <ResendIconSimple />
+            </button>
+          </>
+        ) : (
+          "Verified"
+        ),
+
+      // 🔹 helper field for sorting (not changing UI)
+      _updatedAtRaw: e?.updated_at,
+    }))
+    ?.sort(
+      (a: any, b: any) =>
+        new Date(b._updatedAtRaw).getTime() -
+        new Date(a._updatedAtRaw).getTime()
+    )
+    ?.map(({ _updatedAtRaw, ...rest }: any) => rest);
 
   const BreadCrumbItems = [
     {

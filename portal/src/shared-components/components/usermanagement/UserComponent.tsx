@@ -127,7 +127,6 @@ export default function UserComponent({
                 data={formattedTenants}
                 menuItems={menuItems}
                 statusColorMap={statusColorMap}
-                defaultSort={{ key: "first_name", direction: "asc" }}
               />
             </div>
           )}

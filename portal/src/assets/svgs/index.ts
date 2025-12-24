@@ -10,8 +10,10 @@ import HomeIcn from "./HomeIcn";
 import DownloadIcn from "./DownloadIcn";
 import EyeIcon2 from "./EyeIcon";
 import EyeSlashIcon from "./EyeSlashIcon";
+import ResendIconSimple from "./ResendEmailIcn";
 
 export {
+  ResendIconSimple,
   EyeSlashIcon,
   ErisLoginLogo,
   UserIcn,
