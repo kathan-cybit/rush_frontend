@@ -140,11 +140,6 @@ export default function CreateUserContainer({
           if (setFormStatus) {
             setFormStatus({ mode: null, userId: null });
           }
-          dispatch(
-            fetchUsers({
-              url: `/users?tenant=${host}`,
-            })
-          );
           setdisplayAlert(false);
           navigate("/usermanagement");
         })
