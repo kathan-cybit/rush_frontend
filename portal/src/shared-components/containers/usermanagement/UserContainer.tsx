@@ -47,7 +47,7 @@ export default function UserContainer() {
   const menuItems = [
     {
       label: "View",
-      icon: <EditIcon className="" color="#000" />,
+      icon: <EyeIcon className="" color="#000" />,
       onClick: (row: any) => {
         handleViewUser(row);
       },
@@ -55,7 +55,7 @@ export default function UserContainer() {
     {
       label: "Edit",
       color: "blue",
-      icon: <EyeIcon color="#228be6" />,
+      icon: <EditIcon color="#228be6" />,
       onClick: (row: any) => {
         handleEditUser(row);
       },

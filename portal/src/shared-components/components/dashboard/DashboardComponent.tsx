@@ -123,11 +123,11 @@ export default function DashboardComponent({
                       <img
                         className="w-full h-full object-contain"
                         src={
-                          index == 0
-                            ? ICExpert
-                            : index == 1
+                          e?.id == "ICXpert"
+                            ? SimExpert
+                            : e?.name == "PoleXpert"
                             ? PoleExpert
-                            : SimExpert
+                            : ICExpert
                         }
                         alt="Teams"
                       />
@@ -161,7 +161,7 @@ export default function DashboardComponent({
           {!FormStatus.mode ? (
             <>
               <div className="flex flex-wrap -mx-3">
-                <div className="px-2 w-1/3">
+                <div className="px-2 w-1/2">
                   <div className="flex justify-between items-start p-[16px] border border-[#e4e5e7] border-[1.2px] rounded-[16px] h-[135px] text-center cursor-pointer">
                     <div className="flex flex-col">
                       <span className="font-fsecondary text-[400] text-[56px] text-textPrimary text-start">
@@ -184,7 +184,7 @@ export default function DashboardComponent({
                     </div>
                   </div>
                 </div>
-                <div className="px-2 w-1/3">
+                <div className="px-2 w-1/2">
                   <div className="flex justify-between items-start p-[16px] border border-[#e4e5e7] border-[1.2px] rounded-[16px] h-[135px] text-center cursor-pointer">
                     <div className="flex flex-col">
                       <span className="font-fsecondary text-[400] text-[56px] text-textPrimary text-start">
@@ -207,7 +207,7 @@ export default function DashboardComponent({
                     </div>
                   </div>
                 </div>
-                <div className="px-2 w-1/3">
+                {/* <div className="px-2 w-1/3">
                   <div className="flex justify-between items-start p-[16px] border border-[#e4e5e7] border-[1.2px] rounded-[16px] h-[135px] text-center cursor-pointer">
                     <div className="flex flex-col">
                       <span className="font-fsecondary text-[400] text-[56px] text-textPrimary text-start">
@@ -218,7 +218,7 @@ export default function DashboardComponent({
                       </span>
                     </div>
                   </div>
-                </div>
+                </div> */}
               </div>
               <div className="mt-5">
                 {tenants?.length > 0 && (
