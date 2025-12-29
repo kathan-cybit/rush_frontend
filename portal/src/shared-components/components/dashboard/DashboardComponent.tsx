@@ -123,7 +123,7 @@ export default function DashboardComponent({
                       <img
                         className="w-full h-full object-contain"
                         src={
-                          e?.id == "ICXpert"
+                          e?.name == "ICXpert"
                             ? SimExpert
                             : e?.name == "PoleXpert"
                             ? PoleExpert
