@@ -124,10 +124,10 @@ export default function DashboardComponent({
                         className="w-full h-full object-contain"
                         src={
                           e?.name == "ICXpert"
-                            ? SimExpert
+                            ? ICExpert
                             : e?.name == "PoleXpert"
                             ? PoleExpert
-                            : ICExpert
+                            : SimExpert
                         }
                         alt="Teams"
                       />
