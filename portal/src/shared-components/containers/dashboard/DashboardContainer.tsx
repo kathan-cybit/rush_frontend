@@ -153,7 +153,9 @@ export default function DashboardContainer() {
                 ?.length || 0;
 
             const freeCount = licenseMap.get(app.id) ?? 0;
-            row[app.name] = `${freeCount}/${totalLicenses}`;
+            row[
+              `${app.name}` + " " + "LICENSES"
+            ] = `${freeCount}/${totalLicenses}`;
           });
         }
 
