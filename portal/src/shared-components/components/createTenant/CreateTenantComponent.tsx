@@ -442,7 +442,7 @@ const CreateTenantComponent: React.FC<any> = ({
             </div>
             <div className="float-left mt-[5px] px-[12px] w-[50%]">
               <label className="text-[#1f2937] text-[14px] text-[500]">
-                Single Organization
+                Single User Organization
                 <span className="ml-1 text-red-500">*</span>
               </label>
 
