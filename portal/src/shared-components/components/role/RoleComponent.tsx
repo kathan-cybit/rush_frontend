@@ -51,6 +51,7 @@ export default function RoleComponent({
   host,
   displayAlert,
   setdisplayAlert,
+  allDetails,
 }: any) {
   const [ErrorAlert, setErrorAlert] = useState("");
   const allSelected =
@@ -90,33 +91,39 @@ export default function RoleComponent({
             </div>
             {host != "public" && (
               <div className="flex gap-2">
-                <Tooltip label="Download Sample File">
-                  <a
-                    href={RolesFile}
+                {(!allDetails?.is_single_org || host == "public") && (
+                  <Tooltip label="Download Sample File">
+                    <a
+                      href={RolesFile}
+                      className="inline-flex float-end items-center gap-2 bg-bsecondary hover:opacity-[0.75] px-7 py-3 border-none rounded-lg h-[45px] font-medium text-white text-sm transition-all duration-200 cursor-pointer"
+                    >
+                      <DownloadIcn />
+                      {/* <span>Download Sample File</span> */}
+                    </a>
+                  </Tooltip>
+                )}
+                {(!allDetails?.is_single_org || host == "public") && (
+                  <button
+                    onClick={() => {
+                      setOpenForm(true);
+                    }}
+                    type="submit"
                     className="inline-flex float-end items-center gap-2 bg-bsecondary hover:opacity-[0.75] px-7 py-3 border-none rounded-lg h-[45px] font-medium text-white text-sm transition-all duration-200 cursor-pointer"
                   >
-                    <DownloadIcn />
-                    {/* <span>Download Sample File</span> */}
-                  </a>
-                </Tooltip>
-                <button
-                  onClick={() => {
-                    setOpenForm(true);
-                  }}
-                  type="submit"
-                  className="inline-flex float-end items-center gap-2 bg-bsecondary hover:opacity-[0.75] px-7 py-3 border-none rounded-lg h-[45px] font-medium text-white text-sm transition-all duration-200 cursor-pointer"
-                >
-                  Bulk upload
-                </button>
-                <button
-                  onClick={() => {
-                    setOpenCreateRole(true);
-                  }}
-                  type="submit"
-                  className="inline-flex float-end items-center gap-2 bg-bsecondary hover:opacity-[0.75] px-7 py-3 border-none rounded-lg h-[45px] font-medium text-white text-sm transition-all duration-200 cursor-pointer"
-                >
-                  Create New Role
-                </button>
+                    Bulk upload
+                  </button>
+                )}
+                {(!allDetails?.is_single_org || host == "public") && (
+                  <button
+                    onClick={() => {
+                      setOpenCreateRole(true);
+                    }}
+                    type="submit"
+                    className="inline-flex float-end items-center gap-2 bg-bsecondary hover:opacity-[0.75] px-7 py-3 border-none rounded-lg h-[45px] font-medium text-white text-sm transition-all duration-200 cursor-pointer"
+                  >
+                    Create New Role
+                  </button>
+                )}
               </div>
             )}
           </div>

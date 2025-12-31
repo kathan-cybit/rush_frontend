@@ -16,11 +16,14 @@ import { error_toast } from "../../../utils/toaster";
 import EditIcn from "../../../assets/svgs/EditIcn";
 import { useNavigate } from "react-router-dom";
 import { formatUtcToIST } from "../../../utils/commonFunctions";
+import { getUserDetails } from "../../../store/reducers/authSlice";
 
 export default function RoleContainer() {
   const navigate = useNavigate();
   const dispatch = useDispatch<AppDispatch>();
-  const { tenantType, user } = useSelector((state: RootState) => state.auth);
+  const { tenantType, user, allDetails } = useSelector(
+    (state: RootState) => state.auth
+  );
   const host = new URL(window.location.href).hostname.split(".")[0];
 
   const isLoading = useSelector((state: any) => state.tenant.isLoading);
@@ -207,6 +210,16 @@ export default function RoleContainer() {
     }
   }, [OpenCreateRole, OpenForm]);
 
+  useEffect(() => {
+    if (host != "public") {
+      dispatch(
+        getUserDetails({
+          headers: { "x-tenant-id": host },
+        })
+      );
+    }
+  }, []);
+
   const selectedPermissionIds = useMemo(() => {
     return (permissionsRoles || []).map((item) => item.Permission?.id);
   }, [permissionsRoles]);
@@ -304,6 +317,7 @@ export default function RoleContainer() {
             BreadCrumbItems={BreadCrumbItems}
             setdisplayAlert={setdisplayAlert}
             displayAlert={displayAlert}
+            allDetails={allDetails}
           />
         </div>
       </div>

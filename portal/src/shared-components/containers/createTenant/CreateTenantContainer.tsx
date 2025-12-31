@@ -14,6 +14,7 @@ import {
   getLicenseApps,
 } from "../../../store/reducers/licenseSlice";
 import { Loader } from "../../ui";
+import { error_toast } from "../../../utils/toaster";
 
 interface TenantFormValues {
   domainname: any;
@@ -121,6 +122,7 @@ const CreateTenantContainer: React.FC<CreateTenantProps> = ({
     handleSubmit,
     setValue,
     formState: { errors },
+    watch,
     reset,
   } = useForm<TenantFormValues>({
     defaultValues: {
@@ -136,6 +138,8 @@ const CreateTenantContainer: React.FC<CreateTenantProps> = ({
       singleOrganization: CurrData?.is_single_org === true ? "true" : "false",
     },
   });
+  const singleOrganizationWatcher = watch("singleOrganization");
+
   useEffect(() => {
     if (
       (FormStatus?.mode === "edit" || FormStatus?.mode === "view") &&
@@ -246,8 +250,7 @@ const CreateTenantContainer: React.FC<CreateTenantProps> = ({
             phonenumber: data.phoneNumber,
             contactperson: data.contactperson,
             contactemail: data.contactemail,
-            singleOrganization:
-              data.singleOrganization == "true" ? true : false,
+            is_single_org: data.singleOrganization == "true" ? true : false,
             licenses: licenses?.map((lic: any) => ({
               ...lic,
               count: Number(lic.count),
@@ -271,7 +274,18 @@ const CreateTenantContainer: React.FC<CreateTenantProps> = ({
         .catch(() => {});
     }
   };
-
+  useEffect(() => {
+    if (
+      (singleOrganizationWatcher == "true" ||
+        singleOrganizationWatcher === true) &&
+      CurrData?.totalusers > 1
+    ) {
+      error_toast(
+        "Single User Organization cannot be enabled because more than one user exists for this tenant."
+      );
+      setValue("singleOrganization", "false");
+    }
+  }, [singleOrganizationWatcher, CurrData?.totalusers, setValue]);
   const onDiscard = () => {
     reset();
     setFormStatus?.({ mode: null, tenant: null });

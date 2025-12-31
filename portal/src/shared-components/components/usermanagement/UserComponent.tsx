@@ -80,24 +80,28 @@ export default function UserComponent({
                   </>
                 </div>
                 <div className="flex gap-2">
-                  <Tooltip label="Download Sample File">
-                    <a
-                      href={USersFile}
+                  {!allDetails?.is_single_org && (
+                    <Tooltip label="Download Sample File">
+                      <a
+                        href={USersFile}
+                        className="inline-flex float-end items-center gap-2 bg-bsecondary hover:opacity-[0.75] px-7 py-3 border-none rounded-lg h-[45px] font-medium text-white text-sm transition-all duration-200 cursor-pointer"
+                      >
+                        <DownloadIcn />
+                        {/* <span>Download Sample File</span> */}
+                      </a>
+                    </Tooltip>
+                  )}
+                  {!allDetails?.is_single_org && (
+                    <button
+                      onClick={() => {
+                        setOpenForm(true);
+                        // exportToCSV(formattedTenants, "hellow");
+                      }}
                       className="inline-flex float-end items-center gap-2 bg-bsecondary hover:opacity-[0.75] px-7 py-3 border-none rounded-lg h-[45px] font-medium text-white text-sm transition-all duration-200 cursor-pointer"
                     >
-                      <DownloadIcn />
-                      {/* <span>Download Sample File</span> */}
-                    </a>
-                  </Tooltip>
-                  <button
-                    onClick={() => {
-                      setOpenForm(true);
-                      // exportToCSV(formattedTenants, "hellow");
-                    }}
-                    className="inline-flex float-end items-center gap-2 bg-bsecondary hover:opacity-[0.75] px-7 py-3 border-none rounded-lg h-[45px] font-medium text-white text-sm transition-all duration-200 cursor-pointer"
-                  >
-                    Bulk upload
-                  </button>
+                      Bulk upload
+                    </button>
+                  )}
                   {!allDetails?.is_single_org && (
                     <button
                       onClick={() => {

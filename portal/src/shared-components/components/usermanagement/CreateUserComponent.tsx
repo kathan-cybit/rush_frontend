@@ -401,7 +401,9 @@ export default function CreateUserComponent({
                   <Select
                     isMulti
                     options={selectOptions}
-                    isDisabled={FormStatus?.mode === "view"}
+                    isDisabled={
+                      FormStatus?.mode === "view" || allDetails?.is_single_org
+                    }
                     value={roleOptions.filter((opt) =>
                       field.value?.includes(opt.value)
                     )}
@@ -475,7 +477,8 @@ export default function CreateUserComponent({
                           type="checkbox"
                           disabled={
                             FormStatus?.mode === "view" ||
-                            (!isAssigned && availableCount <= 0)
+                            (!isAssigned && availableCount <= 0) ||
+                            allDetails?.is_single_org
                           }
                           checked={isAssigned}
                           onChange={() => {

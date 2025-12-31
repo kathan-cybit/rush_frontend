@@ -247,6 +247,22 @@ export default function CreateUserContainer({
       }
     }
   }, [FormStatus?.mode, CurrData, allUsersRoles]);
+
+  useEffect(() => {
+    if (allDetails?.is_single_org && allRoles?.length > 0) {
+      const allRoleIds = allRoles.map((r: any) => r.id);
+
+      setValue("role_ids", allRoleIds);
+
+      const formatted = allRoles.map((r: any) => ({
+        value: r.id,
+        label: r.name,
+      }));
+
+      setDefaultUserRoleOptions(formatted);
+    }
+  }, [allDetails?.is_single_org, allRoles]);
+
   const roleOptions = allRoles.map((r) => ({
     value: r.id,
     label: r.name,
