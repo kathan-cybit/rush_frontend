@@ -6,8 +6,8 @@ export default function CustomFooter() {
     <>
       {" "}
       <ErisFooter
-        version={process.env.VERSION}
-        build_number={process.env.BUILD_NUMBER}
+        version={process.env.REACT_APP_VERSION}
+        build_number={process.env.REACT_APP_BUILD_NUMBER}
       />
     </>
   );
