@@ -44,6 +44,7 @@ export default function DashboardComponent({
   formattedTenants,
   allTenantWithLicenses,
 }: any) {
+  console.log(filteredApps, "filteredApps");
   return (
     <>
       {(isLoading || loading) && (
@@ -268,9 +269,9 @@ export default function DashboardComponent({
                           <img
                             className="w-full h-full object-contain"
                             src={
-                              index == 0
+                              e?.name == "ICXpert"
                                 ? ICExpert
-                                : index == 1
+                                : e?.name == "PoleXpert"
                                 ? PoleExpert
                                 : SimExpert
                             }
