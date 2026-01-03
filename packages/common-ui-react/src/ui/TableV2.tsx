@@ -55,6 +55,7 @@ interface TableV2Props<T> {
   onStartInspection?: (item: T) => void;
   hideForPoles?: boolean; // Optional prop to hide the table header for poles
   defaultSort?: { key: string; direction: "asc" | "desc" };
+  customTooltip?: { [key: string]: any };
 }
 
 export const TableV2 = <T extends Record<string, any>>({
@@ -70,6 +71,7 @@ export const TableV2 = <T extends Record<string, any>>({
   onStartInspection,
   hideForPoles,
   defaultSort,
+  customTooltip = {},
 }: TableV2Props<T>) => {
   const [searchTerm, setSearchTerm] = useState("");
   const [activePage, setPage] = useState(1);
@@ -344,7 +346,13 @@ export const TableV2 = <T extends Record<string, any>>({
                           }}
                         >
                           <Tooltip
-                            label={String(content)}
+                            label={
+                              String(content) == "N/A"
+                                ? "Not available"
+                                : typeof content == "string"
+                                ? String(content)
+                                : customTooltip?.[key]
+                            }
                             withArrow
                             position="top-start"
                             disabled={

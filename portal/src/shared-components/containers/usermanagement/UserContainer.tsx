@@ -150,11 +150,12 @@ export default function UserContainer() {
               .sort()
               .join(", ") || "N/A"
           : "N/A",
-      roles: allUsersRoles
-        .find((u) => u.user_id == e?.id)
-        ?.roles.map((role) => role.name)
-        .sort()
-        .join(", "),
+      roles:
+        allUsersRoles
+          .find((u) => u.user_id == e?.id)
+          ?.roles.map((role) => role.name)
+          .sort()
+          .join(", ") || "N/A",
       isVerified:
         (e?.is_default_admin === false || e?.is_default_admin == "false") &&
         (e?.is_verified === false || e?.is_verified == "false") ? (

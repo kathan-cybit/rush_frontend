@@ -129,6 +129,7 @@ export default function UserComponent({
                 data={formattedTenants}
                 menuItems={menuItems}
                 statusColorMap={statusColorMap}
+                customTooltip={{ isVerified: "Click to verify" }}
               />
             </div>
           )}
