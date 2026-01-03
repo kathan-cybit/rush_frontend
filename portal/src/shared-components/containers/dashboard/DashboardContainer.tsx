@@ -54,7 +54,7 @@ export default function DashboardContainer() {
     tenant: null as string | null,
   });
 
-  const [CurrData, setCurrData] = useState<any>(null);
+  // const [CurrData, setCurrData] = useState<any>(null);
 
   const { allApps, allLicenses, allTenantWithLicenses } = useSelector(
     (state: RootState) => state.license
@@ -93,7 +93,7 @@ export default function DashboardContainer() {
         })
       );
     }
-  }, [FormStatus]);
+  }, []);
 
   useEffect(() => {
     const host = new URL(window.location.href).hostname.split(".")[0];
@@ -101,15 +101,30 @@ export default function DashboardContainer() {
     if (host == "public") {
       dispatch(fetchTenants(host));
     }
-  }, [FormStatus]);
+  }, []);
 
   useEffect(() => {
     if (
       FormStatus.tenant &&
       (FormStatus.mode == "view" || FormStatus.mode == "edit")
     ) {
-      const data = tenants.find((e: any) => e.id === FormStatus.tenant);
-      setCurrData(data);
+      const data = tenants.find((e: any) => e.id == FormStatus.tenant);
+      // setCurrData(data);
+      if (FormStatus.mode == "view") {
+        navigate("/viewtenant", {
+          state: {
+            CurrData: data,
+            FormStatus: FormStatus,
+          },
+        });
+      } else {
+        navigate("/edittenant", {
+          state: {
+            CurrData: data,
+            FormStatus: FormStatus,
+          },
+        });
+      }
     }
   }, [FormStatus, tenants]);
 
@@ -191,7 +206,7 @@ export default function DashboardContainer() {
     loading,
     tenants,
     FormStatus,
-    CurrData,
+    // CurrData,
     handleCreateTenant,
     handleViewTenant,
     handleEditTenant,

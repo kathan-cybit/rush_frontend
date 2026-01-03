@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { useDispatch, useSelector } from "react-redux";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { AppDispatch, RootState } from "../../../store/store";
 import {
   createTenant,
@@ -42,19 +42,23 @@ interface FormStatus {
 }
 
 interface CreateTenantProps {
-  CurrData?: any;
-  FormStatus?: FormStatus;
-  setFormStatus?: any;
+  // CurrData?: any;
+  // FormStatus?: FormStatus;
+  // setFormStatus?: any;
 }
 
-const CreateTenantContainer: React.FC<CreateTenantProps> = ({
-  CurrData = {},
-  FormStatus = { mode: null, tenant: null },
-  setFormStatus,
-}) => {
+const CreateTenantContainer: React.FC<any> = (
+  {
+    // CurrData = {},
+    // FormStatus = { mode: null, tenant: null },
+    // setFormStatus,
+  }
+) => {
   const navigate = useNavigate();
   const dispatch = useDispatch<AppDispatch>();
-
+  const location = useLocation();
+  const { CurrData = {}, FormStatus = { mode: null, tenant: null } } =
+    location.state;
   const [licenses, setLicenses] = useState<any>([]);
   // const handleLicenseChange = (applicationId: any, value: any) => {
   //   setLicenses((prevLicenses: any) => {
@@ -157,29 +161,6 @@ const CreateTenantContainer: React.FC<CreateTenantProps> = ({
         CurrData?.is_single_org === true ? "true" : "false"
       );
 
-      // if (allApps?.length) {
-      //   const existingLicensesMap = new Map();
-      //   if (CurrData?.licenses && Array.isArray(CurrData.licenses)) {
-      //     CurrData.licenses.forEach((license) => {
-      //       existingLicensesMap.set(license.application_id, license);
-      //     });
-      //   }
-
-      //   const finalLicenses = allApps.map((app: any) => {
-      //     const existingLicense = existingLicensesMap.get(app.id);
-
-      //     if (existingLicense) {
-      //       return existingLicense;
-      //     } else {
-      //       return {
-      //         application_id: app.id,
-      //         count: "0",
-      //       };
-      //     }
-      //   });
-
-      //   setLicenses(finalLicenses);
-      // }
       if (allApps?.length && allTenantWithLicenses?.length && CurrData?.id) {
         const tenant = allTenantWithLicenses.find(
           (t: any) => t.tenant_id === CurrData.id
@@ -235,7 +216,7 @@ const CreateTenantContainer: React.FC<CreateTenantProps> = ({
             count: 0,
           }));
           setLicenses(initialLicenses);
-          setFormStatus?.({ mode: null, tenant: null });
+          // setFormStatus?.({ mode: null, tenant: null });
           navigate("/dashboard");
         })
         .catch(() => {});
@@ -267,7 +248,7 @@ const CreateTenantContainer: React.FC<CreateTenantProps> = ({
             count: 0,
           }));
           setLicenses(initialLicenses);
-          setFormStatus?.({ mode: null, tenant: null });
+          // setFormStatus?.({ mode: null, tenant: null });
           dispatch(fetchTenants(host));
           navigate("/dashboard");
         })
@@ -288,7 +269,7 @@ const CreateTenantContainer: React.FC<CreateTenantProps> = ({
   }, [singleOrganizationWatcher, CurrData?.totalusers, setValue]);
   const onDiscard = () => {
     reset();
-    setFormStatus?.({ mode: null, tenant: null });
+    // setFormStatus?.({ mode: null, tenant: null });
     navigate("/dashboard");
   };
 
@@ -296,7 +277,8 @@ const CreateTenantContainer: React.FC<CreateTenantProps> = ({
     e: "view" | "edit" | null,
     id: string | number | null
   ) => {
-    setFormStatus?.({ tenant: id, mode: e });
+    navigate("/dashboard");
+    // setFormStatus?.({ tenant: id, mode: e });
   };
 
   const BreadCrumbItems = [
@@ -328,7 +310,6 @@ const CreateTenantContainer: React.FC<CreateTenantProps> = ({
     handleLicenseChange,
     onDiscard,
     handleSubmit: handleSubmit(onSubmit),
-    navigate: navigate,
     handleReset,
     BreadCrumbItems,
     allTenantWithLicenses,

@@ -1,8 +1,8 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { UseFormRegister, FieldErrors } from "react-hook-form";
 
 import { BackIcon, EditIcon } from "../../../assets/svgs";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { CustomBreadCrumbs, Loader } from "../../ui";
 
 interface TenantFormValues {
@@ -46,12 +46,13 @@ const CreateTenantComponent: React.FC<any> = ({
   CurrData = {},
   handleLicenseChange,
   onDiscard,
-  navigate,
   handleReset,
   handleSubmit,
   BreadCrumbItems,
   allTenantWithLicenses,
 }) => {
+  const navigate = useNavigate();
+
   return (
     <>
       {isLoading && (
@@ -95,7 +96,12 @@ const CreateTenantComponent: React.FC<any> = ({
             {FormStatus?.mode === "view" && (
               <div
                 onClick={() => {
-                  handleReset("edit", FormStatus?.tenant);
+                  navigate("/edittenant", {
+                    state: {
+                      CurrData: CurrData,
+                      FormStatus: { mode: "edit", tenant: CurrData.id },
+                    },
+                  });
                 }}
                 className="px-[20px] py-[12px] rounded-[8px] max-w-[200px] primaryc-btn"
               >

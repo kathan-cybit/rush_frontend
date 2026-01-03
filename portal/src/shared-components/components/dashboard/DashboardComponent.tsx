@@ -10,7 +10,7 @@ interface DashboardProps {
   isLoading: boolean;
   tenants: any[];
   FormStatus: { mode: "view" | "edit" | null; tenant: string | null };
-  CurrData: any;
+  // CurrData: any;
   handleCreateTenant: () => void;
   handleViewTenant: (row: any) => void;
   handleEditTenant: (row: any) => void;
@@ -34,7 +34,7 @@ export default function DashboardComponent({
   loading,
   tenants,
   FormStatus,
-  CurrData,
+  // CurrData,
   handleCreateTenant,
   handleViewTenant,
   handleEditTenant,
@@ -44,7 +44,6 @@ export default function DashboardComponent({
   formattedTenants,
   allTenantWithLicenses,
 }: any) {
-  console.log(filteredApps, "filteredApps");
   return (
     <>
       {(isLoading || loading) && (
@@ -159,56 +158,48 @@ export default function DashboardComponent({
         </div>
       ) : host == "public" ? (
         <>
-          {!FormStatus.mode ? (
-            <>
-              <div className="flex flex-wrap -mx-3">
-                <div className="px-2 w-1/2">
-                  <div className="flex justify-between items-start p-[16px] border border-[#e4e5e7] border-[1.2px] rounded-[16px] h-[135px] text-center cursor-pointer">
-                    <div className="flex flex-col">
-                      <span className="font-fsecondary text-[400] text-[56px] text-textPrimary text-start">
-                        {
-                          tenants?.filter((item) => item.status == "active")
-                            .length
-                        }
-                      </span>
-                      <span className="text-[#555555] text-[14px] text-[400] leading-[140%]">
-                        Active Tenants
-                      </span>
-                    </div>
-                    <div>
-                      <span className={`badge-parent active`}>
-                        <span className={`status-badge active`}>
-                          <span className="status-dot"></span>
-                          {"active"}
-                        </span>
-                      </span>
-                    </div>
-                  </div>
+          <div className="flex flex-wrap -mx-3">
+            <div className="px-2 w-1/2">
+              <div className="flex justify-between items-start p-[16px] border border-[#e4e5e7] border-[1.2px] rounded-[16px] h-[135px] text-center cursor-pointer">
+                <div className="flex flex-col">
+                  <span className="font-fsecondary text-[400] text-[56px] text-textPrimary text-start">
+                    {tenants?.filter((item) => item.status == "active").length}
+                  </span>
+                  <span className="text-[#555555] text-[14px] text-[400] leading-[140%]">
+                    Active Tenants
+                  </span>
                 </div>
-                <div className="px-2 w-1/2">
-                  <div className="flex justify-between items-start p-[16px] border border-[#e4e5e7] border-[1.2px] rounded-[16px] h-[135px] text-center cursor-pointer">
-                    <div className="flex flex-col">
-                      <span className="font-fsecondary text-[400] text-[56px] text-textPrimary text-start">
-                        {
-                          tenants?.filter((item) => item.status != "active")
-                            .length
-                        }
-                      </span>
-                      <span className="text-[#555555] text-[14px] text-[400] leading-[140%]">
-                        Inactive Tenants
-                      </span>
-                    </div>
-                    <div>
-                      <span className={`badge-parent inactive`}>
-                        <span className={`status-badge inactive`}>
-                          <span className="status-dot"></span>
-                          {"Inactive"}
-                        </span>
-                      </span>
-                    </div>
-                  </div>
+                <div>
+                  <span className={`badge-parent active`}>
+                    <span className={`status-badge active`}>
+                      <span className="status-dot"></span>
+                      {"active"}
+                    </span>
+                  </span>
                 </div>
-                {/* <div className="px-2 w-1/3">
+              </div>
+            </div>
+            <div className="px-2 w-1/2">
+              <div className="flex justify-between items-start p-[16px] border border-[#e4e5e7] border-[1.2px] rounded-[16px] h-[135px] text-center cursor-pointer">
+                <div className="flex flex-col">
+                  <span className="font-fsecondary text-[400] text-[56px] text-textPrimary text-start">
+                    {tenants?.filter((item) => item.status != "active").length}
+                  </span>
+                  <span className="text-[#555555] text-[14px] text-[400] leading-[140%]">
+                    Inactive Tenants
+                  </span>
+                </div>
+                <div>
+                  <span className={`badge-parent inactive`}>
+                    <span className={`status-badge inactive`}>
+                      <span className="status-dot"></span>
+                      {"Inactive"}
+                    </span>
+                  </span>
+                </div>
+              </div>
+            </div>
+            {/* <div className="px-2 w-1/3">
                   <div className="flex justify-between items-start p-[16px] border border-[#e4e5e7] border-[1.2px] rounded-[16px] h-[135px] text-center cursor-pointer">
                     <div className="flex flex-col">
                       <span className="font-fsecondary text-[400] text-[56px] text-textPrimary text-start">
@@ -220,30 +211,27 @@ export default function DashboardComponent({
                     </div>
                   </div>
                 </div> */}
-              </div>
-              <div className="mt-5">
-                {tenants?.length > 0 && (
-                  <TableV2
-                    data={formattedTenants}
-                    menuItems={menuItems}
-                    statusColorMap={statusColorMap}
-                  />
-                )}
-              </div>
-            </>
-          ) : (
-            <>
-              {FormStatus.mode && FormStatus.tenant && CurrData && (
-                <CreateTenantContainer
-                  setFormStatus={setFormStatus}
-                  FormStatus={FormStatus}
-                  CurrData={CurrData}
-                />
-              )}
-            </>
-          )}
+          </div>
+          <div className="mt-5">
+            {tenants?.length > 0 && (
+              <TableV2
+                data={formattedTenants}
+                menuItems={menuItems}
+                statusColorMap={statusColorMap}
+              />
+            )}
+          </div>
         </>
       ) : (
+        //  <>
+        //       {FormStatus.mode && FormStatus.tenant && CurrData && (
+        //         <CreateTenantContainer
+        //           setFormStatus={setFormStatus}
+        //           FormStatus={FormStatus}
+        //           CurrData={CurrData}
+        //         />
+        //       )}
+        //     </>
         <>
           <div className="flex flex-wrap justify-center -mx-3">
             {filteredApps?.length > 0 &&
