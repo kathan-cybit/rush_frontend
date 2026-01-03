@@ -20,7 +20,6 @@ interface userProps {
   loading: boolean;
   userData: any;
   FormStatus: any;
-  CurrData: any;
   handleViewUser: (row: any) => void;
   handleEditUser: (row: any) => void;
   setFormStatus: any;
@@ -32,7 +31,6 @@ export default function UserComponent({
   loading2,
   allDetails,
   userData,
-  CurrData,
   FormStatus,
   setFormStatus,
   handleViewUser,
@@ -105,7 +103,7 @@ export default function UserComponent({
                   {!allDetails?.is_single_org && (
                     <button
                       onClick={() => {
-                        navigate("/createUser");
+                        navigate("/createuser");
                       }}
                       type="submit"
                       className="inline-flex float-end items-center gap-2 bg-bsecondary hover:opacity-[0.75] px-7 py-3 border-none rounded-lg h-[45px] font-medium text-white text-sm transition-all duration-200 cursor-pointer"
@@ -136,7 +134,7 @@ export default function UserComponent({
           )}
         </>
       )}
-      {FormStatus.mode && FormStatus.userId && CurrData && (
+      {/* {FormStatus.mode && FormStatus.userId && CurrData && (
         <>
           <CreateUserContainer
             allUsersRoles={allUsersRoles}
@@ -146,7 +144,7 @@ export default function UserComponent({
             setdisplayAlert={setdisplayAlert}
           />
         </>
-      )}
+      )} */}
       {OpenForm && (
         <Dialog
           title="Create Users"

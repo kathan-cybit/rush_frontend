@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { useForm } from "react-hook-form";
 import { useDispatch, useSelector } from "react-redux";
 import { useLocation, useNavigate } from "react-router-dom";
@@ -57,23 +57,20 @@ const CreateTenantContainer: React.FC<any> = (
   const navigate = useNavigate();
   const dispatch = useDispatch<AppDispatch>();
   const location = useLocation();
-  const { CurrData = {}, FormStatus = { mode: null, tenant: null } } =
-    location.state;
-  const [licenses, setLicenses] = useState<any>([]);
-  // const handleLicenseChange = (applicationId: any, value: any) => {
-  //   setLicenses((prevLicenses: any) => {
-  //     return prevLicenses.map((license: any) => {
-  //       if (license.application_id == applicationId) {
-  //         return {
-  //           ...license,
-  //           count: value,
-  //         };
-  //       }
+  // const { CurrData = {}, FormStatus = { mode: null, tenant: null } } =
+  //   location.state;
+  const safeState = useMemo(() => {
+    return location.state && typeof location.state === "object"
+      ? location.state
+      : {};
+  }, [location.state]);
 
-  //       return license;
-  //     });
-  //   });
-  // };
+  const CurrData = safeState.CurrData ?? {};
+  const FormStatus = safeState.FormStatus ?? {
+    mode: null,
+    tenant: null,
+  };
+  const [licenses, setLicenses] = useState<any>([]);
   const handleLicenseChange = (
     applicationId: any | string,
     value: number | string

@@ -95,7 +95,12 @@ export default function CreateUserComponent({
           {FormStatus?.mode === "view" && (
             <div
               onClick={() => {
-                handleReset("edit", FormStatus?.userId);
+                navigate("/updateuser", {
+                  state: {
+                    CurrData: CurrData,
+                    FormStatus: { mode: "edit", tenant: CurrData.id },
+                  },
+                });
               }}
               className="px-[20px] py-[12px] rounded-[8px] max-w-[200px] primaryc-btn"
             >

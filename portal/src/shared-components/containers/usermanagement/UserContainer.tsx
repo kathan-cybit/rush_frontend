@@ -34,7 +34,6 @@ export default function UserContainer() {
     userId: null,
   });
 
-  const [CurrData, setCurrData] = useState<any>(null);
   const [displayAlert, setdisplayAlert] = useState(false);
   const [OpenForm, setOpenForm] = useState(false);
   const host = new URL(window.location.href).hostname.split(".")[0];
@@ -73,7 +72,22 @@ export default function UserContainer() {
       (FormStatus.mode == "view" || FormStatus.mode == "edit")
     ) {
       const data = userData.find((e: any) => e.id === FormStatus.userId);
-      setCurrData(data);
+
+      if (FormStatus.mode == "view") {
+        navigate("/viewuser", {
+          state: {
+            CurrData: data,
+            FormStatus: FormStatus,
+          },
+        });
+      } else {
+        navigate("/updateuser", {
+          state: {
+            CurrData: data,
+            FormStatus: FormStatus,
+          },
+        });
+      }
     }
   }, [FormStatus, userData]);
 
@@ -202,7 +216,7 @@ export default function UserContainer() {
     loading,
     userData,
     FormStatus,
-    CurrData,
+
     handleViewUser,
     handleEditUser,
     setFormStatus,

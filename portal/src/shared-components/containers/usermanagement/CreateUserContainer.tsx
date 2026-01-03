@@ -2,7 +2,7 @@ import React, { useEffect, useMemo, useState } from "react";
 import { CreateUserComponent } from "../../components";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "../../../store/store";
-import { useNavigate } from "react-router-dom";
+import { redirect, useLocation, useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import {
   createTenantUser,
@@ -34,14 +34,29 @@ interface FormStatus {
 }
 
 export default function CreateUserContainer({
-  CurrData = {},
-  FormStatus = { mode: null, userId: null },
-  setFormStatus,
+  // CurrData = {},
+  // FormStatus = { mode: null, userId: null },
+  // setFormStatus,
   setdisplayAlert,
   allUsersRoles,
 }: any) {
-  const dispatch = useDispatch<AppDispatch>();
+  const location = useLocation();
+  // const { CurrData = {}, FormStatus = { mode: null, tenant: null } } =
+  //   location.state;
+
+  const safeState = useMemo(() => {
+    return location.state && typeof location.state === "object"
+      ? location.state
+      : {};
+  }, [location.state]);
+
+  const CurrData = safeState.CurrData ?? {};
+  const FormStatus = safeState.FormStatus ?? {
+    mode: null,
+    tenant: null,
+  };
   const navigate = useNavigate();
+  const dispatch = useDispatch<AppDispatch>();
   const {
     tenantType,
     allDetails,
@@ -125,6 +140,11 @@ export default function CreateUserContainer({
       }
     }
   }, [CurrData, FormStatus?.mode]);
+  const onDiscard = () => {
+    reset();
+
+    navigate("/usermanagement", { replace: true });
+  };
 
   const onSubmit = async (data: UserFormValues) => {
     data.assigned_apps = assignedApps;
@@ -135,13 +155,9 @@ export default function CreateUserContainer({
       await dispatch(createTenantUser({ payload: data, currentTenant: host }))
         .unwrap()
         .then((res) => {
-          reset();
           setAssignedApps([]);
-          if (setFormStatus) {
-            setFormStatus({ mode: null, userId: null });
-          }
-          setdisplayAlert(false);
-          navigate("/usermanagement");
+
+          onDiscard();
         })
         .catch((res) => {});
     } else {
@@ -152,46 +168,28 @@ export default function CreateUserContainer({
           currentTenant: host,
         })
       )
-        .unwrap()
         .then(() => {
-          reset();
-          if (setFormStatus) {
-            setFormStatus({ mode: null, userId: null });
-          }
           setAssignedApps([]);
+
           dispatch(
             fetchUsers({
               url: `/users?tenant=${host}`,
             })
           );
-          setdisplayAlert(false);
-          navigate("/usermanagement");
+          onDiscard();
         })
-        .catch(() => {});
+        .catch((err) => {});
     }
-  };
-
-  const onDiscard = () => {
-    reset();
-    if (setFormStatus) {
-      setFormStatus({ mode: null, userId: null });
-    }
-    navigate("/usermanagement");
   };
 
   const handleReset = (mode: any, id: any) => {
-    if (setFormStatus) {
-      setFormStatus({ mode, userId: id });
-    }
+    navigate("/usermanagement");
   };
 
   const BreadCrumbItems = [
     {
       title: "User Management",
       onClick: () => {
-        if (setFormStatus) {
-          setFormStatus({ userId: null, mode: null });
-        }
         navigate("/usermanagement");
       },
     },
@@ -207,29 +205,23 @@ export default function CreateUserContainer({
 
   useEffect(() => {
     const host = new URL(window.location.href).hostname.split(".")[0];
-    dispatch(
-      getRoles({
-        role: tenantType,
-        headers: {
-          "x-tenant-id": host,
-        },
-      })
-    );
-    // dispatch(
-    //   getAllRoleUsers({
-    //     role: tenantType,
-    //     headers: {
-    //       "x-tenant-id": host,
-    //     },
-    //   })
-    // );
+    if ((FormStatus?.mode && FormStatus?.mode == "edit") || !FormStatus?.mode) {
+      dispatch(
+        getRoles({
+          role: tenantType,
+          headers: {
+            "x-tenant-id": host,
+          },
+        })
+      );
+    }
   }, []);
 
   useEffect(() => {
     if (
       (FormStatus?.mode == "edit" || FormStatus?.mode == "view") &&
       CurrData?.id &&
-      allUsersRoles.length > 0
+      allUsersRoles?.length > 0
     ) {
       const found = allUsersRoles.find((u) => u.user_id === CurrData.id);
 
