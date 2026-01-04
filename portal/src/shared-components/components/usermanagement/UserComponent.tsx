@@ -86,16 +86,59 @@ export default function UserComponent({
                       isClearable={false}
                       isSearchable={false}
                       menuPlacement="auto"
+                      classNamePrefix="action-dropdown"
                       styles={{
-                        control: (base) => ({
+                        control: (base, state) => ({
                           ...base,
                           minHeight: "45px",
                           borderRadius: "0.5rem",
+                          border: "none",
+                          boxShadow: "none",
+                          backgroundColor: "#14258f",
+                          paddingLeft: "12px",
+                          paddingRight: "12px",
                           cursor: "pointer",
+                          ":hover": {
+                            opacity: 0.85,
+                          },
                         }),
-                        option: (base) => ({
+                        singleValue: (base) => ({
+                          ...base,
+                          color: "white",
+                          fontWeight: 500,
+                        }),
+                        placeholder: (base) => ({
+                          ...base,
+                          color: "white",
+                          fontWeight: 500,
+                        }),
+                        dropdownIndicator: (base) => ({
+                          ...base,
+                          color: "white",
+                          ":hover": {
+                            color: "white",
+                          },
+                        }),
+                        indicatorSeparator: () => ({
+                          display: "none",
+                        }),
+                        menu: (base) => ({
+                          ...base,
+                          borderRadius: "0.5rem",
+                          marginTop: "6px",
+                          overflow: "hidden",
+                          zIndex: 50,
+                        }),
+                        option: (base, state) => ({
                           ...base,
                           cursor: "pointer",
+                          backgroundColor: state.isFocused
+                            ? "#14258f"
+                            : "white",
+                          color: !state.isFocused ? "#111827" : "#fff",
+                          ":active": {
+                            backgroundColor: "#14258fa6",
+                          },
                         }),
                       }}
                     />
