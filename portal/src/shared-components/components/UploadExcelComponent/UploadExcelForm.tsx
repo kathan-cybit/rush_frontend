@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
 import { useDispatch } from "react-redux";
 import { AppDispatch } from "../../../store/store";
 import {
@@ -15,28 +15,69 @@ const UploadExcelForm = ({
   setdisplayAlert,
   setErrorAlert,
 }: any) => {
+  const MAX_FILE_SIZE = 25 * 1024 * 1024; // 25 MB
+
   const dispatch = useDispatch<AppDispatch>();
   const [file, setFile] = useState<File | null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [isDragging, setIsDragging] = useState(false);
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
-  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const selectedFile = e.target.files?.[0];
+  const handleDragEnter = (e: React.DragEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setIsDragging(true);
+  };
 
-    if (!selectedFile) return;
+  const handleDragLeave = (e: React.DragEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setIsDragging(false);
+  };
 
+  const handleDragOver = (e: React.DragEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+  };
+
+  const handleDrop = (e: React.DragEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setIsDragging(false);
+
+    const droppedFile = e.dataTransfer.files?.[0];
+    if (droppedFile) {
+      validateAndSetFile(droppedFile);
+    }
+  };
+
+  const validateAndSetFile = (selectedFile: File) => {
     if (
-      selectedFile.type !=
+      selectedFile.type !==
       "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
     ) {
       setError("Only .xlsx files are allowed");
       setFile(null);
-      e.target.value = "";
+      fileInputRef.current && (fileInputRef.current.value = "");
+      return;
+    }
+
+    if (selectedFile.size > MAX_FILE_SIZE) {
+      setError("File size must be less than 25 MB");
+      setFile(null);
+      fileInputRef.current && (fileInputRef.current.value = "");
       return;
     }
 
     setError(null);
     setFile(selectedFile);
+  };
+
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const selectedFile = e.target.files?.[0];
+    if (!selectedFile) return;
+    validateAndSetFile(selectedFile);
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -157,37 +198,127 @@ const UploadExcelForm = ({
   };
 
   return (
-    <div className="bg-white mx-auto p-6 rounded-lg max-w-md">
-      <h2 className="mb-4 font-semibold text-lg">Upload Excel File</h2>
-
-      <form onSubmit={handleSubmit} className="space-y-4">
-        <div>
-          <input
-            type="file"
-            accept=".xlsx"
-            onChange={handleFileChange}
-            className="block hover:file:bg-blue-100 file:bg-blue-50 file:mr-4 file:px-4 file:py-2 file:border-0 file:rounded-md w-full file:font-medium text-gray-600 file:text-blue-700 text-sm file:text-sm"
-          />
+    <div className="bg-white shadow-2xl rounded-lg w-full max-w-2xl">
+      <div className="p-8">
+        <div className="flex justify-between items-center mb-6">
+          <h2 className="font-semibold text-gray-800 text-xl">Upload file</h2>
         </div>
-        <span className="font-fsecondary text-[#adadad] text-[13px] text-[500] leading-[140%]">
-          upload .xlsx file
-        </span>
-        {file && (
-          <p className="text-gray-600 text-sm">
-            Selected: <strong>{file.name}</strong>
-          </p>
-        )}
 
-        {error && <p className="text-red-600 text-sm">{error}</p>}
+        <form onSubmit={handleSubmit}>
+          <div
+            onDragEnter={handleDragEnter}
+            onDragOver={handleDragOver}
+            onDragLeave={handleDragLeave}
+            onDrop={handleDrop}
+            className={`relative border-2 border-dashed rounded-lg p-16 transition-all duration-200 ${
+              isDragging
+                ? "border-green-500 bg-green-50"
+                : "border-gray-300 bg-gray-50"
+            }`}
+          >
+            <input
+              ref={fileInputRef}
+              type="file"
+              accept=".xlsx"
+              onChange={handleFileChange}
+              className="hidden"
+              id="file-upload-input"
+            />
 
-        <button
-          type="submit"
-          disabled={loading}
-          className="items-center gap-2 bg-bsecondary hover:opacity-[0.75] px-7 py-3 border-none rounded-lg w-full h-[45px] font-medium text-white text-sm transition-all duration-200 cursor-pointer"
-        >
-          {loading ? "Uploading..." : "Upload"}
-        </button>
-      </form>
+            <div className="flex flex-col justify-center items-center text-center">
+              <div className="mb-4">
+                <svg className="w-16 h-16" viewBox="0 0 48 48" fill="none">
+                  <rect
+                    x="8"
+                    y="4"
+                    width="32"
+                    height="40"
+                    rx="2"
+                    fill="#21A366"
+                  />
+                  <path
+                    d="M16 4v40h-6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h6z"
+                    fill="#185C37"
+                  />
+                  <rect
+                    x="16"
+                    y="15"
+                    width="24"
+                    height="2"
+                    fill="white"
+                    fillOpacity="0.3"
+                  />
+                  <rect
+                    x="16"
+                    y="20"
+                    width="24"
+                    height="2"
+                    fill="white"
+                    fillOpacity="0.3"
+                  />
+                  <rect
+                    x="16"
+                    y="25"
+                    width="24"
+                    height="2"
+                    fill="white"
+                    fillOpacity="0.3"
+                  />
+                  <rect
+                    x="16"
+                    y="30"
+                    width="24"
+                    height="2"
+                    fill="white"
+                    fillOpacity="0.3"
+                  />
+                  <path
+                    d="M22 18l4 6-4 6h4l2-3 2 3h4l-4-6 4-6h-4l-2 3-2-3h-4z"
+                    fill="white"
+                  />
+                </svg>
+              </div>
+
+              <div className="mb-2">
+                <span className="text-gray-600 text-sm">
+                  Drag&Drop file here or{" "}
+                </span>
+                <label
+                  htmlFor="file-upload-input"
+                  className="font-medium text-[#14258f] hover:text-[#14258f] text-sm underline cursor-pointer"
+                >
+                  Choose file
+                </label>
+              </div>
+
+              {file && (
+                <div className="bg-white mt-4 px-4 py-2 border border-gray-200 rounded text-gray-700 text-sm">
+                  Selected: <span className="font-medium">{file.name}</span>
+                </div>
+              )}
+
+              {error && (
+                <div className="bg-red-50 mt-4 px-4 py-2 border border-red-200 rounded text-red-600 text-sm">
+                  {error}
+                </div>
+              )}
+            </div>
+          </div>
+
+          <div className="flex justify-between items-center mt-4 text-gray-500 text-xs">
+            <div>Supported formats: .XLSX </div>
+            <div>Maximum size: 25 MB</div>
+          </div>
+
+          <button
+            type="submit"
+            disabled={loading || !file}
+            className="items-center gap-2 bg-bsecondary hover:opacity-[0.75] disabled:opacity-50 mt-3 px-7 py-3 border-none rounded-lg w-full h-[45px] font-medium text-white text-sm transition-all duration-200 cursor-pointer disabled:cursor-not-allowed"
+          >
+            {loading ? "Uploading..." : "Upload"}
+          </button>
+        </form>
+      </div>
     </div>
   );
 };
