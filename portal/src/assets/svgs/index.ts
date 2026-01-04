@@ -11,8 +11,10 @@ import DownloadIcn from "./DownloadIcn";
 import EyeIcon2 from "./EyeIcon";
 import EyeSlashIcon from "./EyeSlashIcon";
 import ResendIconSimple from "./ResendEmailIcn";
+import Dropdown from "./Dropdown";
 
 export {
+  Dropdown,
   ResendIconSimple,
   EyeSlashIcon,
   ErisLoginLogo,

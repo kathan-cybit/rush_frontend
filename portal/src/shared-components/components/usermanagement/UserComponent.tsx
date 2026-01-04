@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 
 import {
   Alert,
@@ -12,9 +12,9 @@ import {
 import { CreateUserContainer } from "../../containers";
 import { useNavigate } from "react-router-dom";
 import { UploadExcelForm } from "../index";
-import { DownloadIcn } from "../../../assets/svgs";
+import { DownloadIcn, Dropdown } from "../../../assets/svgs";
 import { exportToCSV } from "../../../utils/exports";
-import { USersFile } from "../../../assets/img";
+import Select from "react-select";
 
 interface userProps {
   loading: boolean;
@@ -32,9 +32,6 @@ export default function UserComponent({
   allDetails,
   userData,
   FormStatus,
-  setFormStatus,
-  handleViewUser,
-  handleEditUser,
   formattedTenants,
   statusColorMap,
   menuItems,
@@ -45,10 +42,12 @@ export default function UserComponent({
   BreadCrumbItems,
   setdisplayAlert,
   displayAlert,
+  selectedAction,
+  setErrorAlert,
+  handleActionChange,
+  actionOptions,
+  ErrorAlert,
 }: any) {
-  const navigate: any = useNavigate();
-  const [ErrorAlert, setErrorAlert] = useState("");
-
   return (
     <div>
       {(loading || loading2) && (
@@ -77,41 +76,31 @@ export default function UserComponent({
                     />
                   </>
                 </div>
-                <div className="flex gap-2">
-                  {!allDetails?.is_single_org && (
-                    <Tooltip label="Download Sample File">
-                      <a
-                        href={USersFile}
-                        className="inline-flex float-end items-center gap-2 bg-bsecondary hover:opacity-[0.75] px-7 py-3 border-none rounded-lg h-[45px] font-medium text-white text-sm transition-all duration-200 cursor-pointer"
-                      >
-                        <DownloadIcn />
-                        {/* <span>Download Sample File</span> */}
-                      </a>
-                    </Tooltip>
-                  )}
-                  {!allDetails?.is_single_org && (
-                    <button
-                      onClick={() => {
-                        setOpenForm(true);
-                        // exportToCSV(formattedTenants, "hellow");
+                {!allDetails?.is_single_org && (
+                  <div className="w-[220px]">
+                    <Select
+                      value={selectedAction}
+                      onChange={handleActionChange}
+                      options={actionOptions}
+                      placeholder="Select option"
+                      isClearable={false}
+                      isSearchable={false}
+                      menuPlacement="auto"
+                      styles={{
+                        control: (base) => ({
+                          ...base,
+                          minHeight: "45px",
+                          borderRadius: "0.5rem",
+                          cursor: "pointer",
+                        }),
+                        option: (base) => ({
+                          ...base,
+                          cursor: "pointer",
+                        }),
                       }}
-                      className="inline-flex float-end items-center gap-2 bg-bsecondary hover:opacity-[0.75] px-7 py-3 border-none rounded-lg h-[45px] font-medium text-white text-sm transition-all duration-200 cursor-pointer"
-                    >
-                      Bulk upload
-                    </button>
-                  )}
-                  {!allDetails?.is_single_org && (
-                    <button
-                      onClick={() => {
-                        navigate("/createuser");
-                      }}
-                      type="submit"
-                      className="inline-flex float-end items-center gap-2 bg-bsecondary hover:opacity-[0.75] px-7 py-3 border-none rounded-lg h-[45px] font-medium text-white text-sm transition-all duration-200 cursor-pointer"
-                    >
-                      Create New User
-                    </button>
-                  )}
-                </div>
+                    />
+                  </div>
+                )}
               </div>
               <>
                 {displayAlert && (

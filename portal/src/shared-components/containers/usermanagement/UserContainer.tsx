@@ -15,8 +15,11 @@ import {
 import { formatUtcToIST } from "../../../utils/commonFunctions";
 import { getLicenseApps } from "../../../store/reducers/licenseSlice";
 import { Tooltip } from "../../ui";
+import { USersFile } from "../../../assets/img";
 
 export default function UserContainer() {
+  const host = new URL(window.location.href).hostname.split(".")[0];
+
   const navigate = useNavigate();
   const dispatch = useDispatch<AppDispatch>();
   const { users: userData, isLoading: loading } = useSelector(
@@ -29,6 +32,13 @@ export default function UserContainer() {
     allDetails,
     loading: loading2,
   } = useSelector((state: RootState) => state.auth);
+
+  const { currentTenantName } = useSelector((state: RootState) => state.auth);
+  const allUsersRoles =
+    useSelector((state: any) => state.tenant.allUsersRoles) || [];
+
+  const { allApps } = useSelector((state: RootState) => state.license);
+
   const [FormStatus, setFormStatus] = useState({
     mode: null,
     userId: null,
@@ -36,12 +46,34 @@ export default function UserContainer() {
 
   const [displayAlert, setdisplayAlert] = useState(false);
   const [OpenForm, setOpenForm] = useState(false);
-  const host = new URL(window.location.href).hostname.split(".")[0];
-  const { currentTenantName } = useSelector((state: RootState) => state.auth);
-  const allUsersRoles =
-    useSelector((state: any) => state.tenant.allUsersRoles) || [];
 
-  const { allApps } = useSelector((state: RootState) => state.license);
+  const [ErrorAlert, setErrorAlert] = useState("");
+  const [selectedAction, setSelectedAction] = useState<any>(null);
+  const actionOptions = [
+    { value: "create", label: "Create New User" },
+    { value: "bulk", label: "Bulk Upload" },
+    { value: "download", label: "Download Sample File" },
+  ];
+
+  const handleActionChange = (option: any) => {
+    if (!option) return;
+
+    switch (option.value) {
+      case "download":
+        window.open(USersFile, "_blank");
+        break;
+
+      case "bulk":
+        setOpenForm(true);
+        break;
+
+      case "create":
+        navigate("/createuser");
+        break;
+    }
+
+    setSelectedAction(null);
+  };
 
   const menuItems = [
     {
@@ -160,9 +192,7 @@ export default function UserContainer() {
         (e?.is_default_admin === false || e?.is_default_admin == "false") &&
         (e?.is_verified === false || e?.is_verified == "false") ? (
           <>
-            {/* <Tooltip label="Resend verification email"> */}
             <button
-              // className="inline-flex float-end float-left items-center gap-2 bg-bsecondary hover:opacity-[0.75] px-7 py-3 border-none rounded-lg h-[45px] font-medium text-white text-sm transition-all duration-200 cursor-pointer"
               onClick={() => {
                 dispatch(
                   resenndVerifyEmail({
@@ -184,7 +214,6 @@ export default function UserContainer() {
             >
               <ResendIconSimple color={"#666"} />
             </button>
-            {/* </Tooltip> */}
           </>
         ) : (
           "Verified"
@@ -217,10 +246,6 @@ export default function UserContainer() {
     loading,
     userData,
     FormStatus,
-
-    handleViewUser,
-    handleEditUser,
-    setFormStatus,
     formattedTenants,
     statusColorMap,
     menuItems,
@@ -234,6 +259,11 @@ export default function UserContainer() {
     allDetails,
     loading2,
     BreadCrumbItems,
+    selectedAction,
+    setErrorAlert,
+    handleActionChange,
+    actionOptions,
+    ErrorAlert,
   };
 
   return (

@@ -52,6 +52,9 @@ export default function RoleComponent({
   displayAlert,
   setdisplayAlert,
   allDetails,
+  actionOptions,
+  handleActionChange,
+  selectedAction,
 }: any) {
   const [ErrorAlert, setErrorAlert] = useState("");
   const allSelected =
@@ -90,41 +93,67 @@ export default function RoleComponent({
               </>
             </div>
             {host != "public" && (
-              <div className="flex gap-2">
-                {(!allDetails?.is_single_org || host == "public") && (
-                  <Tooltip label="Download Sample File">
-                    <a
-                      href={RolesFile}
-                      className="inline-flex float-end items-center gap-2 bg-bsecondary hover:opacity-[0.75] px-7 py-3 border-none rounded-lg h-[45px] font-medium text-white text-sm transition-all duration-200 cursor-pointer"
-                    >
-                      <DownloadIcn />
-                      {/* <span>Download Sample File</span> */}
-                    </a>
-                  </Tooltip>
+              // <div className="flex gap-2">
+              //   {(!allDetails?.is_single_org || host == "public") && (
+              //     <Tooltip label="Download Sample File">
+              //       <a
+              //         href={RolesFile}
+              //         className="inline-flex float-end items-center gap-2 bg-bsecondary hover:opacity-[0.75] px-7 py-3 border-none rounded-lg h-[45px] font-medium text-white text-sm transition-all duration-200 cursor-pointer"
+              //       >
+              //         <DownloadIcn />
+              //       </a>
+              //     </Tooltip>
+              //   )}
+              //   {(!allDetails?.is_single_org || host == "public") && (
+              //     <button
+              //       onClick={() => {
+              //         setOpenForm(true);
+              //       }}
+              //       type="submit"
+              //       className="inline-flex float-end items-center gap-2 bg-bsecondary hover:opacity-[0.75] px-7 py-3 border-none rounded-lg h-[45px] font-medium text-white text-sm transition-all duration-200 cursor-pointer"
+              //     >
+              //       Bulk upload
+              //     </button>
+              //   )}
+              //   {(!allDetails?.is_single_org || host == "public") && (
+              //     <button
+              //       onClick={() => {
+              //         setOpenCreateRole(true);
+              //       }}
+              //       type="submit"
+              //       className="inline-flex float-end items-center gap-2 bg-bsecondary hover:opacity-[0.75] px-7 py-3 border-none rounded-lg h-[45px] font-medium text-white text-sm transition-all duration-200 cursor-pointer"
+              //     >
+              //       Create New Role
+              //     </button>
+              //   )}
+              // </div>
+              <>
+                {!allDetails?.is_single_org && (
+                  <div className="w-[220px]">
+                    <Select
+                      value={selectedAction}
+                      onChange={handleActionChange}
+                      options={actionOptions}
+                      placeholder="Select option"
+                      isClearable={false}
+                      isSearchable={false}
+                      menuPlacement="auto"
+                      styles={{
+                        control: (base) => ({
+                          ...base,
+                          minHeight: "45px",
+                          borderRadius: "0.5rem",
+                          cursor: "pointer",
+                        }),
+                        option: (base) => ({
+                          ...base,
+                          cursor: "pointer",
+                        }),
+                      }}
+                    />
+                  </div>
                 )}
-                {(!allDetails?.is_single_org || host == "public") && (
-                  <button
-                    onClick={() => {
-                      setOpenForm(true);
-                    }}
-                    type="submit"
-                    className="inline-flex float-end items-center gap-2 bg-bsecondary hover:opacity-[0.75] px-7 py-3 border-none rounded-lg h-[45px] font-medium text-white text-sm transition-all duration-200 cursor-pointer"
-                  >
-                    Bulk upload
-                  </button>
-                )}
-                {(!allDetails?.is_single_org || host == "public") && (
-                  <button
-                    onClick={() => {
-                      setOpenCreateRole(true);
-                    }}
-                    type="submit"
-                    className="inline-flex float-end items-center gap-2 bg-bsecondary hover:opacity-[0.75] px-7 py-3 border-none rounded-lg h-[45px] font-medium text-white text-sm transition-all duration-200 cursor-pointer"
-                  >
-                    Create New Role
-                  </button>
-                )}
-              </div>
+              </>
             )}
           </div>
         </div>

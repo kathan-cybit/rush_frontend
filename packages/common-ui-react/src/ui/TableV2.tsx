@@ -267,6 +267,7 @@ export const TableV2 = <T extends Record<string, any>>({
                       width: columnWidths[key],
                       position: "relative",
                       minWidth: 10,
+                      alignContent: "flex-end",
                     }}
                   >
                     <div

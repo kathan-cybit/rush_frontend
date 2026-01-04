@@ -41,8 +41,6 @@ export default function CreateUserContainer({
   allUsersRoles,
 }: any) {
   const location = useLocation();
-  // const { CurrData = {}, FormStatus = { mode: null, tenant: null } } =
-  //   location.state;
 
   const safeState = useMemo(() => {
     return location.state && typeof location.state === "object"

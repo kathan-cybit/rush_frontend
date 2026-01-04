@@ -17,6 +17,7 @@ import EditIcn from "../../../assets/svgs/EditIcn";
 import { useNavigate } from "react-router-dom";
 import { formatUtcToIST } from "../../../utils/commonFunctions";
 import { getUserDetails } from "../../../store/reducers/authSlice";
+import { RolesFile } from "../../../assets/img";
 
 export default function RoleContainer() {
   const navigate = useNavigate();
@@ -35,6 +36,33 @@ export default function RoleContainer() {
   const allRoles = useSelector((state: any) => state.tenant.allRoles) || [];
   const allpermissionsroles =
     useSelector((state: any) => state.tenant.allpermissionsroles) || [];
+
+  const [selectedAction, setSelectedAction] = useState<any>(null);
+  const actionOptions = [
+    { value: "create", label: "Create New Role" },
+    { value: "bulk", label: "Bulk Upload" },
+    { value: "download", label: "Download Sample File" },
+  ];
+
+  const handleActionChange = (option: any) => {
+    if (!option) return;
+
+    switch (option.value) {
+      case "download":
+        window.open(RolesFile, "_blank");
+        break;
+
+      case "bulk":
+        setOpenForm(true);
+        break;
+
+      case "create":
+        setOpenCreateRole(true);
+        break;
+    }
+
+    setSelectedAction(null);
+  };
 
   const menuItems = [
     {
@@ -318,6 +346,9 @@ export default function RoleContainer() {
             setdisplayAlert={setdisplayAlert}
             displayAlert={displayAlert}
             allDetails={allDetails}
+            selectedAction={selectedAction}
+            handleActionChange={handleActionChange}
+            actionOptions={actionOptions}
           />
         </div>
       </div>
