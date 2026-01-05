@@ -48,8 +48,21 @@ const Layout: React.FC = () => {
 
   const getActiveNavItem = () => {
     const path = location.pathname;
-    if (path === "/") return "home";
-    return "dashboard";
+
+    switch (path) {
+      case "/usermanagement":
+        return "usermanagement";
+      case "/createuser":
+        return "usermanagement";
+      case "/viewuser":
+        return "usermanagement";
+      case "/updateuser":
+        return "usermanagement";
+      case "/roles":
+        return "roles";
+      default:
+        return "home";
+    }
   };
   const host = new URL(window.location.href).hostname.split(".")[0];
 
