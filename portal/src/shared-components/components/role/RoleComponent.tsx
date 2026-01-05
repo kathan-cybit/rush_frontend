@@ -128,74 +128,89 @@ export default function RoleComponent({
               //   )}
               // </div>
               <>
-                {!allDetails?.is_single_org && (
-                  <div className="w-[220px]">
-                    <Select
-                      value={selectedAction}
-                      onChange={handleActionChange}
-                      options={actionOptions}
-                      placeholder="Select option"
-                      isClearable={false}
-                      isSearchable={false}
-                      menuPlacement="auto"
-                      classNamePrefix="action-dropdown"
-                      styles={{
-                        control: (base, state) => ({
-                          ...base,
-                          minHeight: "45px",
-                          borderRadius: "0.5rem",
-                          border: "none",
-                          boxShadow: "none",
-                          backgroundColor: "#14258f",
-                          paddingLeft: "12px",
-                          paddingRight: "12px",
-                          cursor: "pointer",
-                          ":hover": {
-                            opacity: 0.85,
-                          },
-                        }),
-                        singleValue: (base) => ({
-                          ...base,
-                          color: "white",
-                          fontWeight: 500,
-                        }),
-                        placeholder: (base) => ({
-                          ...base,
-                          color: "white",
-                          fontWeight: 500,
-                        }),
-                        dropdownIndicator: (base) => ({
-                          ...base,
-                          color: "white",
-                          ":hover": {
-                            color: "white",
-                          },
-                        }),
-                        indicatorSeparator: () => ({
-                          display: "none",
-                        }),
-                        menu: (base) => ({
-                          ...base,
-                          borderRadius: "0.5rem",
-                          marginTop: "6px",
-                          overflow: "hidden",
-                          zIndex: 50,
-                        }),
-                        option: (base, state) => ({
-                          ...base,
-                          cursor: "pointer",
-                          backgroundColor: state.isFocused
-                            ? "#14258f"
-                            : "white",
-                          color: !state.isFocused ? "#111827" : "#fff",
-                          ":active": {
-                            backgroundColor: "#14258fa6",
-                          },
-                        }),
-                      }}
-                    />
-                  </div>
-                )}
+                <>
+                  <div className="flex gap-2">
+                    {!allDetails?.is_single_org && (
+                      <div className="w-[125px]">
+                        <Select
+                          value={selectedAction}
+                          onChange={handleActionChange}
+                          options={actionOptions}
+                          placeholder="Actions"
+                          isClearable={false}
+                          isSearchable={false}
+                          menuPlacement="auto"
+                          classNamePrefix="action-dropdown"
+                          styles={{
+                            control: (base, state) => ({
+                              ...base,
+                              minHeight: "45px",
+                              borderRadius: "0.5rem",
+                              border: "none",
+                              boxShadow: "none",
+                              backgroundColor: "#14258f",
+                              paddingLeft: "12px",
+                              paddingRight: "12px",
+                              cursor: "pointer",
+                              ":hover": {
+                                opacity: 0.85,
+                              },
+                            }),
+                            singleValue: (base) => ({
+                              ...base,
+                              color: "white",
+                              fontWeight: 500,
+                            }),
+                            placeholder: (base) => ({
+                              ...base,
+                              color: "white",
+                              fontWeight: 500,
+                            }),
+                            dropdownIndicator: (base) => ({
+                              ...base,
+                              color: "white",
+                              ":hover": {
+                                color: "white",
+                              },
+                            }),
+                            indicatorSeparator: () => ({
+                              display: "none",
+                            }),
+                            menu: (base) => ({
+                              ...base,
+                              borderRadius: "0.5rem",
+                              marginTop: "6px",
+                              overflow: "hidden",
+                              zIndex: 50,
+                            }),
+                            option: (base, state) => ({
+                              ...base,
+                              cursor: "pointer",
+                              backgroundColor: state.isFocused
+                                ? "#14258f"
+                                : "white",
+                              color: !state.isFocused ? "#111827" : "#fff",
+                              ":active": {
+                                backgroundColor: "#14258fa6",
+                              },
+                            }),
+                          }}
+                        />
+                      </div>
+                    )}
+                    {(!allDetails?.is_single_org || host == "public") && (
+                      <button
+                        onClick={() => {
+                          setOpenCreateRole(true);
+                        }}
+                        type="submit"
+                        className="inline-flex float-end items-center gap-2 bg-bsecondary hover:opacity-[0.75] px-7 py-3 border-none rounded-lg h-[45px] font-medium text-white text-sm transition-all duration-200 cursor-pointer"
+                      >
+                        Create New Role
+                      </button>
+                    )}
+                  </div>{" "}
+                </>
               </>
             )}
           </div>

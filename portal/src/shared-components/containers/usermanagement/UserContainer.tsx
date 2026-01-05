@@ -50,7 +50,7 @@ export default function UserContainer() {
   const [ErrorAlert, setErrorAlert] = useState("");
   const [selectedAction, setSelectedAction] = useState<any>(null);
   const actionOptions = [
-    { value: "create", label: "Create New User" },
+    // { value: "create", label: "Create New User" },
     { value: "bulk", label: "Bulk Upload" },
     { value: "download", label: "Download Sample File" },
   ];
@@ -67,9 +67,9 @@ export default function UserContainer() {
         setOpenForm(true);
         break;
 
-      case "create":
-        navigate("/createuser");
-        break;
+      // case "create":
+      //   navigate("/createuser");
+      //   break;
     }
 
     setSelectedAction(null);

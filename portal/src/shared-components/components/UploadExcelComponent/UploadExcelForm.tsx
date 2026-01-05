@@ -55,10 +55,11 @@ const UploadExcelForm = ({
 
   const validateAndSetFile = (selectedFile: File) => {
     if (
-      selectedFile.type !==
-      "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+      selectedFile.type !=
+        "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" &&
+      selectedFile.type != "application/vnd.ms-excel"
     ) {
-      setError("Only .xlsx files are allowed");
+      setError("Only .xlsx and .xls files are allowed");
       setFile(null);
       fileInputRef.current && (fileInputRef.current.value = "");
       return;
@@ -220,7 +221,7 @@ const UploadExcelForm = ({
             <input
               ref={fileInputRef}
               type="file"
-              accept=".xlsx"
+              accept=".xlsx,.xls"
               onChange={handleFileChange}
               className="hidden"
               id="file-upload-input"
@@ -258,7 +259,7 @@ const UploadExcelForm = ({
           </div>
 
           <div className="flex justify-between items-center mt-4 text-gray-500 text-xs">
-            <div>Supported formats: .XLSX </div>
+            <div>Supported formats: .xlsx,.xls </div>
             <div>Maximum size: 25 MB</div>
           </div>
 

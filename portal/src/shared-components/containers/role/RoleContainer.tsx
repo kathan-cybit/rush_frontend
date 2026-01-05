@@ -39,7 +39,7 @@ export default function RoleContainer() {
 
   const [selectedAction, setSelectedAction] = useState<any>(null);
   const actionOptions = [
-    { value: "create", label: "Create New Role" },
+    // { value: "create", label: "Create New Role" },
     { value: "bulk", label: "Bulk Upload" },
     { value: "download", label: "Download Sample File" },
   ];
@@ -56,9 +56,9 @@ export default function RoleContainer() {
         setOpenForm(true);
         break;
 
-      case "create":
-        setOpenCreateRole(true);
-        break;
+      // case "create":
+      //   setOpenCreateRole(true);
+      //   break;
     }
 
     setSelectedAction(null);
