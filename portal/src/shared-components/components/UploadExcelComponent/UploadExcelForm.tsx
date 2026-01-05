@@ -7,6 +7,7 @@ import {
   resetRolesUpload,
   resetUsersUpload,
 } from "../../../store/reducers/tenantSlice";
+import { XlsxIcon } from "../../../assets/svgs";
 
 const UploadExcelForm = ({
   host,
@@ -227,56 +228,7 @@ const UploadExcelForm = ({
 
             <div className="flex flex-col justify-center items-center text-center">
               <div className="mb-4">
-                <svg className="w-16 h-16" viewBox="0 0 48 48" fill="none">
-                  <rect
-                    x="8"
-                    y="4"
-                    width="32"
-                    height="40"
-                    rx="2"
-                    fill="#21A366"
-                  />
-                  <path
-                    d="M16 4v40h-6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h6z"
-                    fill="#185C37"
-                  />
-                  <rect
-                    x="16"
-                    y="15"
-                    width="24"
-                    height="2"
-                    fill="white"
-                    fillOpacity="0.3"
-                  />
-                  <rect
-                    x="16"
-                    y="20"
-                    width="24"
-                    height="2"
-                    fill="white"
-                    fillOpacity="0.3"
-                  />
-                  <rect
-                    x="16"
-                    y="25"
-                    width="24"
-                    height="2"
-                    fill="white"
-                    fillOpacity="0.3"
-                  />
-                  <rect
-                    x="16"
-                    y="30"
-                    width="24"
-                    height="2"
-                    fill="white"
-                    fillOpacity="0.3"
-                  />
-                  <path
-                    d="M22 18l4 6-4 6h4l2-3 2 3h4l-4-6 4-6h-4l-2 3-2-3h-4z"
-                    fill="white"
-                  />
-                </svg>
+                <XlsxIcon />
               </div>
 
               <div className="mb-2">
