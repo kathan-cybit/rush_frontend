@@ -67,7 +67,7 @@ const Layout: React.FC = () => {
   const host = new URL(window.location.href).hostname.split(".")[0];
 
   const hasManageOrgSettings = allUsersRolesPermissions?.roles?.some((role) =>
-    role.permissions?.some((perm) => perm?.slug == "manage_org_settings")
+    role.permissions?.some((perm) => perm?.slug == "manage_corporate_user")
   );
 
   const navItems =

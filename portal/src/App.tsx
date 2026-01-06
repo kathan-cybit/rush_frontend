@@ -58,7 +58,7 @@ function App() {
   }, []);
 
   const hasManageOrgSettings = allUsersRolesPermissions?.roles?.some((role) =>
-    role.permissions?.some((perm) => perm?.slug == "manage_org_settings")
+    role.permissions?.some((perm) => perm?.slug == "manage_corporate_user")
   );
 
   return (
