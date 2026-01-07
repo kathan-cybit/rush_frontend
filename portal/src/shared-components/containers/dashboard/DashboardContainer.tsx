@@ -3,12 +3,13 @@ import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 
 import {
+  deleteTenant,
   fetchTenants,
   getAllUsersRolesPermissions,
 } from "../../../store/reducers/tenantSlice";
 import { AppDispatch, RootState } from "../../../store/store";
 import { DashboardComponent } from "../../components";
-import { EditIcon, EyeIcon } from "../../../assets/svgs";
+import { DeleteIcon, EditIcon, EyeIcon } from "../../../assets/svgs";
 import {
   getAllLicenses,
   getAllTenantsWithLicenses,
@@ -33,6 +34,35 @@ export default function DashboardContainer() {
       icon: <EditIcon color="#228be6" />,
       onClick: (row: any) => {
         handleEditTenant(row);
+      },
+    },
+    {
+      label: "Delete",
+      color: "#ef4444",
+      icon: <DeleteIcon color="#ef4444" />,
+      onClick: (row: any) => {
+        dispatch(
+          deleteTenant({
+            payload: { domain: row.domain },
+            headers: { "x-tenant-id": host },
+          })
+        )
+          .unwrap()
+          .then(() => {
+            dispatch(
+              getLicenseApps({
+                role: tenantType,
+                headers: { "x-tenant-id": host },
+              })
+            );
+            dispatch(fetchTenants(host));
+            dispatch(
+              getAllTenantsWithLicenses({
+                headers: { "x-tenant-id": "public" },
+              })
+            );
+          })
+          .catch(() => {});
       },
     },
   ];

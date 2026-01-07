@@ -38,7 +38,6 @@ export default function CreateUserContainer({
   // FormStatus = { mode: null, userId: null },
   // setFormStatus,
   setdisplayAlert,
-  allUsersRoles,
 }: any) {
   const location = useLocation();
 
@@ -63,6 +62,7 @@ export default function CreateUserContainer({
   const [assignedApps, setAssignedApps] = useState<string[]>([]);
   const allRoles = useSelector((state: any) => state.tenant.allRoles) || [];
   const loading = useSelector((state: any) => state.tenant.isLoading);
+  const allUsersRoles = useSelector((state: any) => state.tenant.allUsersRoles);
   // const allUsersRoles =
   //   useSelector((state: any) => state.tenant.allUsersRoles) || [];
   const [defaultUserRoleOptions, setDefaultUserRoleOptions] = useState([]);
@@ -92,6 +92,14 @@ export default function CreateUserContainer({
         })
       );
     }
+    dispatch(
+      getAllRoleUsers({
+        role: tenantType,
+        headers: {
+          "x-tenant-id": host,
+        },
+      })
+    );
   }, []);
 
   const {
@@ -217,11 +225,11 @@ export default function CreateUserContainer({
 
   useEffect(() => {
     if (
-      (FormStatus?.mode == "edit" || FormStatus?.mode == "view") &&
+      // (FormStatus?.mode == "edit" || FormStatus?.mode == "view") &&
       CurrData?.id &&
       allUsersRoles?.length > 0
     ) {
-      const found = allUsersRoles.find((u) => u.user_id === CurrData.id);
+      const found = allUsersRoles.find((u) => u.user_id == CurrData.id);
 
       if (found) {
         const formatted = found.roles.map((r) => ({

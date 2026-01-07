@@ -5,6 +5,7 @@ import {
   addPermissonRole,
   addPermssion,
   addRole,
+  deleteRole,
   getAllPermissonRole,
   getPermissonRole,
   getPermssion,
@@ -18,6 +19,7 @@ import { useNavigate } from "react-router-dom";
 import { formatUtcToIST } from "../../../utils/commonFunctions";
 import { getUserDetails } from "../../../store/reducers/authSlice";
 import { RolesFile } from "../../../assets/img";
+import { DeleteIcon } from "../../../assets/svgs";
 
 export default function RoleContainer() {
   const navigate = useNavigate();
@@ -63,17 +65,6 @@ export default function RoleContainer() {
 
     setSelectedAction(null);
   };
-
-  const menuItems = [
-    {
-      label: "Edit",
-      color: "blue",
-      icon: <EditIcn color="#228be6" />,
-      onClick: (row: any) => {
-        handleModalOpen(row?.id);
-      },
-    },
-  ];
 
   const statusColorMap = {};
 
@@ -312,6 +303,61 @@ export default function RoleContainer() {
     },
     {
       title: "Roles & Permissions",
+    },
+  ];
+
+  const menuItems = [
+    {
+      label: "Edit",
+      color: "blue",
+      icon: <EditIcn color="#228be6" />,
+      onClick: (row: any) => {
+        handleModalOpen(row?.id);
+      },
+    },
+    {
+      label: "Delete",
+      color: "#ef4444",
+      icon: <DeleteIcon color="#ef4444" />,
+      onClick: (row: any) => {
+        dispatch(
+          deleteRole({
+            role: tenantType,
+            roleId: row?.id,
+            headers: { "x-tenant-id": host },
+          })
+        )
+          .unwrap()
+          .then(async () => {
+            await dispatch(
+              getPermssion({
+                role: tenantType,
+                headers: {
+                  "x-tenant-id": host,
+                },
+              })
+            );
+
+            await dispatch(
+              getAllPermissonRole({
+                role: tenantType,
+                headers: {
+                  "x-tenant-id": host,
+                },
+              })
+            );
+
+            await dispatch(
+              getRoles({
+                role: tenantType,
+                headers: {
+                  "x-tenant-id": host,
+                },
+              })
+            );
+          })
+          .catch(() => {});
+      },
     },
   ];
 

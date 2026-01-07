@@ -1,6 +1,12 @@
 import React, { useEffect, useMemo, useState } from "react";
-import { EditIcon, EyeIcon, ResendIconSimple } from "../../../assets/svgs";
 import {
+  DeleteIcon,
+  EditIcon,
+  EyeIcon,
+  ResendIconSimple,
+} from "../../../assets/svgs";
+import {
+  deleteTenantUser,
   fetchUsers,
   getAllRoleUsers,
 } from "../../../store/reducers/tenantSlice";
@@ -16,6 +22,7 @@ import { formatUtcToIST } from "../../../utils/commonFunctions";
 import { getLicenseApps } from "../../../store/reducers/licenseSlice";
 import { Tooltip } from "../../ui";
 import { USersFile } from "../../../assets/img";
+import { error_toast } from "../../../utils/toaster";
 
 export default function UserContainer() {
   const host = new URL(window.location.href).hostname.split(".")[0];
@@ -91,6 +98,51 @@ export default function UserContainer() {
         handleEditUser(row);
       },
     },
+
+    {
+      label: "Delete",
+      color: "#ef4444",
+      icon: <DeleteIcon color="#ef4444" />,
+      onClick: (row: any) => {
+        if (row.id == user.id) {
+          error_toast("You cannot delete yourself");
+          return;
+        }
+        const x: any = userData.find((e: any) => e.id == row.id);
+        if (x?.is_default_admin) {
+          error_toast("Default admin cannot be deleted");
+          return;
+        }
+        dispatch(
+          deleteTenantUser({
+            id: row?.id,
+            headers: { "x-tenant-id": host },
+          })
+        )
+          .unwrap()
+          .then(() => {
+            dispatch(
+              fetchUsers({
+                url: `/users?tenant=${host}`,
+              })
+            );
+            dispatch(
+              getLicenseApps({
+                role: tenantType,
+                headers: { "x-tenant-id": host },
+              })
+            );
+          })
+          .catch(() => {});
+      },
+    },
+
+    // {
+    //       role: tenantType,
+    //       headers: {
+    //         "x-tenant-id": host,
+    //       },
+    //     }
   ];
 
   const statusColorMap = {

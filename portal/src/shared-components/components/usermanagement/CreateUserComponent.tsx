@@ -390,20 +390,9 @@ export default function CreateUserComponent({
               <Controller
                 name="role_ids"
                 control={control}
-                defaultValue={defaultUserRoleOptions.map((x) => x.value)}
                 render={({ field }) => (
-                  // <Select
-                  //   {...field}
-                  //   isMulti
-                  //   options={roleOptions}
-                  //   isDisabled={FormStatus?.mode === "view"}
-                  //   value={roleOptions.filter((opt) =>
-                  //     field.value?.includes(opt.value)
-                  //   )}
-                  //   onChange={(val) => field.onChange(val.map((x) => x.value))}
-                  //   placeholder="Select roles..."
-                  // />
                   <Select
+                    {...field}
                     isMulti
                     options={selectOptions}
                     isDisabled={

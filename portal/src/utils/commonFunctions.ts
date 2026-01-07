@@ -4,15 +4,17 @@ function formatUtcToIST(utcString) {
   const date = new Date(utcString);
   if (isNaN(date.getTime())) return "";
 
-  return date.toLocaleString("en-GB", {
-    timeZone: "Asia/Kolkata",
-    day: "2-digit",
-    month: "short",
-    year: "numeric",
-    hour: "2-digit",
-    minute: "2-digit",
-    hour12: true,
-  });
+  return date
+    .toLocaleString("en-GB", {
+      timeZone: "Asia/Kolkata",
+      day: "2-digit",
+      month: "short",
+      year: "numeric",
+      hour: "2-digit",
+      minute: "2-digit",
+      hour12: true,
+    })
+    .replace(/\b(am|pm)\b/g, (m) => m.toUpperCase());
 }
 
 export { formatUtcToIST };

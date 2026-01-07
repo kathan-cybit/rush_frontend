@@ -13,8 +13,10 @@ import EyeSlashIcon from "./EyeSlashIcon";
 import ResendIconSimple from "./ResendEmailIcn";
 import Dropdown from "./Dropdown";
 import XlsxIcon from "./XlsxIcon";
+import DeleteIcon from "./DeleteIcon";
 
 export {
+  DeleteIcon,
   Dropdown,
   XlsxIcon,
   ResendIconSimple,

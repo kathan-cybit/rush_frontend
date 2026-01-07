@@ -71,6 +71,25 @@ export const createTenant = createAsyncThunk<unknown, any>(
   }
 );
 
+export const deleteTenant = createAsyncThunk<unknown, any>(
+  "tenant/deleteTenant",
+  async (props, { rejectWithValue }) => {
+    try {
+      const response = await axiosInstance.post(
+        `/admin/tenants/delete`,
+        props?.payload,
+        { headers: { ...props.headers } }
+      );
+      success_toast(response.data.message || "Tenant deleted successfully");
+      return response.data;
+    } catch (err: any) {
+      const error = err.response?.data?.error || err.message;
+      error_toast(error);
+      return rejectWithValue({ error, status: err.response?.status });
+    }
+  }
+);
+
 export const updateTenant = createAsyncThunk<unknown, any>(
   "tenant/updateTenant",
   async (params, { rejectWithValue }) => {
@@ -127,10 +146,9 @@ export const deleteTenantUser = createAsyncThunk<unknown, any>(
   "tenant/deleteTenantUser",
   async (props, { rejectWithValue }) => {
     try {
-      const response = await axiosInstance.delete(
-        `/users?tenant=${props.currentTenant}`,
-        props?.payload
-      );
+      const response = await axiosInstance.delete(`/users/${props.id}`, {
+        headers: { ...props.headers },
+      });
       success_toast("User deleted successfully");
       return response.data;
     } catch (err: any) {
@@ -169,6 +187,26 @@ export const addRole = createAsyncThunk<unknown, any>(
         { headers: { ...props.headers } }
       );
       success_toast(response.data.message || "Role added successfully");
+      return response.data;
+    } catch (err: any) {
+      const error = err.response?.data?.error || err.message;
+      error_toast(error);
+      return rejectWithValue({ error, status: err.response?.status });
+    }
+  }
+);
+
+export const deleteRole = createAsyncThunk<unknown, any>(
+  "tenant/deleteRole",
+  async (props, { rejectWithValue }) => {
+    try {
+      const response = await axiosInstance.delete(
+        props.role != "admin"
+          ? `/users/roles/${props.roleId}`
+          : `/admin/roles/${props.roleId}`,
+        { headers: { ...props.headers } }
+      );
+      success_toast(response.data.message || "Role deleted successfully");
       return response.data;
     } catch (err: any) {
       const error = err.response?.data?.error || err.message;
@@ -593,6 +631,24 @@ const tenantSlice = createSlice({
       })
       .addCase(addRolesExcel.rejected, (state) => {
         state.isLoading = false;
+      })
+      .addCase(deleteTenant.fulfilled, (state) => {
+        state.isLoading = false;
+      })
+      .addCase(deleteTenant.rejected, (state) => {
+        state.isLoading = false;
+      })
+      .addCase(deleteTenant.pending, (state) => {
+        state.isLoading = true;
+      })
+      .addCase(deleteRole.fulfilled, (state) => {
+        state.isLoading = false;
+      })
+      .addCase(deleteRole.rejected, (state) => {
+        state.isLoading = false;
+      })
+      .addCase(deleteRole.pending, (state) => {
+        state.isLoading = true;
       });
   },
 });
