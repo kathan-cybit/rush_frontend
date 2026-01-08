@@ -181,7 +181,6 @@ export default function DashboardContainer() {
           domain: tenant.domain,
           status: tenant.status,
 
-          // keep raw date ONLY for sorting
           _updatedAtRaw: tenant?.updated_at,
         };
 
@@ -204,7 +203,6 @@ export default function DashboardContainer() {
           });
         }
 
-        // formatted value for UI
         row["Created At"] = formatUtcToIST(tenant?.created_at);
         row["Last Updated"] = formatUtcToIST(tenant?.updated_at);
 
@@ -218,6 +216,32 @@ export default function DashboardContainer() {
 
       .map(({ _updatedAtRaw, ...rest }: any) => rest);
   }
+
+  const ignoreArray = [
+    "id",
+    "company",
+    "domain",
+    "status",
+    "Created At",
+    "Last Updated",
+  ];
+
+  const tooltipObj = formattedTenants.map((row) => {
+    const obj = {};
+
+    for (const [key, value] of Object.entries(row)) {
+      if (ignoreArray.includes(key)) {
+        obj[key] = null;
+      } else if (typeof value === "string" && value.includes("/")) {
+        const [a, b] = value.split("/").map(Number);
+        obj[key] = ` ${a} licenses remaining out of ${b}`;
+      } else {
+        obj[key] = null;
+      }
+    }
+
+    return obj;
+  });
 
   const licensedAppIds = new Set(
     allLicenses?.map((l: any) => l?.application_id)
@@ -248,6 +272,7 @@ export default function DashboardContainer() {
     filteredApps,
     allTenantWithLicenses,
     hasManageOrgSettings,
+    tooltipObj,
   };
 
   return (

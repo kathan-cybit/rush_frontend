@@ -7,7 +7,7 @@ import { CustomBreadCrumbs, Loader } from "../../ui";
 
 interface TenantFormValues {
   domainname: string;
-  company_name: string;
+  first_name: string;
   status: string;
   gstNumber?: string;
   adminemail?: string;
@@ -126,7 +126,7 @@ const CreateTenantComponent: React.FC<any> = ({
 
         <form
           onSubmit={handleSubmit}
-          className="bg-white mx-auto my-0 p-[40px] rounded-[8px] max-w-[1200px]"
+          className="bg-white mx-auto my-0 p-[40px] rounded-[8px] min-w-[800px] max-w-[1200px]"
         >
           <div className="mb-[25px] font-fsecondary text-[#adadad] text-[12px] text-[500] text-center uppercase tracking-[1.5px]">
             company details
@@ -143,7 +143,7 @@ const CreateTenantComponent: React.FC<any> = ({
               </label>
               <input
                 autoComplete="off"
-                disabled={!!FormStatus?.mode}
+                disabled={FormStatus?.mode === "view"}
                 type="text"
                 className={` w-full px-3 py-2 border border-[#ced4da] rounded-md 
          focus:border-[#86b7fe]  focus:outline-none focus:border-[2px] disabled:bg-[#ced4da] ${
@@ -172,69 +172,101 @@ const CreateTenantComponent: React.FC<any> = ({
                 </div>
               )}
             </div>
-
             <div className="float-left px-[12px] w-[50%]">
-              <div className="col-md-12">
-                <label
-                  htmlFor="status"
-                  className="mb-[8px] text-[#1f2937] text-[14px] text-[500]"
-                >
-                  Status
-                </label>
-                <select
-                  disabled={FormStatus?.mode === "view"}
-                  id="status"
-                  className={`w-full px-3 py-2 border border-[#ced4da] rounded-md 
+              <label
+                htmlFor="status"
+                className="mb-[8px] text-[#1f2937] text-[14px] text-[500]"
+              >
+                Status
+              </label>
+              <select
+                disabled={FormStatus?.mode === "view"}
+                id="status"
+                className={`w-full px-3 py-2 border border-[#ced4da] rounded-md 
          focus:border-[#86b7fe]  focus:outline-none focus:border-[2px] disabled:bg-[#ced4da] ${
            errors.status ? "is-invalid" : ""
          }`}
-                  {...register("status", {
-                    required: "Status is required",
-                  })}
-                >
-                  <option value="active">Active</option>
-                  <option value="inactive">Inactive</option>
-                </select>
+                {...register("status", {
+                  required: "Status is required",
+                })}
+              >
+                <option value="active">Active</option>
+                <option value="inactive">Inactive</option>
+              </select>
 
-                {errors.status && (
+              {errors.status && (
+                <div className="block mt-[4px] text-[#ef4444] text-[12px]">
+                  {errors.status.message}
+                </div>
+              )}
+            </div>
+          </div>
+
+          {/* kathan section - First Name and Last Name */}
+          {!FormStatus?.mode && (
+            <div className="clear-both mx-[-12px] mb-[24px] overflow-hidden">
+              <div className="float-left px-[12px] w-[50%]">
+                <label
+                  htmlFor="first_name"
+                  className="mb-[8px] text-[#1f2937] text-[14px] text-[500]"
+                >
+                  First Name
+                  <span className="ml-1 text-red-500">*</span>
+                </label>
+                <input
+                  autoComplete="off"
+                  disabled={FormStatus?.mode === "view"}
+                  type="text"
+                  className={` w-full px-3 py-2 border border-[#ced4da] rounded-md 
+         focus:border-[#86b7fe]  focus:outline-none focus:border-[2px] disabled:bg-[#ced4da] ${
+           errors.first_name ? "is-invalid" : ""
+         }`}
+                  id="first_name"
+                  placeholder="Enter Full Legal Name"
+                  {...register("first_name", {
+                    required: "First name is required",
+                  })}
+                />
+                {errors.first_name && (
                   <div className="block mt-[4px] text-[#ef4444] text-[12px]">
-                    {errors.status.message}
+                    {errors.first_name.message}
+                  </div>
+                )}
+              </div>
+              <div className="float-left px-[12px] w-[50%]">
+                <label
+                  htmlFor="last_name"
+                  className="mb-[8px] text-[#1f2937] text-[14px] text-[500]"
+                >
+                  Last Name
+                  <span className="ml-1 text-red-500">*</span>
+                </label>
+                <input
+                  autoComplete="off"
+                  disabled={FormStatus?.mode === "view"}
+                  type="text"
+                  className={` w-full px-3 py-2 border border-[#ced4da] rounded-md 
+         focus:border-[#86b7fe]  focus:outline-none focus:border-[2px] disabled:bg-[#ced4da] ${
+           errors.last_name ? "is-invalid" : ""
+         }`}
+                  id="last_name"
+                  placeholder="Enter Full Legal Name"
+                  {...register("last_name", {
+                    required: "Last name is required",
+                  })}
+                />
+                {errors.last_name && (
+                  <div className="block mt-[4px] text-[#ef4444] text-[12px]">
+                    {errors.last_name.message}
                   </div>
                 )}
               </div>
             </div>
-          </div>
+          )}
+          {/* kathan section ends*/}
 
+          {/* GST Number - always takes full row with 50% width on left */}
           <div className="clear-both mx-[-12px] mb-[40px] overflow-hidden">
-            <div className="float-left px-[12px] w-[50%]">
-              <label
-                htmlFor="company_name"
-                className="mb-[8px] text-[#1f2937] text-[14px] text-[500]"
-              >
-                Full Legal Name
-                <span className="ml-1 text-red-500">*</span>
-              </label>
-              <input
-                autoComplete="off"
-                disabled={FormStatus?.mode === "view"}
-                type="text"
-                className={` w-full px-3 py-2 border border-[#ced4da] rounded-md 
-         focus:border-[#86b7fe]  focus:outline-none focus:border-[2px] disabled:bg-[#ced4da] ${
-           errors.company_name ? "is-invalid" : ""
-         }`}
-                id="company_name"
-                placeholder="Enter Full Legal Name"
-                {...register("company_name", {
-                  required: "Full legal name is required",
-                })}
-              />
-              {errors.company_name && (
-                <div className="block mt-[4px] text-[#ef4444] text-[12px]">
-                  {errors.company_name.message}
-                </div>
-              )}
-            </div>
-
             <div className="float-left px-[12px] w-[50%]">
               <label
                 htmlFor="gstNumber"
@@ -285,7 +317,7 @@ const CreateTenantComponent: React.FC<any> = ({
                     <span className="ml-1 text-red-500">*</span>
                   </label>
                   <input
-                    autocomplete="off"
+                    autoComplete="off"
                     type="email"
                     className={` w-full px-3 py-2 border border-[#ced4da] rounded-md 
          focus:border-[#86b7fe]  focus:outline-none focus:border-[2px] disabled:bg-[#ced4da] ${
@@ -317,7 +349,7 @@ const CreateTenantComponent: React.FC<any> = ({
                     <span className="ml-1 text-red-500">*</span>
                   </label>
                   <input
-                    autocomplete="off"
+                    autoComplete="off"
                     type="password"
                     className={` w-full px-3 py-2 border border-[#ced4da] rounded-md 
          focus:border-[#86b7fe]  focus:outline-none focus:border-[2px] disabled:bg-[#ced4da] ${
@@ -359,7 +391,7 @@ const CreateTenantComponent: React.FC<any> = ({
                 <span className="ml-1 text-red-500">*</span>
               </label>
               <input
-                autocomplete="off"
+                autoComplete="off"
                 disabled={FormStatus?.mode === "view"}
                 type="text"
                 className={` w-full px-3 py-2 border border-[#ced4da] rounded-md 
@@ -388,7 +420,7 @@ const CreateTenantComponent: React.FC<any> = ({
                 <span className="ml-1 text-red-500">*</span>
               </label>
               <input
-                autocomplete="off"
+                autoComplete="off"
                 disabled={FormStatus?.mode === "view"}
                 type="text"
                 className={` w-full px-3 py-2 border border-[#ced4da] rounded-md 
@@ -423,7 +455,7 @@ const CreateTenantComponent: React.FC<any> = ({
                 <span className="ml-1 text-red-500">*</span>
               </label>
               <input
-                autocomplete="off"
+                autoComplete="off"
                 disabled={FormStatus?.mode === "view"}
                 type="tel"
                 className={` w-full px-3 py-2 border border-[#ced4da] rounded-md 
@@ -446,8 +478,8 @@ const CreateTenantComponent: React.FC<any> = ({
                 </div>
               )}
             </div>
-            <div className="float-left mt-[5px] px-[12px] w-[50%]">
-              <label className="text-[#1f2937] text-[14px] text-[500]">
+            <div className="float-left mb-[24px] px-[12px] w-[50%]">
+              <label className="block mb-[8px] text-[#1f2937] text-[14px] text-[500]">
                 Single User Organization
                 <span className="ml-1 text-red-500">*</span>
               </label>
@@ -497,35 +529,8 @@ const CreateTenantComponent: React.FC<any> = ({
                 </div>
               </div>
 
-              {/* {allTenantWithLicenses?.length > 0 &&
-              licenses?.length > 0 &&
-              allApps?.map((app: any) => (
-                <div className="table-row" key={app.id}>
-                  <div className="row-application">{app.name}</div>
-                  <div className="row-input">
-                    <input
-                      disabled={FormStatus?.mode == "view"}
-                      type="number"
-                      className="disabled:bg-[#ced4da] license-input"
-                      value={
-                        allTenantWithLicenses
-                          ?.find(
-                            (license: any) => license.tenant_id == CurrData.id
-                          )
-                          ?.licenses?.filter(
-                            (e: any) => e?.application_id == app.id
-                          )?.length || 0
-                      }
-                      onChange={(e) =>
-                        handleLicenseChange(app.id, e.target.value)
-                      }
-                      min="0"
-                    />
-                  </div>
-                </div>
-              ))} */}
               {licenses?.length > 0 &&
-                allApps?.map((app: any) => (
+                allApps?.map((app) => (
                   <div className="table-row" key={app.id}>
                     <div className="row-application">{app.name}</div>
                     <div className="row-input">
@@ -534,7 +539,7 @@ const CreateTenantComponent: React.FC<any> = ({
                         type="number"
                         className="disabled:bg-[#ced4da] license-input"
                         value={
-                          licenses.find((l: any) => l.application_id === app.id)
+                          licenses.find((l) => l.application_id === app.id)
                             ?.count || 0
                         }
                         onChange={(e) =>
@@ -545,70 +550,6 @@ const CreateTenantComponent: React.FC<any> = ({
                     </div>
                   </div>
                 ))}
-
-              {/* <div className="table-row">
-              <div className="row-application">Microsoft Team</div>
-              <div className="row-input">
-                <input
-                  disabled={FormStatus?.mode === "view"}
-                  type="number"
-                  className="disabled:bg-[#ced4da] license-input"
-                  value={licenses.microsoftTeam}
-                  onChange={(e) =>
-                    handleLicenseChange("microsoftTeam", Number(e.target.value))
-                  }
-                  min="0"
-                />
-              </div>
-            </div>
-
-            <div className="table-row">
-              <div className="row-application">PowerPoint</div>
-              <div className="row-input">
-                <input
-                  disabled={FormStatus?.mode === "view"}
-                  type="number"
-                  className="disabled:bg-[#ced4da] license-input"
-                  value={licenses.powerPoint}
-                  onChange={(e) =>
-                    handleLicenseChange("powerPoint", Number(e.target.value))
-                  }
-                  min="0"
-                />
-              </div>
-            </div>
-
-            <div className="table-row">
-              <div className="row-application">Outlook</div>
-              <div className="row-input">
-                <input
-                  disabled={FormStatus?.mode === "view"}
-                  type="number"
-                  className="disabled:bg-[#ced4da] license-input"
-                  value={licenses.outlook}
-                  onChange={(e) =>
-                    handleLicenseChange("outlook", Number(e.target.value))
-                  }
-                  min="0"
-                />
-              </div>
-            </div>
-
-            <div className="table-row">
-              <div className="row-application">Excel</div>
-              <div className="row-input">
-                <input
-                  disabled={FormStatus?.mode === "view"}
-                  type="number"
-                  className="disabled:bg-[#ced4da] license-input"
-                  value={licenses.excel}
-                  onChange={(e) =>
-                    handleLicenseChange("excel", Number(e.target.value))
-                  }
-                  min="0"
-                />
-              </div>
-            </div> */}
             </div>
           </div>
 

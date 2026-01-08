@@ -18,7 +18,8 @@ import { error_toast } from "../../../utils/toaster";
 
 interface TenantFormValues {
   domainname: any;
-  company_name: any;
+  first_name: any;
+  last_name: any;
   status: any;
   gstNumber?: any;
   adminemail?: any;
@@ -70,6 +71,7 @@ const CreateTenantContainer: React.FC<any> = (
     mode: null,
     tenant: null,
   };
+
   const [licenses, setLicenses] = useState<any>([]);
   const handleLicenseChange = (
     applicationId: any | string,
@@ -128,7 +130,8 @@ const CreateTenantContainer: React.FC<any> = (
   } = useForm<TenantFormValues>({
     defaultValues: {
       domainname: CurrData?.domain || "",
-      company_name: CurrData?.company_name || "",
+      first_name: CurrData?.first_name || "",
+      last_name: CurrData?.last_name || "",
       status: CurrData?.status || "active",
       gstNumber: CurrData?.gst || "",
       adminemail: "",
@@ -147,7 +150,8 @@ const CreateTenantContainer: React.FC<any> = (
       CurrData
     ) {
       setValue("domainname", CurrData.domain || "");
-      setValue("company_name", CurrData.company_name || "");
+      setValue("first_name", CurrData.first_name || "");
+      setValue("last_name", CurrData.last_name || "");
       setValue("status", CurrData.status || "");
       setValue("gstNumber", CurrData.gst || "");
       setValue("contactperson", CurrData.contactperson || "");
@@ -184,7 +188,8 @@ const CreateTenantContainer: React.FC<any> = (
           payload: {
             admin_email: data.adminemail,
             password: data.password,
-            company_name: data.company_name,
+            first_name: data.first_name,
+            last_name: data.last_name,
             domain: data.domainname,
             gst: data.gstNumber,
             status: data.status,
@@ -222,7 +227,8 @@ const CreateTenantContainer: React.FC<any> = (
         updateTenant({
           payload: {
             updated_at: new Date(),
-            company_name: data.company_name,
+            first_name: data.first_name,
+            last_name: data.last_name,
             gst: data.gstNumber,
             status: data.status,
             phonenumber: data.phoneNumber,

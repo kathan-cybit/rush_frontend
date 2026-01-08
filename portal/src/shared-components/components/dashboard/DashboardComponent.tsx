@@ -43,6 +43,7 @@ export default function DashboardComponent({
   menuItems,
   formattedTenants,
   allTenantWithLicenses,
+  tooltipObj,
 }: any) {
   return (
     <>
@@ -218,6 +219,8 @@ export default function DashboardComponent({
                 data={formattedTenants}
                 menuItems={menuItems}
                 statusColorMap={statusColorMap}
+                tooltipObj={tooltipObj}
+                customTooltip={true}
               />
             )}
           </div>

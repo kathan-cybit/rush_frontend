@@ -26,6 +26,7 @@ interface userProps {
 }
 
 export default function UserComponent({
+  tooltipObj,
   allUsersRoles,
   loading,
   loading2,
@@ -177,7 +178,8 @@ export default function UserComponent({
                 data={formattedTenants}
                 menuItems={menuItems}
                 statusColorMap={statusColorMap}
-                customTooltip={{ isVerified: "Click to verify" }}
+                tooltipObj={tooltipObj}
+                customTooltip={true}
               />
             </div>
           )}

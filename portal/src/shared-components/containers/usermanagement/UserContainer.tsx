@@ -282,6 +282,24 @@ export default function UserContainer() {
     )
     ?.map(({ _updatedAtRaw, ...rest }: any) => rest);
 
+  const ignoreArray = ["isVerified"];
+
+  const tooltipObj = formattedTenants.map((row) => {
+    const obj = {};
+
+    for (const [key, value] of Object.entries(row)) {
+      if (!ignoreArray.includes(key)) {
+        obj[key] = null;
+      } else if (typeof value == "string") {
+        obj[key] = "Verified";
+      } else {
+        obj[key] = "Click to verify";
+      }
+    }
+
+    return obj;
+  });
+
   const BreadCrumbItems = [
     {
       title: "Home",
@@ -316,6 +334,7 @@ export default function UserContainer() {
     handleActionChange,
     actionOptions,
     ErrorAlert,
+    tooltipObj,
   };
 
   return (

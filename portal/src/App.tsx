@@ -81,12 +81,12 @@ function App() {
                   <>
                     <Route path="usermanagement" element={<Users />} />
                     <Route path="roles" element={<Roles />} />
+                    <Route path="viewuser" element={<CreateUser />} />
+                    <Route path="updateuser" element={<CreateUser />} />
                     {(allDetails?.is_single_org == "false" ||
                       allDetails?.is_single_org === false) && (
                       <>
                         <Route path="createuser" element={<CreateUser />} />
-                        <Route path="viewuser" element={<CreateUser />} />
-                        <Route path="updateuser" element={<CreateUser />} />
                       </>
                     )}
                   </>

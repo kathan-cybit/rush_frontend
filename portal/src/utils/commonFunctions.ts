@@ -14,6 +14,7 @@ function formatUtcToIST(utcString) {
       minute: "2-digit",
       hour12: true,
     })
+    .replace(",", "")
     .replace(/\b(am|pm)\b/g, (m) => m.toUpperCase());
 }
 

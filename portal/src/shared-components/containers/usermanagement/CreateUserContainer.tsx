@@ -40,7 +40,6 @@ export default function CreateUserContainer({
   setdisplayAlert,
 }: any) {
   const location = useLocation();
-
   const safeState = useMemo(() => {
     return location.state && typeof location.state === "object"
       ? location.state
@@ -211,16 +210,15 @@ export default function CreateUserContainer({
 
   useEffect(() => {
     const host = new URL(window.location.href).hostname.split(".")[0];
-    if ((FormStatus?.mode && FormStatus?.mode == "edit") || !FormStatus?.mode) {
-      dispatch(
-        getRoles({
-          role: tenantType,
-          headers: {
-            "x-tenant-id": host,
-          },
-        })
-      );
-    }
+
+    dispatch(
+      getRoles({
+        role: tenantType,
+        headers: {
+          "x-tenant-id": host,
+        },
+      })
+    );
   }, []);
 
   useEffect(() => {
@@ -247,18 +245,15 @@ export default function CreateUserContainer({
   }, [FormStatus?.mode, CurrData, allUsersRoles]);
 
   useEffect(() => {
-    if (allDetails?.is_single_org && allRoles?.length > 0) {
-      const allRoleIds = allRoles.map((r: any) => r.id);
-
-      setValue("role_ids", allRoleIds);
-
-      const formatted = allRoles.map((r: any) => ({
-        value: r.id,
-        label: r.name,
-      }));
-
-      setDefaultUserRoleOptions(formatted);
-    }
+    // if (allDetails?.is_single_org && allRoles?.length > 0) {
+    //   const allRoleIds = allRoles.map((r: any) => r.id);
+    //   setValue("role_ids", allRoleIds);
+    //   const formatted = allRoles.map((r: any) => ({
+    //     value: r.id,
+    //     label: r.name,
+    //   }));
+    //   setDefaultUserRoleOptions(formatted);
+    // }
   }, [allDetails?.is_single_org, allRoles]);
 
   const roleOptions = allRoles.map((r) => ({
@@ -273,27 +268,43 @@ export default function CreateUserContainer({
           <Loader />
         </div>
       )}
-      <CreateUserComponent
-        roleOptions={roleOptions}
-        defaultUserRoleOptions={defaultUserRoleOptions}
-        register={register}
-        errors={errors}
-        navigate={navigate}
-        handleSubmit={handleSubmit(onSubmit)}
-        CurrData={CurrData}
-        FormStatus={FormStatus}
-        onDiscard={onDiscard}
-        handleReset={handleReset}
-        BreadCrumbItems={BreadCrumbItems}
-        assignedApps={assignedApps}
-        setAssignedApps={setAssignedApps}
-        control={control}
-        allRoles={allRoles}
-        allApps={allApps}
-        allLicenseWithCounts={allLicenseWithCounts}
-        allLicenses={allLicenses}
-        allDetails={allDetails}
-      />
+      {
+        <CreateUserComponent
+          roleOptions={roleOptions}
+          defaultUserRoleOptions={defaultUserRoleOptions}
+          register={register}
+          errors={errors}
+          navigate={navigate}
+          handleSubmit={handleSubmit(onSubmit)}
+          CurrData={CurrData}
+          FormStatus={FormStatus}
+          onDiscard={onDiscard}
+          handleReset={handleReset}
+          BreadCrumbItems={BreadCrumbItems}
+          assignedApps={assignedApps}
+          setAssignedApps={setAssignedApps}
+          control={control}
+          allRoles={allRoles}
+          allApps={allApps}
+          allLicenseWithCounts={allLicenseWithCounts}
+          allLicenses={allLicenses}
+          allDetails={allDetails}
+        />
+      }
     </div>
   );
 }
+// useEffect(() => {
+//   if (allDetails?.is_single_org && allRoles?.length > 0) {
+//     const allRoleIds = allRoles.map((r: any) => r.id);
+
+//     setValue("role_ids", allRoleIds);
+
+//     const formatted = allRoles.map((r: any) => ({
+//       value: r.id,
+//       label: r.name,
+//     }));
+
+//     setDefaultUserRoleOptions(formatted);
+//   }
+// }, [allDetails?.is_single_org, allRoles]);
