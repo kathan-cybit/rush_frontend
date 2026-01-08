@@ -222,7 +222,7 @@ const CreateTenantComponent: React.FC<any> = ({
            errors.first_name ? "is-invalid" : ""
          }`}
                   id="first_name"
-                  placeholder="Enter Full Legal Name"
+                  placeholder="Enter First Name"
                   {...register("first_name", {
                     required: "First name is required",
                   })}
@@ -250,7 +250,7 @@ const CreateTenantComponent: React.FC<any> = ({
            errors.last_name ? "is-invalid" : ""
          }`}
                   id="last_name"
-                  placeholder="Enter Full Legal Name"
+                  placeholder="Enter Last Name"
                   {...register("last_name", {
                     required: "Last name is required",
                   })}
