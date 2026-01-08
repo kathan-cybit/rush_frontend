@@ -20,52 +20,7 @@ import { formatUtcToIST } from "../../../utils/commonFunctions";
 export default function DashboardContainer() {
   const dispatch = useDispatch<AppDispatch>();
   const navigate = useNavigate();
-  const menuItems = [
-    {
-      label: "View",
-      icon: <EyeIcon className="" color="#000" />,
-      onClick: (row: any) => {
-        handleViewTenant(row);
-      },
-    },
-    {
-      label: "Edit",
-      color: "blue",
-      icon: <EditIcon color="#228be6" />,
-      onClick: (row: any) => {
-        handleEditTenant(row);
-      },
-    },
-    {
-      label: "Delete",
-      color: "#ef4444",
-      icon: <DeleteIcon color="#ef4444" />,
-      onClick: (row: any) => {
-        dispatch(
-          deleteTenant({
-            payload: { domain: row.domain },
-            headers: { "x-tenant-id": host },
-          })
-        )
-          .unwrap()
-          .then(() => {
-            dispatch(
-              getLicenseApps({
-                role: tenantType,
-                headers: { "x-tenant-id": host },
-              })
-            );
-            dispatch(fetchTenants(host));
-            dispatch(
-              getAllTenantsWithLicenses({
-                headers: { "x-tenant-id": "public" },
-              })
-            );
-          })
-          .catch(() => {});
-      },
-    },
-  ];
+  const host = new URL(window.location.href).hostname.split(".")[0];
   const statusColorMap = {
     active: "green",
     inactive: "red",
@@ -74,11 +29,15 @@ export default function DashboardContainer() {
   const { tenants, isLoading, allUsersRolesPermissions } = useSelector(
     (state: RootState) => state.tenant
   );
+
   const { user, loading, tenantType, token } = useSelector(
     (state: RootState) => state.auth
   );
-  const [host, setHost] = useState<string | null>(null);
 
+  const [ConfirmDelete, setConfirmDelete] = useState<any>({
+    mode: false,
+    row: null,
+  });
   const [FormStatus, setFormStatus] = useState({
     mode: null as "view" | "edit" | null,
     tenant: null as string | null,
@@ -97,41 +56,42 @@ export default function DashboardContainer() {
   );
 
   useEffect(() => {
-    const host = new URL(window.location.href).hostname.split(".")[0];
-    dispatch(
-      getLicenseApps({
-        role: tenantType,
-        headers: { "x-tenant-id": host },
-      })
-    );
-    if (host != "public" && host != "admin") {
+    if (!ConfirmDelete?.mode) {
       dispatch(
-        getAllLicenses({
+        getLicenseApps({
+          role: tenantType,
           headers: { "x-tenant-id": host },
         })
       );
-      dispatch(
-        getAllUsersRolesPermissions({
-          params: user?.id,
-          headers: { "x-tenant-id": host },
-        })
-      );
-    } else {
-      dispatch(
-        getAllTenantsWithLicenses({
-          headers: { "x-tenant-id": "public" },
-        })
-      );
+      if (host != "public" && host != "admin") {
+        dispatch(
+          getAllLicenses({
+            headers: { "x-tenant-id": host },
+          })
+        );
+        dispatch(
+          getAllUsersRolesPermissions({
+            params: user?.id,
+            headers: { "x-tenant-id": host },
+          })
+        );
+      } else {
+        dispatch(
+          getAllTenantsWithLicenses({
+            headers: { "x-tenant-id": "public" },
+          })
+        );
+      }
     }
-  }, []);
+  }, [ConfirmDelete]);
 
   useEffect(() => {
-    const host = new URL(window.location.href).hostname.split(".")[0];
-    setHost(host);
-    if (host == "public") {
-      dispatch(fetchTenants(host));
+    if (!ConfirmDelete?.mode) {
+      if (host == "public") {
+        dispatch(fetchTenants(host));
+      }
     }
-  }, []);
+  }, [ConfirmDelete]);
 
   useEffect(() => {
     if (
@@ -169,6 +129,48 @@ export default function DashboardContainer() {
   const handleEditTenant = (row: any) => {
     setFormStatus({ mode: "edit", tenant: row.id });
   };
+
+  const modalClose = () => {
+    setConfirmDelete({ mode: false, row: null });
+  };
+  const deleteEntry = async (row: any, host: any, tenantType: any) => {
+    dispatch(
+      deleteTenant({
+        payload: { domain: row.domain },
+        headers: { "x-tenant-id": host },
+      })
+    )
+      .unwrap()
+      .then(() => {
+        modalClose();
+      })
+      .catch(() => {});
+  };
+  const menuItems = [
+    {
+      label: "View",
+      icon: <EyeIcon className="" color="#000" />,
+      onClick: (row: any) => {
+        handleViewTenant(row);
+      },
+    },
+    {
+      label: "Edit",
+      color: "blue",
+      icon: <EditIcon color="#228be6" />,
+      onClick: (row: any) => {
+        handleEditTenant(row);
+      },
+    },
+    {
+      label: "Delete",
+      color: "#ef4444",
+      icon: <DeleteIcon color="#ef4444" />,
+      onClick: (row: any) => {
+        setConfirmDelete({ mode: true, row: row });
+      },
+    },
+  ];
 
   let formattedTenants: any[] = [];
 
@@ -273,6 +275,11 @@ export default function DashboardContainer() {
     allTenantWithLicenses,
     hasManageOrgSettings,
     tooltipObj,
+    ConfirmDelete,
+    setConfirmDelete,
+    deleteEntry,
+    modalClose,
+    tenantType,
   };
 
   return (

@@ -40,6 +40,14 @@ export default function RoleContainer() {
     useSelector((state: any) => state.tenant.allpermissionsroles) || [];
 
   const [selectedAction, setSelectedAction] = useState<any>(null);
+
+  const [ConfirmDelete, setConfirmDelete] = useState<any>({
+    mode: false,
+    row: null,
+  });
+  const modalClose = () => {
+    setConfirmDelete({ mode: false, row: null });
+  };
   const actionOptions = [
     // { value: "create", label: "Create New Role" },
     { value: "bulk", label: "Bulk Upload" },
@@ -182,62 +190,68 @@ export default function RoleContainer() {
   };
 
   useEffect(() => {
-    if ((EditRole?.open || OpenCreateRole) && !OpenForm) {
-      dispatch(
-        getPermssion({
-          role: tenantType,
-          headers: {
-            "x-tenant-id": host,
-          },
-        })
-      );
-    }
-    if (!OpenForm) {
-      dispatch(
-        getAllPermissonRole({
-          role: tenantType,
-          headers: {
-            "x-tenant-id": host,
-          },
-        })
-      );
-    }
+    if (!ConfirmDelete?.mode) {
+      if ((EditRole?.open || OpenCreateRole) && !OpenForm) {
+        dispatch(
+          getPermssion({
+            role: tenantType,
+            headers: {
+              "x-tenant-id": host,
+            },
+          })
+        );
+      }
+      if (!OpenForm) {
+        dispatch(
+          getAllPermissonRole({
+            role: tenantType,
+            headers: {
+              "x-tenant-id": host,
+            },
+          })
+        );
+      }
 
-    if (EditRole?.open && EditRole?.roleId && !OpenForm) {
-      dispatch(
-        getPermissonRole({
-          role: tenantType,
-          id: EditRole?.roleId,
-          headers: {
-            "x-tenant-id": host,
-          },
-        })
-      );
+      if (EditRole?.open && EditRole?.roleId && !OpenForm) {
+        dispatch(
+          getPermissonRole({
+            role: tenantType,
+            id: EditRole?.roleId,
+            headers: {
+              "x-tenant-id": host,
+            },
+          })
+        );
+      }
     }
-  }, [EditRole, OpenCreateRole, OpenForm]);
-
-  useEffect(() => {
-    if (!OpenForm) {
-      dispatch(
-        getRoles({
-          role: tenantType,
-          headers: {
-            "x-tenant-id": host,
-          },
-        })
-      );
-    }
-  }, [OpenCreateRole, OpenForm]);
+  }, [EditRole, OpenCreateRole, OpenForm, ConfirmDelete]);
 
   useEffect(() => {
-    if (host != "public") {
-      dispatch(
-        getUserDetails({
-          headers: { "x-tenant-id": host },
-        })
-      );
+    if (!ConfirmDelete?.mode) {
+      if (!OpenForm) {
+        dispatch(
+          getRoles({
+            role: tenantType,
+            headers: {
+              "x-tenant-id": host,
+            },
+          })
+        );
+      }
     }
-  }, []);
+  }, [OpenCreateRole, OpenForm, ConfirmDelete]);
+
+  useEffect(() => {
+    if (!ConfirmDelete?.mode) {
+      if (host != "public") {
+        dispatch(
+          getUserDetails({
+            headers: { "x-tenant-id": host },
+          })
+        );
+      }
+    }
+  }, [ConfirmDelete]);
 
   const selectedPermissionIds = useMemo(() => {
     return (permissionsRoles || []).map((item) => item.Permission?.id);
@@ -320,47 +334,25 @@ export default function RoleContainer() {
       color: "#ef4444",
       icon: <DeleteIcon color="#ef4444" />,
       onClick: (row: any) => {
-        dispatch(
-          deleteRole({
-            role: tenantType,
-            roleId: row?.id,
-            headers: { "x-tenant-id": host },
-          })
-        )
-          .unwrap()
-          .then(async () => {
-            await dispatch(
-              getPermssion({
-                role: tenantType,
-                headers: {
-                  "x-tenant-id": host,
-                },
-              })
-            );
-
-            await dispatch(
-              getAllPermissonRole({
-                role: tenantType,
-                headers: {
-                  "x-tenant-id": host,
-                },
-              })
-            );
-
-            await dispatch(
-              getRoles({
-                role: tenantType,
-                headers: {
-                  "x-tenant-id": host,
-                },
-              })
-            );
-          })
-          .catch(() => {});
+        setConfirmDelete({ mode: true, row: row });
       },
     },
   ];
 
+  const deleteEntry = async (row: any, host: any, tenantType: any) => {
+    dispatch(
+      deleteRole({
+        role: tenantType,
+        roleId: row?.id,
+        headers: { "x-tenant-id": host },
+      })
+    )
+      .unwrap()
+      .then(() => {
+        modalClose();
+      })
+      .catch(() => {});
+  };
   return (
     <div className="">
       <div className="mx-auto">
@@ -395,6 +387,10 @@ export default function RoleContainer() {
             selectedAction={selectedAction}
             handleActionChange={handleActionChange}
             actionOptions={actionOptions}
+            tenantType={tenantType}
+            modalClose={modalClose}
+            deleteEntry={deleteEntry}
+            ConfirmDelete={ConfirmDelete}
           />
         </div>
       </div>

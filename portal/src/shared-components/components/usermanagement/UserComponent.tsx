@@ -15,6 +15,7 @@ import { UploadExcelForm } from "../index";
 import { DownloadIcn, Dropdown } from "../../../assets/svgs";
 import { exportToCSV } from "../../../utils/exports";
 import Select from "react-select";
+import ConfirmDeleteModal from "../confirmDeleteModal/confirmDeleteModal";
 
 interface userProps {
   loading: boolean;
@@ -48,6 +49,10 @@ export default function UserComponent({
   handleActionChange,
   actionOptions,
   ErrorAlert,
+  tenantType,
+  modalClose,
+  deleteEntry,
+  ConfirmDelete,
 }: any) {
   const navigate = useNavigate();
   return (
@@ -211,6 +216,15 @@ export default function UserComponent({
             setErrorAlert={setErrorAlert}
           />
         </Dialog>
+      )}
+      {ConfirmDelete?.mode && (
+        <ConfirmDeleteModal
+          ConfirmDelete={ConfirmDelete}
+          modalClose={modalClose}
+          host={host}
+          tenantType={tenantType}
+          deleteEntry={deleteEntry}
+        />
       )}
     </div>
   );

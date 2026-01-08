@@ -14,6 +14,7 @@ import { DownloadIcn } from "../../../assets/svgs";
 import { exportToCSV } from "../../../utils/exports";
 import { RolesFile } from "../../../assets/img";
 import { UploadExcelForm } from "../index";
+import ConfirmDeleteModal from "../confirmDeleteModal/confirmDeleteModal";
 
 const SELECT_ALL_OPTION = {
   label: "Select All",
@@ -55,6 +56,10 @@ export default function RoleComponent({
   actionOptions,
   handleActionChange,
   selectedAction,
+  ConfirmDelete,
+  tenantType,
+  modalClose,
+  deleteEntry,
 }: any) {
   const [ErrorAlert, setErrorAlert] = useState("");
   const allSelected =
@@ -380,6 +385,15 @@ export default function RoleComponent({
             setErrorAlert={setErrorAlert}
           />
         </Dialog>
+      )}
+      {ConfirmDelete?.mode && (
+        <ConfirmDeleteModal
+          ConfirmDelete={ConfirmDelete}
+          modalClose={modalClose}
+          host={host}
+          tenantType={tenantType}
+          deleteEntry={deleteEntry}
+        />
       )}
     </div>
   );

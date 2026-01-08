@@ -45,7 +45,13 @@ export default function UserContainer() {
     useSelector((state: any) => state.tenant.allUsersRoles) || [];
 
   const { allApps } = useSelector((state: RootState) => state.license);
-
+  const [ConfirmDelete, setConfirmDelete] = useState<any>({
+    mode: false,
+    row: null,
+  });
+  const modalClose = () => {
+    setConfirmDelete({ mode: false, row: null });
+  };
   const [FormStatus, setFormStatus] = useState({
     mode: null,
     userId: null,
@@ -113,27 +119,7 @@ export default function UserContainer() {
           error_toast("Default admin cannot be deleted");
           return;
         }
-        dispatch(
-          deleteTenantUser({
-            id: row?.id,
-            headers: { "x-tenant-id": host },
-          })
-        )
-          .unwrap()
-          .then(() => {
-            dispatch(
-              fetchUsers({
-                url: `/users?tenant=${host}`,
-              })
-            );
-            dispatch(
-              getLicenseApps({
-                role: tenantType,
-                headers: { "x-tenant-id": host },
-              })
-            );
-          })
-          .catch(() => {});
+        setConfirmDelete({ mode: true, row: row });
       },
     },
 
@@ -144,7 +130,19 @@ export default function UserContainer() {
     //       },
     //     }
   ];
-
+  const deleteEntry = async (row: any, host: any, tenantType: any) => {
+    dispatch(
+      deleteTenantUser({
+        id: row?.id,
+        headers: { "x-tenant-id": host },
+      })
+    )
+      .unwrap()
+      .then(() => {
+        modalClose();
+      })
+      .catch(() => {});
+  };
   const statusColorMap = {
     active: "green",
     inactive: "red",
@@ -184,39 +182,43 @@ export default function UserContainer() {
   };
 
   useEffect(() => {
-    if (currentTenantName && !OpenForm) {
+    if (!ConfirmDelete?.mode) {
+      if (currentTenantName && !OpenForm) {
+        dispatch(
+          fetchUsers({
+            url: `/users?tenant=${currentTenantName}`,
+          })
+        );
+      }
       dispatch(
-        fetchUsers({
-          url: `/users?tenant=${currentTenantName}`,
-        })
-      );
-    }
-    dispatch(
-      getLicenseApps({
-        role: tenantType,
-        headers: { "x-tenant-id": host },
-      })
-    );
-    if (host != "public") {
-      dispatch(
-        getUserDetails({
+        getLicenseApps({
+          role: tenantType,
           headers: { "x-tenant-id": host },
         })
       );
+      if (host != "public") {
+        dispatch(
+          getUserDetails({
+            headers: { "x-tenant-id": host },
+          })
+        );
+      }
     }
-  }, [currentTenantName, OpenForm]);
+  }, [currentTenantName, OpenForm, ConfirmDelete]);
 
   useEffect(() => {
-    if (!OpenForm)
-      dispatch(
-        getAllRoleUsers({
-          role: tenantType,
-          headers: {
-            "x-tenant-id": host,
-          },
-        })
-      );
-  }, [FormStatus.mode, userData, OpenForm]);
+    if (!ConfirmDelete?.mode) {
+      if (!OpenForm)
+        dispatch(
+          getAllRoleUsers({
+            role: tenantType,
+            headers: {
+              "x-tenant-id": host,
+            },
+          })
+        );
+    }
+  }, [FormStatus.mode, userData, OpenForm, ConfirmDelete]);
 
   const formattedTenants = userData
     ?.map((e: any) => ({
@@ -335,6 +337,10 @@ export default function UserContainer() {
     actionOptions,
     ErrorAlert,
     tooltipObj,
+    tenantType,
+    modalClose,
+    deleteEntry,
+    ConfirmDelete,
   };
 
   return (

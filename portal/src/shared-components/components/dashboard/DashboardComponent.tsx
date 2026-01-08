@@ -1,9 +1,10 @@
 import React from "react";
 
 import { CreateTenantContainer } from "../../containers";
-import { Loader, TableV2 } from "../../ui";
+import { Loader, Modal, TableV2 } from "../../ui";
 import { AuthIcn } from "../../../assets/svgs";
 import { ICExpert, PoleExpert, SimExpert } from "../../../assets/img";
+import ConfirmDeleteModal from "../confirmDeleteModal/confirmDeleteModal";
 
 interface DashboardProps {
   host: string | null;
@@ -29,6 +30,7 @@ export default function DashboardComponent({
   allLicenses,
   filteredApps,
   user,
+  tenantType,
   host,
   isLoading,
   loading,
@@ -44,6 +46,10 @@ export default function DashboardComponent({
   formattedTenants,
   allTenantWithLicenses,
   tooltipObj,
+  ConfirmDelete,
+  setConfirmDelete,
+  deleteEntry,
+  modalClose,
 }: any) {
   return (
     <>
@@ -278,6 +284,15 @@ export default function DashboardComponent({
                 })}
           </div>
         </>
+      )}
+      {ConfirmDelete?.mode && (
+        <ConfirmDeleteModal
+          ConfirmDelete={ConfirmDelete}
+          modalClose={modalClose}
+          host={host}
+          tenantType={tenantType}
+          deleteEntry={deleteEntry}
+        />
       )}
     </>
   );
