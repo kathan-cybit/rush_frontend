@@ -47,7 +47,7 @@ export default function ChangePassword({ setIsOpen }) {
   };
 
   return (
-    <div className="flex justify-center">
+    <div className="flex justify-center pb-[30px]">
       <form
         onSubmit={handleSubmit(onSubmit)}
         className="flex flex-wrap max-w-[500px]"

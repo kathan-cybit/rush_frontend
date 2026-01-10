@@ -8,6 +8,7 @@ import {
   Modal,
   TableV2,
   Tooltip,
+  MultiSelect,
 } from "../../ui";
 import { CreateUserContainer } from "../../containers";
 import { useNavigate } from "react-router-dom";

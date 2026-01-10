@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 import { Controller } from "react-hook-form";
 import Select from "react-select";
+
+import { MultiSelect } from "../../ui"; // Your Mantine-based MultiSelect
 import {
   Alert,
   CustomBreadCrumbs,
@@ -16,15 +18,7 @@ import { RolesFile } from "../../../assets/img";
 import { UploadExcelForm } from "../index";
 import ConfirmDeleteModal from "../confirmDeleteModal/confirmDeleteModal";
 
-const SELECT_ALL_OPTION = {
-  label: "Select All",
-  value: "__select_all__",
-};
-
-const DESELECT_ALL_OPTION = {
-  label: "",
-  value: "",
-};
+const SELECT_ALL_VALUE = "__select_all__";
 
 export default function RoleComponent({
   allRoles,
@@ -62,14 +56,54 @@ export default function RoleComponent({
   deleteEntry,
 }: any) {
   const [ErrorAlert, setErrorAlert] = useState("");
+
+  // Check if all permissions are selected
   const allSelected =
-    Roleform.permissions?.length == permissionOptions.length &&
+    Roleform.permissions?.length === permissionOptions.length &&
     permissionOptions.length > 0;
 
+  // Add "Select All" option to the beginning of the options array
   const selectOptions = [
-    allSelected ? DESELECT_ALL_OPTION : SELECT_ALL_OPTION,
+    {
+      value: SELECT_ALL_VALUE,
+      label: allSelected ? "Deselect All" : "Select All",
+    },
     ...permissionOptions,
   ];
+
+  // Helper function to handle multi-select changes with "Select All" logic
+  const handleMultiSelectChange = (
+    selectedValues: string[],
+    onChange: (value: any[]) => void
+  ) => {
+    if (!selectedValues || selectedValues.length === 0) {
+      onChange([]);
+      return;
+    }
+
+    // Check if "Select All" was clicked
+    if (selectedValues.includes(SELECT_ALL_VALUE)) {
+      // If currently all selected, deselect all
+      if (allSelected) {
+        onChange([]);
+      } else {
+        // Otherwise, select all permissions (excluding the select all option)
+        onChange(permissionOptions);
+      }
+      return;
+    }
+
+    // Normal selection - map values back to option objects
+    const selected = permissionOptions.filter((opt: any) =>
+      selectedValues.includes(opt.value)
+    );
+    onChange(selected);
+  };
+
+  // Helper function to get current values for Mantine MultiSelect
+  const getCurrentValues = (permissions: any[]) => {
+    return (permissions || []).map((p: any) => p.value);
+  };
 
   return (
     <div>
@@ -97,7 +131,6 @@ export default function RoleComponent({
                 />
               </>
             </div>
-            {/* {host != "public" && ( */}
             <>
               <div className="flex gap-2">
                 {!allDetails?.is_single_org && (
@@ -179,9 +212,8 @@ export default function RoleComponent({
                     Create New Role
                   </button>
                 )}
-              </div>{" "}
+              </div>
             </>
-            {/* )} */}
           </div>
         </div>
       </>
@@ -210,7 +242,7 @@ export default function RoleComponent({
             handleModalClose();
           }}
         >
-          <div className="p-[1.25rem] min-h-[700px]">
+          <div className="p-[1.25rem] pb-4">
             <form
               onSubmit={handleSubmitAssign(submitAssign)}
               className="gap-4 grid"
@@ -220,13 +252,6 @@ export default function RoleComponent({
                   <label className="block mb-1 font-medium text-sm">Role</label>
                   {CurrData?.name}
                 </div>
-
-                {/* <div>
-                  <label className="block mb-1 font-medium text-sm">
-                    Organization ID
-                  </label>
-                  {CurrData?.organization_id}
-                </div> */}
               </div>
 
               <div>
@@ -238,37 +263,15 @@ export default function RoleComponent({
                   name="permission_ids"
                   control={controlAssign}
                   render={({ field }) => (
-                    // <Select
-                    //   {...field}
-                    //   isMulti
-                    //   options={permissionOptions}
-                    //   onChange={(val) => field.onChange(val)}
-                    //   placeholder="Select permissions..."
-                    // />
-                    <Select
-                      isMulti
-                      options={selectOptions}
+                    <MultiSelect
+                      data={selectOptions}
                       placeholder="Select permissions..."
-                      value={field.value}
-                      onChange={(selected: any) => {
-                        if (!selected) {
-                          field.onChange([]);
-                          return;
-                        }
-
-                        // Select All clicked
-                        if (
-                          selected.some(
-                            (opt: any) => opt.value === "__select_all__"
-                          )
-                        ) {
-                          field.onChange(permissionOptions);
-                          return;
-                        }
-
-                        // Normal selection
-                        field.onChange(selected);
-                      }}
+                      value={getCurrentValues(field.value)}
+                      onChange={(selectedValues) =>
+                        handleMultiSelectChange(selectedValues, field.onChange)
+                      }
+                      searchable
+                      clearable
                     />
                   )}
                 />
@@ -292,7 +295,7 @@ export default function RoleComponent({
           opened={OpenCreateRole}
           onClose={() => setOpenCreateRole(false)}
         >
-          <div className="p-[1.25rem] min-h-[700px]">
+          <div className="p-[1.25rem] pb-4">
             <form className="gap-4 grid" onSubmit={handleSubmit}>
               <div className="gap-1 grid">
                 <label className="font-medium text-sm">
@@ -325,36 +328,20 @@ export default function RoleComponent({
                   Select Permissions
                 </label>
 
-                <Select
-                  isMulti
-                  options={selectOptions}
-                  value={Roleform.permissions}
+                <MultiSelect
+                  data={selectOptions}
+                  value={getCurrentValues(Roleform.permissions)}
                   placeholder="Select permissions..."
-                  onChange={(selected: any) => {
-                    if (!selected) {
-                      setRoleForm({ ...Roleform, permissions: [] });
-                      return;
-                    }
-
-                    // Select All clicked
-                    if (
-                      selected.some(
-                        (opt: any) => opt.value === "__select_all__"
-                      )
-                    ) {
+                  onChange={(selectedValues) => {
+                    handleMultiSelectChange(selectedValues, (selected) => {
                       setRoleForm({
                         ...Roleform,
-                        permissions: permissionOptions,
+                        permissions: selected,
                       });
-                      return;
-                    }
-
-                    // Normal selection
-                    setRoleForm({
-                      ...Roleform,
-                      permissions: selected,
                     });
                   }}
+                  searchable
+                  clearable
                 />
               </div>
 
