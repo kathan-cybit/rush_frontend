@@ -248,20 +248,31 @@ const CreateTenantContainer: React.FC<any> = (
     }
   };
 
+  // uncomment for single org and comnet below useefcfect
+  // useEffect(() => {
+  //   if (
+  //     (allApps?.length > 0 && !FormStatus?.mode) ||
+  //     ((singleOrganizationWatcher === true ||
+  //       singleOrganizationWatcher == "true") &&
+  //       !licenses?.some((license) => Number(license.count) > 1))
+  //   ) {
+  //     const initialLicenses = allApps.map((app: any) => ({
+  //       application_id: app.id,
+  //       count: "0",
+  //     }));
+  //     setLicenses(initialLicenses);
+  //   }
+  // }, [allApps, FormStatus?.mode, singleOrganizationWatcher]);
+
   useEffect(() => {
-    if (
-      (allApps?.length > 0 && !FormStatus?.mode) ||
-      ((singleOrganizationWatcher === true ||
-        singleOrganizationWatcher == "true") &&
-        !licenses?.some((license) => Number(license.count) > 1))
-    ) {
+    if (allApps?.length > 0 && !FormStatus?.mode) {
       const initialLicenses = allApps.map((app: any) => ({
         application_id: app.id,
         count: "0",
       }));
       setLicenses(initialLicenses);
     }
-  }, [allApps, FormStatus?.mode, singleOrganizationWatcher]);
+  }, [allApps, FormStatus?.mode]);
 
   useEffect(() => {
     if (
@@ -275,6 +286,7 @@ const CreateTenantContainer: React.FC<any> = (
       setValue("singleOrganization", "false");
     }
   }, [singleOrganizationWatcher, CurrData?.totalusers, setValue]);
+
   const onDiscard = () => {
     reset();
     // setFormStatus?.({ mode: null, tenant: null });
