@@ -50,9 +50,11 @@ const CreateTenantComponent: React.FC<any> = ({
   handleSubmit,
   BreadCrumbItems,
   allTenantWithLicenses,
+  singleOrganizationWatcher,
 }) => {
   const navigate = useNavigate();
 
+  console.log(singleOrganizationWatcher, "singleOrganizationWatcher");
   return (
     <>
       {isLoading && (
@@ -546,6 +548,14 @@ const CreateTenantComponent: React.FC<any> = ({
                           handleLicenseChange(app.id, Number(e.target.value))
                         }
                         min="0"
+                        max={
+                          (singleOrganizationWatcher === true ||
+                            singleOrganizationWatcher === "true") &&
+                          licenses.find((l) => l.application_id === app.id)
+                            ?.count < 2
+                            ? 1
+                            : undefined
+                        }
                       />
                     </div>
                   </div>

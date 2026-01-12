@@ -109,17 +109,6 @@ const CreateTenantContainer: React.FC<any> = (
     }
   }, []);
 
-  useEffect(() => {
-    if (allApps?.length > 0 && !FormStatus?.mode) {
-      // Create mode: Initialize with all apps with count 0
-      const initialLicenses = allApps.map((app: any) => ({
-        application_id: app.id,
-        count: "0",
-      }));
-      setLicenses(initialLicenses);
-    }
-  }, [allApps, FormStatus?.mode]);
-
   const {
     register,
     handleSubmit,
@@ -258,6 +247,22 @@ const CreateTenantContainer: React.FC<any> = (
         .catch(() => {});
     }
   };
+
+  useEffect(() => {
+    if (
+      (allApps?.length > 0 && !FormStatus?.mode) ||
+      ((singleOrganizationWatcher === true ||
+        singleOrganizationWatcher == "true") &&
+        !licenses?.some((license) => Number(license.count) > 1))
+    ) {
+      const initialLicenses = allApps.map((app: any) => ({
+        application_id: app.id,
+        count: "0",
+      }));
+      setLicenses(initialLicenses);
+    }
+  }, [allApps, FormStatus?.mode, singleOrganizationWatcher]);
+
   useEffect(() => {
     if (
       (singleOrganizationWatcher == "true" ||
@@ -316,6 +321,7 @@ const CreateTenantContainer: React.FC<any> = (
     handleReset,
     BreadCrumbItems,
     allTenantWithLicenses,
+    singleOrganizationWatcher,
   };
 
   return (
