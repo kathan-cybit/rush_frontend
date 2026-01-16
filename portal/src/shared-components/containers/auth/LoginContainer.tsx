@@ -82,7 +82,7 @@ export default function LoginContainer({ token = null }) {
         )
           .then((res: any) => {
             if (res?.userFound) {
-              navigate("/");
+              navigate("/dashboard");
             } else {
             }
           })

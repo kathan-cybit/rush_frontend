@@ -1,5 +1,5 @@
 import "./App.css";
-import { Route, Routes, Navigate, useLocation } from "react-router-dom";
+import { Route, Routes, Navigate, useLocation, Link } from "react-router-dom";
 import Layout from "./layout/Layout";
 import License from "./pages/license/License";
 import Users from "./pages/usermanagement/Users";
@@ -18,6 +18,7 @@ import CreateTenant from "./pages/createTenant/CreateTenant";
 import { AppDispatch, RootState } from "./store/store";
 import CreateUser from "./pages/usermanagement/components/CreateUser";
 import { getAllUsersRolesPermissions } from "./store/reducers/tenantSlice";
+import NotFound from "./pages/notFound/NotFound";
 
 function App() {
   const location = useLocation();
@@ -72,17 +73,17 @@ function App() {
             <Routes>
               <Route path="/" element={<Layout />}>
                 <Route
-                  path="/"
+                  path="/login"
                   element={<Navigate to="/dashboard" replace />}
                 />
                 <Route path="dashboard" element={<Dashboard />} />
-                {/* <Route path="license" element={<License />} /> */}
                 {(user?.is_default_admin || hasManageOrgSettings) && (
                   <>
                     <Route path="usermanagement" element={<Users />} />
                     <Route path="roles" element={<Roles />} />
                     <Route path="viewuser" element={<CreateUser />} />
                     <Route path="updateuser" element={<CreateUser />} />
+                    <Route path="notfound" element={<NotFound />} />
                     {(allDetails?.is_single_org == "false" ||
                       allDetails?.is_single_org === false) && (
                       <>
@@ -92,10 +93,7 @@ function App() {
                   </>
                 )}
 
-                <Route
-                  path="*"
-                  element={<Navigate to="/dashboard" replace />}
-                />
+                <Route path="*" element={<Navigate to="/notfound" replace />} />
               </Route>
             </Routes>
           ) : tenantType == "admin" ? (
@@ -103,7 +101,7 @@ function App() {
               <Routes>
                 <Route path="/" element={<Layout />}>
                   <Route
-                    path="/"
+                    path="/login"
                     element={<Navigate to="/dashboard" replace />}
                   />
                   <Route path="dashboard" element={<Dashboard />} />
@@ -111,9 +109,10 @@ function App() {
                   <Route path="viewtenant" element={<CreateTenant />} />
                   <Route path="edittenant" element={<CreateTenant />} />
                   <Route path="roles" element={<Roles />} />
+                  <Route path="notfound" element={<NotFound />} />
                   <Route
                     path="*"
-                    element={<Navigate to="/dashboard" replace />}
+                    element={<Navigate to="/notfound" replace />}
                   />
                 </Route>
               </Routes>

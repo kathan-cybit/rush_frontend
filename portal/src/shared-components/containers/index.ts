@@ -5,6 +5,7 @@ import LicenseContainer from "./license/LicenseContainer";
 import RoleContainer from "./role/RoleContainer";
 import UserContainer from "./usermanagement/UserContainer";
 import CreateUserContainer from "./usermanagement/CreateUserContainer";
+import NotFoundContainer from "./notFound/NotFoundContainer";
 
 export {
   LoginContainer,
@@ -14,4 +15,5 @@ export {
   LicenseContainer,
   UserContainer,
   CreateUserContainer,
+  NotFoundContainer,
 };

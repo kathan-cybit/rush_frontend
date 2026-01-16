@@ -15,21 +15,22 @@ interface LoginPayload {
   password: string;
 }
 
-export const loginUser = createAsyncThunk<LoginResponse, LoginPayload>(
+export const loginUser = createAsyncThunk<any, any>(
   "auth/loginUser",
   async ({ currentTenantName, email, password }, { rejectWithValue }) => {
     try {
-      const res = await axiosInstance.post<LoginResponse>(
+      const res = await axiosInstance.post<any>(
         `/auth/login?tenant=${currentTenantName}`,
         { email, password }
       );
 
-      if (res?.data) {
+      if (res?.data?.code == 200 || res?.data?.status == "success") {
         success_toast(res.data.message || "Logged in successfully");
       }
-      return res.data;
+      return res.data?.data;
     } catch (err: any) {
-      const msg = err.response?.data?.error || err.message;
+      const msg =
+        err.response?.data?.message || err.response?.data?.error || err.message;
       error_toast(msg);
       return rejectWithValue({ err, status: err.response?.status });
     }
@@ -44,12 +45,13 @@ export const verifyUser = createAsyncThunk<unknown, any>(
         `/auth/verify-email?token=${token}&tenant=${tenant}`
       );
 
-      if (res?.data) {
+      if (res?.data?.code == 200 || res?.data?.status == "success") {
         success_toast(res.data.message || "Verifid successfully");
       }
-      return res.data;
+      return res.data?.data;
     } catch (err: any) {
-      const msg = err.response?.data?.error || err.message;
+      const msg =
+        err.response?.data?.message || err.response?.data?.error || err.message;
       error_toast(msg);
       return rejectWithValue({ err, status: err.response?.status });
     }
@@ -63,9 +65,10 @@ export const getUserDetails = createAsyncThunk<unknown, any>(
       const res = await axiosInstance.get<any>(`/users/details`, {
         headers: { ...props.headers },
       });
-      return res.data;
+      return res.data?.data;
     } catch (err: any) {
-      const msg = err.response?.data?.error || err.message;
+      const msg =
+        err.response?.data?.message || err.response?.data?.error || err.message;
       error_toast(msg);
       return rejectWithValue({ err, status: err.response?.status });
     }
@@ -84,12 +87,13 @@ export const updatePassword = createAsyncThunk<unknown, any>(
         { headers: { ...props.headers } }
       );
 
-      if (res?.data) {
+      if (res?.data?.code == 200 || res?.data?.status == "success") {
         success_toast(res.data.message || "Updated successfully");
       }
-      return res.data;
+      return res.data?.data;
     } catch (err: any) {
-      const msg = err.response?.data?.error || err.message;
+      const msg =
+        err.response?.data?.message || err.response?.data?.error || err.message;
       error_toast(msg);
       return rejectWithValue({ err, status: err.response?.status });
     }
@@ -106,12 +110,13 @@ export const forgotPassword = createAsyncThunk<unknown, any>(
         { headers: { ...props.headers } }
       );
 
-      if (res?.data) {
+      if (res?.data?.code == 200 || res?.data?.status == "success") {
         success_toast(res.data.message || "Verified successfully");
       }
-      return res.data;
+      return res.data?.data;
     } catch (err: any) {
-      const msg = err.response?.data?.error || err.message;
+      const msg =
+        err.response?.data?.message || err.response?.data?.error || err.message;
       error_toast(msg);
       return rejectWithValue({ err, status: err.response?.status });
     }
@@ -128,12 +133,13 @@ export const verifytokenPasswdLink = createAsyncThunk<unknown, any>(
         { headers: { ...props.headers } }
       );
 
-      if (res?.data) {
+      if (res?.data?.code == 200 || res?.data?.status == "success") {
         success_toast(res.data.message || "Verified successfully");
       }
-      return res.data;
+      return res.data?.data;
     } catch (err: any) {
-      const msg = err.response?.data?.error || err.message;
+      const msg =
+        err.response?.data?.message || err.response?.data?.error || err.message;
       error_toast(msg);
       return rejectWithValue({ err, status: err.response?.status });
     }
@@ -150,12 +156,13 @@ export const resetPassword = createAsyncThunk<unknown, any>(
         { headers: { ...props.headers } }
       );
 
-      if (res?.data) {
+      if (res?.data?.code == 200 || res?.data?.status == "success") {
         success_toast(res.data.message || "Changed password ccessfully");
       }
-      return res.data;
+      return res.data?.data;
     } catch (err: any) {
-      const msg = err.response?.data?.error || err.message;
+      const msg =
+        err.response?.data?.message || err.response?.data?.error || err.message;
       error_toast(msg);
       return rejectWithValue({ err, status: err.response?.status });
     }
@@ -172,12 +179,13 @@ export const resenndVerifyEmail = createAsyncThunk<unknown, any>(
         { headers: { ...props.headers } }
       );
 
-      if (res?.data) {
+      if (res?.data?.code == 200 || res?.data?.status == "success") {
         success_toast(res.data.message || "Email sent successfully");
       }
-      return res.data;
+      return res.data?.data;
     } catch (err: any) {
-      const msg = err.response?.data?.error || err.message;
+      const msg =
+        err.response?.data?.message || err.response?.data?.error || err.message;
       error_toast(msg);
       return rejectWithValue({ err, status: err.response?.status });
     }
@@ -293,7 +301,7 @@ const authSlice = createSlice({
       .addCase(getUserDetails.pending, (state) => {
         state.loading = true;
       })
-      .addCase(getUserDetails.fulfilled, (state, action) => {
+      .addCase(getUserDetails.fulfilled, (state, action: any) => {
         state.loading = false;
         state.allDetails = action.payload;
       })

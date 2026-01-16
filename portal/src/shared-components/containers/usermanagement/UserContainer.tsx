@@ -286,7 +286,7 @@ export default function UserContainer() {
 
   const ignoreArray = ["isVerified"];
 
-  const tooltipObj = formattedTenants.map((row) => {
+  const tooltipObj = formattedTenants?.map((row) => {
     const obj = {};
 
     for (const [key, value] of Object.entries(row)) {

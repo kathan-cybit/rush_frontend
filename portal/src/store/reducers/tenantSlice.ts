@@ -44,9 +44,10 @@ export const fetchUsers = createAsyncThunk<unknown, any>(
   async (params, { rejectWithValue }) => {
     try {
       const response = await axiosInstance.get(params.url);
-      return response.data;
+      return response?.data?.data;
     } catch (err: any) {
-      const error = err.response?.data?.error || err.message;
+      const error =
+        err.response?.data?.message || err.response?.data?.error || err.message;
       error_toast(error);
       return rejectWithValue({ error, status: err.response?.status });
     }
@@ -61,10 +62,11 @@ export const createTenant = createAsyncThunk<unknown, any>(
         `/admin/tenants`,
         params.payload
       );
-      success_toast(response.data.message || "Tenant created successfully");
-      return response.data;
+      success_toast(response?.data?.message || "Tenant created successfully");
+      return response?.data?.data;
     } catch (err: any) {
-      const error = err.response?.data?.error || err.message;
+      const error =
+        err.response?.data?.message || err.response?.data?.error || err.message;
       error_toast(error);
       return rejectWithValue({ error, status: err.response?.status });
     }
@@ -80,10 +82,11 @@ export const deleteTenant = createAsyncThunk<unknown, any>(
         props?.payload,
         { headers: { ...props.headers } }
       );
-      success_toast(response.data.message || "Tenant deleted successfully");
-      return response.data;
+      success_toast(response?.data?.message || "Tenant deleted successfully");
+      return response?.data?.data;
     } catch (err: any) {
-      const error = err.response?.data?.error || err.message;
+      const error =
+        err.response?.data?.message || err.response?.data?.error || err.message;
       error_toast(error);
       return rejectWithValue({ error, status: err.response?.status });
     }
@@ -98,10 +101,12 @@ export const updateTenant = createAsyncThunk<unknown, any>(
         `/admin/tenants/update`,
         params
       );
-      success_toast(response.data.message || "Tenant updated successfully");
-      return response.data;
+
+      success_toast(response?.data?.message || "Tenant updated successfully");
+      return response?.data?.data;
     } catch (err: any) {
-      const error = err.response?.data?.error || err.message;
+      const error =
+        err.response?.data?.message || err.response?.data?.error || err.message;
       error_toast(error);
       return rejectWithValue({ error, status: err.response?.status });
     }
@@ -115,9 +120,11 @@ export const fetchTenants = createAsyncThunk<unknown, any>(
       const response = await axiosInstance.get(
         `/admin/tenants?tenant=${currentTenant}`
       );
-      return response.data;
+
+      return response?.data?.data;
     } catch (err: any) {
-      const error = err.response?.data?.error || err.message;
+      const error =
+        err.response?.data?.message || err.response?.data?.error || err.message;
       error_toast(error);
       return rejectWithValue({ error, status: err.response?.status });
     }
@@ -132,10 +139,11 @@ export const createTenantUser = createAsyncThunk<unknown, any>(
         `/users?tenant=${props.currentTenant}`,
         props?.payload
       );
-      success_toast("User created successfully");
-      return response.data;
+      success_toast(response?.data?.message || "User created successfully");
+      return response?.data?.data;
     } catch (err: any) {
-      const error = err.response?.data?.error || err.message;
+      const error =
+        err.response?.data?.message || err.response?.data?.error || err.message;
       error_toast(error);
       return rejectWithValue({ error, status: err.response?.status });
     }
@@ -149,10 +157,11 @@ export const deleteTenantUser = createAsyncThunk<unknown, any>(
       const response = await axiosInstance.delete(`/users/${props.id}`, {
         headers: { ...props.headers },
       });
-      success_toast("User deleted successfully");
-      return response.data;
+      success_toast(response?.data?.message || "User deleted successfully");
+      return response?.data?.data;
     } catch (err: any) {
-      const error = err.response?.data?.error || err.message;
+      const error =
+        err.response?.data?.message || err.response?.data?.error || err.message;
       error_toast(error);
       return rejectWithValue({ error, status: err.response?.status });
     }
@@ -167,10 +176,11 @@ export const updateTenantUser = createAsyncThunk<unknown, any>(
         `/users/update/${props.id}?tenant=${props.currentTenant}`,
         props?.payload
       );
-      success_toast("User updated successfully");
-      return response.data;
+      success_toast(response?.data?.message || "User updated successfully");
+      return response?.data?.data;
     } catch (err: any) {
-      const error = err.response?.data?.error || err.message;
+      const error =
+        err.response?.data?.message || err.response?.data?.error || err.message;
       error_toast(error);
       return rejectWithValue({ error, status: err.response?.status });
     }
@@ -186,10 +196,11 @@ export const addRole = createAsyncThunk<unknown, any>(
         props?.payload,
         { headers: { ...props.headers } }
       );
-      success_toast(response.data.message || "Role added successfully");
-      return response.data;
+      success_toast(response?.data?.message || "Role added successfully");
+      return response?.data?.data;
     } catch (err: any) {
-      const error = err.response?.data?.error || err.message;
+      const error =
+        err.response?.data?.message || err.response?.data?.error || err.message;
       error_toast(error);
       return rejectWithValue({ error, status: err.response?.status });
     }
@@ -206,10 +217,11 @@ export const deleteRole = createAsyncThunk<unknown, any>(
           : `/admin/roles/${props.roleId}`,
         { headers: { ...props.headers } }
       );
-      success_toast(response.data.message || "Role deleted successfully");
-      return response.data;
+      success_toast(response?.data?.message || "Role deleted successfully");
+      return response?.data?.data;
     } catch (err: any) {
-      const error = err.response?.data?.error || err.message;
+      const error =
+        err.response?.data?.message || err.response?.data?.error || err.message;
       error_toast(error);
       return rejectWithValue({ error, status: err.response?.status });
     }
@@ -225,10 +237,13 @@ export const addPermssion = createAsyncThunk<unknown, any>(
         props?.payload,
         { headers: { ...props.headers } }
       );
-      success_toast(response.data.message || "permissions added successfully");
-      return response.data;
+      success_toast(
+        response?.data?.message || "permissions added successfully"
+      );
+      return response?.data?.data;
     } catch (err: any) {
-      const error = err.response?.data?.error || err.message;
+      const error =
+        err.response?.data?.message || err.response?.data?.error || err.message;
       error_toast(error);
       return rejectWithValue({ error, status: err.response?.status });
     }
@@ -243,9 +258,10 @@ export const getPermssion = createAsyncThunk<unknown, any>(
         props.role != "admin" ? `/users/permissions` : "/admin/permissions",
         { headers: { ...props.headers } }
       );
-      return response.data;
+      return response?.data?.data;
     } catch (err: any) {
-      const error = err.response?.data?.error || err.message;
+      const error =
+        err.response?.data?.message || err.response?.data?.error || err.message;
       error_toast(error);
       return rejectWithValue({ error, status: err.response?.status });
     }
@@ -261,9 +277,10 @@ export const getRoles = createAsyncThunk<unknown, any>(
         { headers: { ...props.headers } }
       );
 
-      return response.data;
+      return response?.data?.data;
     } catch (err: any) {
-      const error = err.response?.data?.error || err.message;
+      const error =
+        err.response?.data?.message || err.response?.data?.error || err.message;
       error_toast(error);
       return rejectWithValue({ error, status: err.response?.status });
     }
@@ -282,11 +299,12 @@ export const addPermissonRole = createAsyncThunk<unknown, any>(
         { headers: { ...props.headers } }
       );
       success_toast(
-        response.data.message || "addpermissionsroles added successfully"
+        response?.data?.message || "addpermissionsroles added successfully"
       );
-      return response.data;
+      return response?.data?.data;
     } catch (err: any) {
-      const error = err.response?.data?.error || err.message;
+      const error =
+        err.response?.data?.message || err.response?.data?.error || err.message;
       error_toast(error);
       return rejectWithValue({ error, status: err.response?.status });
     }
@@ -304,9 +322,10 @@ export const getPermissonRole = createAsyncThunk<unknown, any>(
         { headers: { ...props.headers } }
       );
 
-      return response.data;
+      return response?.data?.data;
     } catch (err: any) {
-      const error = err.response?.data?.error || err.message;
+      const error =
+        err.response?.data?.message || err.response?.data?.error || err.message;
       error_toast(error);
       return rejectWithValue({ error, status: err.response?.status });
     }
@@ -324,9 +343,10 @@ export const getAllPermissonRole = createAsyncThunk<unknown, any>(
         { headers: { ...props.headers } }
       );
 
-      return response.data;
+      return response?.data?.data;
     } catch (err: any) {
-      const error = err.response?.data?.error || err.message;
+      const error =
+        err.response?.data?.message || err.response?.data?.error || err.message;
       error_toast(error);
       return rejectWithValue({ error, status: err.response?.status });
     }
@@ -344,9 +364,10 @@ export const getAllRoleUsers = createAsyncThunk<unknown, any>(
         { headers: { ...props.headers } }
       );
 
-      return response.data;
+      return response?.data?.data;
     } catch (err: any) {
-      const error = err.response?.data?.error || err.message;
+      const error =
+        err.response?.data?.message || err.response?.data?.error || err.message;
       error_toast(error);
       return rejectWithValue({ error, status: err.response?.status });
     }
@@ -364,9 +385,10 @@ export const getAllUsersRolesPermissions = createAsyncThunk<unknown, any>(
         { headers: { ...props.headers } }
       );
 
-      return response.data;
+      return response?.data?.data;
     } catch (err: any) {
-      const error = err.response?.data?.error || err.message;
+      const error =
+        err.response?.data?.message || err.response?.data?.error || err.message;
       // error_toast(error);
       return rejectWithValue({ error, status: err.response?.status });
     }
@@ -382,14 +404,19 @@ export const addUsersExcel = createAsyncThunk<unknown, any>(
         props?.payload,
         { headers: { ...props.headers } }
       );
-      if (response.data?.success == true || response.data?.success == "true") {
-        success_toast(response.data.message || "users uploaded successfully");
+
+      if (
+        response?.data?.data?.success == true ||
+        response?.data?.data?.success == "true"
+      ) {
+        success_toast(response?.data?.message || "users uploaded successfully");
       } else {
-        return rejectWithValue({ response: response.data });
+        return rejectWithValue({ response: response?.data?.data });
       }
-      return response.data;
+      return response?.data?.data;
     } catch (err: any) {
-      const error = err.response?.data?.error || err.message;
+      const error =
+        err.response?.data?.message || err.response?.data?.error || err.message;
       error_toast(error);
       return rejectWithValue({ error, status: err.response?.status });
     }
@@ -405,14 +432,18 @@ export const addRolesExcel = createAsyncThunk<unknown, any>(
         props?.payload,
         { headers: { ...props.headers } }
       );
-      if (response.data?.success == true || response.data?.success == "true") {
-        success_toast(response.data.message || "roles uploaded successfully");
+      if (
+        response?.data?.data?.success == true ||
+        response?.data?.data?.success == "true"
+      ) {
+        success_toast(response?.data?.message || "roles uploaded successfully");
       } else {
-        return rejectWithValue({ response: response.data });
+        return rejectWithValue({ response: response?.data?.data });
       }
-      return response.data;
+      return response?.data?.data;
     } catch (err: any) {
-      const error = err.response?.data?.error || err.message;
+      const error =
+        err.response?.data?.message || err.response?.data?.error || err.message;
       error_toast(error);
       return rejectWithValue({ error, status: err.response?.status });
     }

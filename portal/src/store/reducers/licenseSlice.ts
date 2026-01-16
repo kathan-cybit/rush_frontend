@@ -12,9 +12,10 @@ export const getLicenseApps = createAsyncThunk<unknown, any>(
           headers: { ...props.headers },
         }
       );
-      return response.data;
+      return response?.data?.data;
     } catch (err: any) {
-      const error = err.response?.data?.error || err.message;
+      const error =
+        err.response?.data?.message || err.response?.data?.error || err.message;
       error_toast(error);
       return rejectWithValue({ error, status: err.response?.status });
     }
@@ -28,9 +29,10 @@ export const getAllLicenses = createAsyncThunk<unknown, any>(
       const response = await axiosInstance.get(`/users/getlicenses`, {
         headers: { ...props.headers },
       });
-      return response.data;
+      return response?.data?.data;
     } catch (err: any) {
-      const error = err.response?.data?.error || err.message;
+      const error =
+        err.response?.data?.message || err.response?.data?.error || err.message;
       error_toast(error);
       return rejectWithValue({ error, status: err.response?.status });
     }
@@ -44,9 +46,10 @@ export const getLicensesCount = createAsyncThunk<unknown, any>(
       const response = await axiosInstance.get(`/users/gettenantlicense`, {
         headers: { ...props.headers },
       });
-      return response.data;
+      return response?.data?.data;
     } catch (err: any) {
-      const error = err.response?.data?.error || err.message;
+      const error =
+        err.response?.data?.message || err.response?.data?.error || err.message;
       error_toast(error);
       return rejectWithValue({ error, status: err.response?.status });
     }
@@ -63,9 +66,10 @@ export const getAllTenantsWithLicenses = createAsyncThunk<unknown, any>(
           headers: { ...props.headers },
         }
       );
-      return response.data;
+      return response?.data?.data;
     } catch (err: any) {
-      const error = err.response?.data?.error || err.message;
+      const error =
+        err.response?.data?.message || err.response?.data?.error || err.message;
       error_toast(error);
       return rejectWithValue({ error, status: err.response?.status });
     }

@@ -6,6 +6,7 @@ import RoleComponent from "./role/RoleComponent";
 import UserComponent from "./usermanagement/UserComponent";
 import CreateUserComponent from "./usermanagement/CreateUserComponent";
 import UploadExcelForm from "./UploadExcelComponent/UploadExcelForm";
+import NotFoundComponent from "./notFound/NotFoundComponent";
 
 export {
   LoginComponent,
@@ -16,4 +17,5 @@ export {
   UserComponent,
   CreateUserComponent,
   UploadExcelForm,
+  NotFoundComponent,
 };

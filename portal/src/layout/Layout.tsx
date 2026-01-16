@@ -27,14 +27,14 @@ const Layout: React.FC = () => {
   const [opened, setOpened] = useState(false);
 
   const handleNavigateHome = () => {
-    navigate("/");
+    navigate("/dashboard");
   };
   const handleNavigateProfile = () => {
-    navigate("/");
+    navigate("/dashboard");
   };
 
   const handleNavigateSettings = () => {
-    navigate("/");
+    navigate("/dashboard");
   };
   const handleLogout = () => {
     dispatch(setLogout());
