@@ -60,8 +60,8 @@ export default function UserContainer({ navigateFunction }: any) {
 
   const [ErrorAlert, setErrorAlert] = useState("");
   const [selectedAction, setSelectedAction] = useState<any>(null);
+
   const actionOptions = [
-    // { value: "create", label: "Create New User" },
     { value: "bulk", label: "Bulk Upload" },
     { value: "download", label: "Download Sample File" },
   ];
@@ -265,9 +265,11 @@ export default function UserContainer({ navigateFunction }: any) {
         ) : (
           "Verified"
         ),
+      //this thing is done so that to get the latest updated entry to be shown first
+
       "Created At": formatUtcToIST(e.created_at),
       "Last Updated": formatUtcToIST(e.updated_at),
-      // 🔹 helper field for sorting (not changing UI)
+      //  helper field for sorting (not changing UI)
       _updatedAtRaw: e?.updated_at,
     }))
     ?.sort(

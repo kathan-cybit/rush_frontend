@@ -18,6 +18,37 @@ export default function ChangePassword({ setIsOpen }) {
   const host = new URL(window.location.href).hostname.split(".")[0];
   const { tenantType, user } = useSelector((state: RootState) => state.auth);
 
+  /*
+      React Hook Form setup for login form
+     
+      useForm<ChangePasswordForm> initializes form state management and validation
+      for the login flow.
+     
+      Extracted helpers:
+      - register:
+        Connects input fields to React Hook Form, enabling value tracking,
+        validation, and error handling.
+     
+      - handleSubmit:
+        Wraps the form submit handler and ensures validation runs
+        before invoking the submit callback.
+     
+      - setValue:
+        Programmatically sets the value of a specific form field.
+        Useful when values are updated via side effects or custom inputs.
+     
+      - watch:
+        Subscribes to form field changes and allows reacting to value updates
+        (e.g., conditional UI logic based on field values).
+     
+      - reset:
+        Resets the entire form to default or provided values.
+        Commonly used after successful submission or when switching tenants.
+     
+      - formState.errors:
+        Contains validation errors for each registered field.
+        Used to display field-level error messages in the UI.
+     */
   const {
     register,
     handleSubmit,
@@ -33,7 +64,7 @@ export default function ChangePassword({ setIsOpen }) {
           role: tenantType,
           payload: { id: user?.id, ...data },
           headers: { "x-tenant-id": host },
-        })
+        }),
       )
         .unwrap()
         .then(() => {

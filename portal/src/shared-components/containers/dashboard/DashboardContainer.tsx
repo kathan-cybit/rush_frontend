@@ -47,12 +47,6 @@ export default function DashboardContainer({ navigateFunction }: any) {
     (state: RootState) => state.license,
   );
 
-  const hasManageOrgSettings = allUsersRolesPermissions?.roles?.some((role) =>
-    role.permissions?.some(
-      (perm) => perm.name === "Manage Organization Settings",
-    ),
-  );
-
   useEffect(() => {
     if (!ConfirmDelete?.mode) {
       dispatch(
@@ -170,6 +164,7 @@ export default function DashboardContainer({ navigateFunction }: any) {
     },
   ];
 
+  // the data to be fed in for TABLEV2 for display of tenants for that table
   let formattedTenants: any[] = [];
 
   if (tenants && allApps) {
@@ -183,6 +178,7 @@ export default function DashboardContainer({ navigateFunction }: any) {
 
           _updatedAtRaw: tenant?.updated_at,
         };
+        //below check is done to display in (remaining)/(total) format
 
         if (Array.isArray(tenant?.licenses) && tenant.licenses.length > 0) {
           const licenseMap = new Map(
@@ -205,7 +201,7 @@ export default function DashboardContainer({ navigateFunction }: any) {
             )}/${totalLicenses}`;
           });
         }
-
+        //this thing is done so that to get the latest updated entry to be shown first
         row["Created At"] = formatUtcToIST(tenant?.created_at);
         row["Last Updated"] = formatUtcToIST(tenant?.updated_at);
 
@@ -219,6 +215,7 @@ export default function DashboardContainer({ navigateFunction }: any) {
 
       .map(({ _updatedAtRaw, ...rest }: any) => rest);
   }
+
   //this below operations are for custom tooltip displays
   //here, we will keep the field of custom tooltip we want to be displayed out of the ignoreArray.
 
@@ -283,7 +280,6 @@ export default function DashboardContainer({ navigateFunction }: any) {
     token,
     filteredApps,
     allTenantWithLicenses,
-    hasManageOrgSettings,
     tooltipObj,
     ConfirmDelete,
     setConfirmDelete,

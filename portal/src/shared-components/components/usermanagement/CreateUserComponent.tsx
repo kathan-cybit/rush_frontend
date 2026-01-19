@@ -3,6 +3,7 @@ import { BackIcon, EditIcon } from "../../../assets/svgs";
 import { Controller } from "react-hook-form";
 import Select from "react-select";
 import { CustomBreadCrumbs } from "../../ui";
+//this extra field is for the seletions of all options functionaklity
 const SELECT_ALL_OPTION = {
   label: "Select All",
   value: "__select_all__",
@@ -128,8 +129,8 @@ export default function CreateUserComponent({
           {FormStatus?.mode === "edit"
             ? "Edit User"
             : FormStatus?.mode === "view"
-            ? "View User"
-            : "New User"}
+              ? "View User"
+              : "New User"}
         </h2>
 
         <form onSubmit={handleSubmit}>
@@ -399,7 +400,7 @@ export default function CreateUserComponent({
                       FormStatus?.mode === "view" || allDetails?.is_single_org
                     }
                     value={roleOptions.filter((opt) =>
-                      field.value?.includes(opt.value)
+                      field.value?.includes(opt.value),
                     )}
                     placeholder="Select roles..."
                     onChange={(selected: any) => {
@@ -407,10 +408,11 @@ export default function CreateUserComponent({
                         field.onChange([]);
                         return;
                       }
+                      //this field is for the seletions of all options functionaklity
 
                       if (
                         selected.some(
-                          (opt: any) => opt.value === "__select_all__"
+                          (opt: any) => opt.value === "__select_all__",
                         )
                       ) {
                         field.onChange(roleOptions.map((r) => r.value));
@@ -457,6 +459,8 @@ export default function CreateUserComponent({
                   </div>
                 );
               })} */}
+
+            {/* this is the checkbox field with avaialbe counts to displayt he licneses available and to assign one */}
             {allApps?.length > 0 &&
               allApps
                 .filter((app: any) => licensedAppIdSet.has(app.id))
@@ -479,7 +483,7 @@ export default function CreateUserComponent({
                             setAssignedApps((prev: number[]) =>
                               prev.includes(app.id)
                                 ? prev.filter((x) => x !== app.id)
-                                : [...prev, app.id]
+                                : [...prev, app.id],
                             );
                           }}
                         />

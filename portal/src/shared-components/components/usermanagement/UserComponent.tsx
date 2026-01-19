@@ -181,6 +181,7 @@ export default function UserComponent({
                 menuItems={menuItems}
                 statusColorMap={statusColorMap}
                 tooltipObj={tooltipObj}
+                //need to provide true to enable customtolltip
                 customTooltip={true}
               />
             </div>

@@ -19,6 +19,7 @@ export default function LoginPage() {
   const tenant = params.get("tenant");
 
   useEffect(() => {
+    //this is to not let user access reset-password page unless valid token/verified
     if (location.pathname == "/reset-password") {
       if (!token || !tenant) {
         error_toast("token not provided");
@@ -37,6 +38,7 @@ export default function LoginPage() {
           if (res?.payload == true || res?.payload == "true") {
             dispatch(setLogout());
             setIsVerified(true);
+            //if verified continue and allow to reset
           } else {
             navigate("/login");
           }
@@ -46,6 +48,7 @@ export default function LoginPage() {
   }, [location.pathname, location.search, navigate]);
 
   if (location.pathname == "/reset-password" && !isVerified) {
+    //if invalid token or not verified then will throw u to login page
     error_toast("not verified");
     setTimeout(() => {
       return null;

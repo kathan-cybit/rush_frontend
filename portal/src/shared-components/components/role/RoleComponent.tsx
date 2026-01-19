@@ -124,7 +124,7 @@ export default function RoleComponent({
             />
           </div>
           <div className="flex gap-2">
-            {!allDetails?.is_single_org && (
+            {!allDetails?.is_single_org && host != "public" && (
               <div className="w-[125px]">
                 <Select
                   value={selectedAction}

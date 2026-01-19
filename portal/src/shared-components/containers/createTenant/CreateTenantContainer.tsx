@@ -57,6 +57,8 @@ const CreateTenantContainer: React.FC<any> = ({ navigateFunction }: any) =>
     const dispatch = useDispatch<AppDispatch>();
     const location = useLocation();
 
+    //since this component/file is common for create/update/view tenants, this is done to fetch the data for view/update if any
+    //otherwise will continue a create tennat page
     const safeState = useMemo(() => {
       return location.state && typeof location.state === "object"
         ? location.state
@@ -105,6 +107,43 @@ const CreateTenantContainer: React.FC<any> = ({ navigateFunction }: any) =>
         );
       }
     }, []);
+    /*
+      React Hook Form setup for Tenant form
+     
+      useForm<TenantFormValues> initializes form state management and validation
+      for the tenant create/edit flow.
+     
+      Extracted helpers:
+      - register:
+        Connects input fields to React Hook Form, enabling value tracking,
+        validation, and error handling.
+     
+      - handleSubmit:
+        Wraps the form submit handler and ensures validation runs
+        before invoking the submit callback.
+     
+      - setValue:
+        Programmatically sets the value of a specific form field.
+        Useful when values are updated via side effects or custom inputs.
+     
+      - watch:
+        Subscribes to form field changes and allows reacting to value updates
+        (e.g., conditional UI logic based on field values).
+     
+      - reset:
+        Resets the entire form to default or provided values.
+        Commonly used after successful submission or when switching tenants.
+     
+      - formState.errors:
+        Contains validation errors for each registered field.
+        Used to display field-level error messages in the UI.
+     
+      defaultValues:
+      - Pre-populates the form when editing an existing tenant (CurrData).
+      - Falls back to sensible defaults for new tenant creation.
+      - Normalizes backend values to match form field types
+        (e.g., boolean → string for singleOrganization).
+     */
 
     const {
       register,
@@ -128,6 +167,8 @@ const CreateTenantContainer: React.FC<any> = ({ navigateFunction }: any) =>
         singleOrganization: CurrData?.is_single_org === true ? "true" : "false",
       },
     });
+
+    //this field is to do the necessary ops for a org that is SINGLE USER
     const singleOrganizationWatcher = watch("singleOrganization");
 
     useEffect(() => {
@@ -152,7 +193,9 @@ const CreateTenantContainer: React.FC<any> = ({ navigateFunction }: any) =>
           const tenant = allTenantWithLicenses.find(
             (t: any) => t.tenant_id === CurrData.id,
           );
-
+          //in the database, this field/column of licenses object will have application_id along with COUNT that is TOTAL LICENSES
+          //  i.e licenses count that are in TOTAL per application
+          //thus the calculation and setting
           const initialLicenses = allApps.map((app: any) => ({
             application_id: app.id,
             count:

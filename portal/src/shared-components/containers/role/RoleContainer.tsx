@@ -73,6 +73,52 @@ export default function RoleContainer({ navigateFunction }: any) {
 
   const statusColorMap = {};
 
+  /*
+      React Hook Form setup for role form
+     
+    
+     
+      Extracted helpers:
+      - register:
+        Connects input fields to React Hook Form, enabling value tracking,
+        validation, and error handling.
+     
+      - handleSubmit:
+        Wraps the form submit handler and ensures validation runs
+        before invoking the submit callback.
+     
+      - setValue:
+        Programmatically sets the value of a specific form field.
+        Useful when values are updated via side effects or custom inputs.
+     
+      - watch:
+        Subscribes to form field changes and allows reacting to value updates
+        (e.g., conditional UI logic based on field values).
+     
+      - reset:
+        Resets the entire form to default or provided values.
+        Commonly used after successful submission or when switching roles.
+     
+      - Controller:
+        A wrapper component provided by React Hook Form that bridges
+        controlled components (e.g. React Select, DatePicker)
+        with the form state.
+ 
+      - control:
+        Core object used by React Hook Form to manage controlled components.
+        Required when using <Controller /> to integrate third-party or
+        custom inputs that do not expose a ref or do not work with `register`.
+  
+      - formState.errors:
+        Contains validation errors for each registered field.
+        Used to display field-level error messages in the UI.
+     
+      defaultValues:
+      - Pre-populates the form when editing an existing role .
+      - Falls back to sensible defaults for new role creation.
+      - Normalizes backend values to match form field types
+     */
+
   const {
     control: controlAssign,
     handleSubmit: handleSubmitAssign,
@@ -250,10 +296,12 @@ export default function RoleContainer({ navigateFunction }: any) {
     }
   }, [ConfirmDelete]);
 
+  //ids which is used in further calculation for preselected permissions per role
   const selectedPermissionIds = useMemo(() => {
     return (permissionsRoles || []).map((item) => item.Permission?.id);
   }, [permissionsRoles]);
 
+  //to format the permissiojs data in label annd value format
   const permissionOptions = useMemo(() => {
     return (allPermissions || []).map((p: any) => ({
       value: p.id,
@@ -261,12 +309,14 @@ export default function RoleContainer({ navigateFunction }: any) {
     }));
   }, [allPermissions]);
 
+  // the pre selected permisisons options
   const preSelectedOptions = useMemo(() => {
     return permissionOptions.filter((opt) =>
       selectedPermissionIds.includes(opt.value),
     );
   }, [permissionOptions, selectedPermissionIds]);
 
+  // this is to display all permissions seperated by comma
   const permissionMap = useMemo(() => {
     return Object.fromEntries(
       allpermissionsroles.map((r) => [
@@ -276,6 +326,7 @@ export default function RoleContainer({ navigateFunction }: any) {
     );
   }, [allpermissionsroles, EditRole]);
 
+  // data to be fed to display all roles table
   const formattedRoles = useMemo(() => {
     if (!allRoles) return [];
 

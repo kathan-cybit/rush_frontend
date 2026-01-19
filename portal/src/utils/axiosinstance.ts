@@ -13,6 +13,7 @@ const axiosInstance = axios.create({
   },
 });
 
+// interceptor functions for axios api calls which gets implenered before and after evry api calls
 axiosInstance.interceptors.request.use(
   (config) => {
     const token = localStorage.getItem("auth_token");
@@ -24,7 +25,7 @@ axiosInstance.interceptors.request.use(
   },
   (error) => {
     return Promise.reject(error);
-  }
+  },
 );
 
 axiosInstance.interceptors.response.use(
@@ -33,6 +34,7 @@ axiosInstance.interceptors.response.use(
   },
   (error) => {
     if (error.response && error.response.status == 401) {
+      // a browser safe fallback if token expired or unauthirized
       if (window.location.pathname != "/login") {
         localStorage.clear();
         setTimeout(() => {
@@ -42,7 +44,7 @@ axiosInstance.interceptors.response.use(
     }
 
     return Promise.reject(error);
-  }
+  },
 );
 
 export default axiosInstance;

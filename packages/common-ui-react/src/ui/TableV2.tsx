@@ -90,12 +90,12 @@ export const TableV2 = <T extends Record<string, any>>({
     const columnMatch = Object.entries(columnSearch)
       .filter(([_, value]) => value?.trim()) // ✅ Only filter non-empty fields
       .every(([key, value]) =>
-        item[key]?.toString().toLowerCase().includes(value.toLowerCase())
+        item[key]?.toString().toLowerCase().includes(value.toLowerCase()),
       );
 
     const globalMatch = searchTerm
       ? Object.values(item).some((val) =>
-          val?.toString().toLowerCase().includes(searchTerm.toLowerCase())
+          val?.toString().toLowerCase().includes(searchTerm.toLowerCase()),
         )
       : true;
 
@@ -135,7 +135,7 @@ export const TableV2 = <T extends Record<string, any>>({
   const totalPages = Math.ceil(sortedData.length / rowsPerPage);
   const paginatedData = sortedData.slice(
     (activePage - 1) * rowsPerPage,
-    activePage * rowsPerPage
+    activePage * rowsPerPage,
   );
 
   // const headings = data.length > 0 ? Object.keys(data[0]) : [];
@@ -149,7 +149,7 @@ export const TableV2 = <T extends Record<string, any>>({
             key !== "project_id" &&
             key !== "lat" &&
             key !== "lon" &&
-            key !== "iseditable"
+            key !== "iseditable",
         )
       : [];
   const totalColumns = headings.length + (hideAction ? 0 : 1);
@@ -348,13 +348,15 @@ export const TableV2 = <T extends Record<string, any>>({
                             overflow: "hidden",
                           }}
                         >
+                          {/* here if customtooltip is false then it will work as it is in the old fashioned way */}
+                          {/* BUT, if true then will search for the key in the tooltipObj for tooltip otherwise again will set the tooltip as default content  */}
                           <Tooltip
                             label={
                               customTooltip && tooltipObj?.[idx]?.[key]
                                 ? tooltipObj[idx][key]
                                 : String(content) === "N/A"
-                                ? "Not available"
-                                : String(content)
+                                  ? "Not available"
+                                  : String(content)
                             }
                             withArrow
                             position="top-start"
@@ -415,7 +417,7 @@ export const TableV2 = <T extends Record<string, any>>({
                                   year: "numeric",
                                 })
                               ) : (
-                                row[key] ?? "N/A"
+                                (row[key] ?? "N/A")
                               )}
                             </div>
                           </Tooltip>

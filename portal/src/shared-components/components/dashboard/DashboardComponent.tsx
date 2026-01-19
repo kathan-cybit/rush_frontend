@@ -23,7 +23,6 @@ interface DashboardProps {
 }
 
 export default function DashboardComponent({
-  hasManageOrgSettings,
   allApps,
   token,
   allLicenses,
@@ -57,6 +56,7 @@ export default function DashboardComponent({
           <Loader />
         </div>
       )}
+
       <div className="flex justify-between mb-5">
         {host !== "public" ? (
           <div>
@@ -81,6 +81,8 @@ export default function DashboardComponent({
             )}
           </>
         )}
+        {/* here the  below section is for the display of the apps cards that are assigned to the user or admin. if admin it will also display the count otherwisr just the apps cards
+        thats why the filters are applied */}
         {host != "public" && user?.is_default_admin ? (
           <div>
             {!FormStatus.mode && (
@@ -132,8 +134,8 @@ export default function DashboardComponent({
                           e?.name == "ICXpert"
                             ? ICExpert
                             : e?.name == "PoleXpert"
-                            ? PoleExpert
-                            : SimExpert
+                              ? PoleExpert
+                              : SimExpert
                         }
                         alt="Teams"
                       />
@@ -147,7 +149,7 @@ export default function DashboardComponent({
                         allLicenses.filter(
                           (license): any =>
                             license.application_id == e?.id &&
-                            license.status == "free"
+                            license.status == "free",
                         )?.length
                       }{" "}
                       out of{" "}
@@ -213,6 +215,7 @@ export default function DashboardComponent({
                 menuItems={menuItems}
                 statusColorMap={statusColorMap}
                 tooltipObj={tooltipObj}
+                //need to provide true to enable customtolltip
                 customTooltip={true}
               />
             )}
@@ -229,7 +232,7 @@ export default function DashboardComponent({
                 allLicenses
                   .filter((item) => item.assigned_to == user?.id)
                   .map((item) => item.application_id)
-                  .includes(app.id)
+                  .includes(app.id),
               )
               ?.map((e: any, index: number | string) => {
                 return (
@@ -246,8 +249,8 @@ export default function DashboardComponent({
                             e?.name == "ICXpert"
                               ? ICExpert
                               : e?.name == "PoleXpert"
-                              ? PoleExpert
-                              : SimExpert
+                                ? PoleExpert
+                                : SimExpert
                           }
                           alt="Teams"
                         />

@@ -41,6 +41,8 @@ export default function CreateUserContainer({
   setdisplayAlert,
 }: any) {
   const location = useLocation();
+  //since this component/file is common for create/update/view users, this is done to fetch the data for view/update if any
+  //otherwise will continue a create user page
   const safeState = useMemo(() => {
     return location.state && typeof location.state === "object"
       ? location.state
@@ -100,6 +102,52 @@ export default function CreateUserContainer({
       }),
     );
   }, []);
+
+  /*
+      React Hook Form setup for user form
+     
+    
+     
+      Extracted helpers:
+      - register:
+        Connects input fields to React Hook Form, enabling value tracking,
+        validation, and error handling.
+     
+      - handleSubmit:
+        Wraps the form submit handler and ensures validation runs
+        before invoking the submit callback.
+     
+      - setValue:
+        Programmatically sets the value of a specific form field.
+        Useful when values are updated via side effects or custom inputs.
+     
+      - watch:
+        Subscribes to form field changes and allows reacting to value updates
+        (e.g., conditional UI logic based on field values).
+     
+      - reset:
+        Resets the entire form to default or provided values.
+        Commonly used after successful submission or when switching users.
+     
+      - Controller:
+        A wrapper component provided by React Hook Form that bridges
+        controlled components (e.g. React Select, DatePicker)
+        with the form state.
+ 
+      - control:
+        Core object used by React Hook Form to manage controlled components.
+        Required when using <Controller /> to integrate third-party or
+        custom inputs that do not expose a ref or do not work with `register`.
+  
+      - formState.errors:
+        Contains validation errors for each registered field.
+        Used to display field-level error messages in the UI.
+     
+      defaultValues:
+      - Pre-populates the form when editing an existing user .
+      - Falls back to sensible defaults for new user creation.
+      - Normalizes backend values to match form field types
+     */
 
   const {
     control,
