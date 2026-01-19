@@ -110,13 +110,6 @@ export default function RoleComponent({
       <div className="flex flex-col">
         <div className="flex justify-between mb-8">
           <div>
-            {/* <h1 className="mb-0 font-fsecondary text-[32px] text-[500] leading-[140%] tracking-[0.25px]">
-                {"Hi," +
-                  " " +
-                  (user?.first_name || user?.username || "") +
-                  " " +
-                  (user?.last_name || "")}
-              </h1> */}
             <CustomBreadCrumbs
               separator=">"
               items={BreadCrumbItems}
@@ -347,7 +340,6 @@ export default function RoleComponent({
       {OpenForm && (
         <Dialog
           title="Create Roles"
-          // size={"xl"}
           opened={OpenForm}
           onClose={() => setOpenForm(false)}
         >

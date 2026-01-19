@@ -18,10 +18,16 @@ const Layout: React.FC = () => {
   const dispatch = useDispatch<AppDispatch>();
   const location = useLocation();
 
-  const { tenantType, user } = useSelector((state: RootState) => state.auth);
+  const { tenantType, user, loading } = useSelector(
+    (state: RootState) => state.auth,
+  );
 
   const { tenants, isLoading, allUsersRolesPermissions } = useSelector(
-    (state: RootState) => state.tenant
+    (state: RootState) => state.tenant,
+  );
+
+  const { loading: loading2 } = useSelector(
+    (state: RootState) => state.license,
   );
   const [collapsed, setCollapsed] = useState(true);
   const [opened, setOpened] = useState(false);
@@ -67,7 +73,7 @@ const Layout: React.FC = () => {
   const host = new URL(window.location.href).hostname.split(".")[0];
 
   const hasManageOrgSettings = allUsersRolesPermissions?.roles?.some((role) =>
-    role.permissions?.some((perm) => perm?.slug == "manage_corporate_user")
+    role.permissions?.some((perm) => perm?.slug == "manage_corporate_user"),
   );
 
   const navItems =
@@ -112,6 +118,8 @@ const Layout: React.FC = () => {
         breakpoint: "sm",
         collapsed: { mobile: !opened },
       }}
+      //not to allow pointer events during loading
+      className={`${loading || loading2 || isLoading ? " pointer-events-none " : " "}`}
     >
       <AdminNavbar
         user={user}
@@ -135,7 +143,7 @@ const Layout: React.FC = () => {
         />
       )}
       <AppShellMain
-        className="flex flex-col h-full overflow-hidden"
+        className={`flex flex-col h-full overflow-hidden `}
         // className={
         //   currentPathname == "/dashboard" || tenantType == "admin"
         //     ? "admin-content admin-container mx-auto px-2 sm:px-6 lg:px-6 xl:pl-0"

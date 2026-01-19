@@ -25,12 +25,6 @@ export default function NotFoundComponent() {
             >
               Return Home
             </Link>
-            {/* <a
-                                href="#"
-                                className="px-7 py-2.5 border border-gray-300 rounded-md text-gray-800 active:scale-95 transition-all"
-                              >
-                                Contact support
-                              </a> */}
           </div>
         </div>
       </div>

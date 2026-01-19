@@ -1,5 +1,5 @@
 import React from "react";
-import { Loader, Modal, TableV2 } from "../../ui";
+import { Modal } from "../../ui";
 
 export default function ConfirmDeleteModal({
   ConfirmDelete,

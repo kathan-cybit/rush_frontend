@@ -34,9 +34,6 @@ interface FormStatus {
 }
 
 export default function CreateUserContainer({
-  // CurrData = {},
-  // FormStatus = { mode: null, userId: null },
-  // setFormStatus,
   navigateFunction,
   setdisplayAlert,
 }: any) {

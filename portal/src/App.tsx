@@ -24,10 +24,10 @@ function App() {
   const location = useLocation();
   const dispatch = useDispatch<AppDispatch>();
   const { token, tenantType, user, allDetails } = useSelector(
-    (state: RootState) => state.auth
+    (state: RootState) => state.auth,
   );
   const { tenants, isLoading, allUsersRolesPermissions } = useSelector(
-    (state: RootState) => state.tenant
+    (state: RootState) => state.tenant,
   );
   useEffect(() => {
     const host = new URL(window.location.href).hostname.split(".")[0];
@@ -45,12 +45,12 @@ function App() {
         getAllUsersRolesPermissions({
           params: user?.id,
           headers: { "x-tenant-id": host },
-        })
+        }),
       );
       dispatch(
         getUserDetails({
           headers: { "x-tenant-id": host },
-        })
+        }),
       );
     }
     if (location?.pathname == "/reset-password") {
@@ -58,8 +58,9 @@ function App() {
     }
   }, []);
 
+  //allow the tenant specific user having role as manage_corporate_user to access the admin routes
   const hasManageOrgSettings = allUsersRolesPermissions?.roles?.some((role) =>
-    role.permissions?.some((perm) => perm?.slug == "manage_corporate_user")
+    role.permissions?.some((perm) => perm?.slug == "manage_corporate_user"),
   );
 
   return (

@@ -20,5 +20,5 @@ createRoot(document.getElementById("root")!).render(
         <Toaster />
       </BrowserRouter>
     </Provider>
-  </MantineProvider>
+  </MantineProvider>,
 );

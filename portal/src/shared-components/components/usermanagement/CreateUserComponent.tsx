@@ -432,34 +432,6 @@ export default function CreateUserComponent({
           </h3>
 
           <div className="flex flex-wrap justify-center mb-[20px] px-[12px] w-full">
-            {/* {allApps?.length > 0 &&
-              allApps.map((app: any) => {
-                const availableCount = licenseCountMap[app.id] ?? 0;
-
-                return (
-                  <div key={app.id} className="mb-[10px] w-[25%]">
-                    <label className="flex items-center gap-2 text-[#1f2937] text-[14px]">
-                      <input
-                        type="checkbox"
-                        disabled={FormStatus?.mode == "view"}
-                        checked={assignedApps.includes(app.id)}
-                        onChange={() => {
-                          setAssignedApps((prev: number[]) =>
-                            prev.includes(app.id)
-                              ? prev.filter((x) => x != app.id)
-                              : [...prev, app.id]
-                          );
-                        }}
-                      />
-                      {app.name}
-                      <span className="text-gray-500 text-xs">
-                        ({availableCount} available)
-                      </span>
-                    </label>
-                  </div>
-                );
-              })} */}
-
             {/* this is the checkbox field with avaialbe counts to displayt he licneses available and to assign one */}
             {allApps?.length > 0 &&
               allApps
