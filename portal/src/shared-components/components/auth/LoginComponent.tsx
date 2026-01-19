@@ -19,7 +19,7 @@ interface LoginProps {
 
 export default function LoginComponent({
   email,
-  navigate,
+  navigateFunction,
   password,
   error,
   loading,
@@ -116,7 +116,7 @@ export default function LoginComponent({
 
               <h5
                 onClick={() => {
-                  navigate("/forget-password");
+                  navigateFunction("/forget-password");
                 }}
                 className="hover:opacity-[0.8] mt-2 font-[500] text-[14px] text-bsecondary text-center leading-[140%] cursor-pointer"
               >
@@ -168,7 +168,7 @@ export default function LoginComponent({
                     <button
                       className="rounded-[4px] w-full h-[45px] primaryc-btn"
                       onClick={() => {
-                        navigate("/login");
+                        navigateFunction("/login");
                       }}
                     >
                       Go to Login

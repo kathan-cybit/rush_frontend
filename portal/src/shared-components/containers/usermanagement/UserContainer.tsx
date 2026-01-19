@@ -13,7 +13,6 @@ import {
 import { AppDispatch, RootState } from "../../../store/store";
 import { useDispatch, useSelector } from "react-redux";
 import { UserComponent } from "../../components";
-import { useNavigate } from "react-router-dom";
 import {
   getUserDetails,
   resenndVerifyEmail,
@@ -24,10 +23,9 @@ import { getLicenseApps } from "../../../store/reducers/licenseSlice";
 import { USersFile } from "../../../assets/img";
 import { error_toast } from "../../../utils/toaster";
 
-export default function UserContainer() {
+export default function UserContainer({ navigateFunction }: any) {
   const host = new URL(globalThis.location.href).hostname.split(".")[0];
 
-  const navigate = useNavigate();
   const dispatch = useDispatch<AppDispatch>();
   const { users: userData, isLoading: loading } = useSelector(
     (state: RootState) => state.tenant,
@@ -79,10 +77,6 @@ export default function UserContainer() {
       case "bulk":
         setOpenForm(true);
         break;
-
-      // case "create":
-      //   navigate("/createuser");
-      //   break;
     }
 
     setSelectedAction(null);
@@ -156,14 +150,14 @@ export default function UserContainer() {
       const data = userData.find((e: any) => e.id === FormStatus.userId);
 
       if (FormStatus.mode == "view") {
-        navigate("/viewuser", {
+        navigateFunction("/viewuser", {
           state: {
             CurrData: data,
             FormStatus: FormStatus,
           },
         });
       } else {
-        navigate("/updateuser", {
+        navigateFunction("/updateuser", {
           state: {
             CurrData: data,
             FormStatus: FormStatus,
@@ -315,7 +309,7 @@ export default function UserContainer() {
     {
       title: "Home",
       onClick: () => {
-        navigate("/dashboard");
+        navigateFunction("/dashboard");
       },
     },
     {
@@ -350,6 +344,7 @@ export default function UserContainer() {
     modalClose,
     deleteEntry,
     ConfirmDelete,
+    navigateFunction,
   };
 
   return (

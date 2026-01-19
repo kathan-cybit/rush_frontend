@@ -10,11 +10,7 @@ import {
   Tooltip,
   MultiSelect,
 } from "../../ui";
-import { CreateUserContainer } from "../../containers";
-import { useNavigate } from "react-router-dom";
 import { UploadExcelForm } from "../index";
-import { DownloadIcn, Dropdown } from "../../../assets/svgs";
-import { exportToCSV } from "../../../utils/exports";
 import Select from "react-select";
 import ConfirmDeleteModal from "../confirmDeleteModal/confirmDeleteModal";
 
@@ -54,8 +50,8 @@ export default function UserComponent({
   modalClose,
   deleteEntry,
   ConfirmDelete,
+  navigateFunction,
 }: any) {
-  const navigate = useNavigate();
   return (
     <div>
       {(loading || loading2) && (
@@ -157,7 +153,7 @@ export default function UserComponent({
                     {!allDetails?.is_single_org && (
                       <button
                         onClick={() => {
-                          navigate("/createuser");
+                          navigateFunction("/createuser");
                         }}
                         type="submit"
                         className="inline-flex float-end items-center gap-2 bg-bsecondary hover:opacity-[0.75] px-7 py-3 border-none rounded-lg h-[45px] font-medium text-white text-sm transition-all duration-200 cursor-pointer"
@@ -191,21 +187,10 @@ export default function UserComponent({
           )}
         </>
       )}
-      {/* {FormStatus.mode && FormStatus.userId && CurrData && (
-        <>
-          <CreateUserContainer
-            allUsersRoles={allUsersRoles}
-            setFormStatus={setFormStatus}
-            FormStatus={FormStatus}
-            CurrData={CurrData}
-            setdisplayAlert={setdisplayAlert}
-          />
-        </>
-      )} */}
+
       {OpenForm && (
         <Dialog
           title="Create Users"
-          // size={"xl"}
           opened={OpenForm}
           onClose={() => setOpenForm(false)}
         >
@@ -230,39 +215,3 @@ export default function UserComponent({
     </div>
   );
 }
-//  <div className="flex gap-2">
-//                 {!allDetails?.is_single_org && (
-//                   <Tooltip label="Download Sample File">
-//                     <a
-//                       href={USersFile}
-//                       className="inline-flex float-end items-center gap-2 bg-bsecondary hover:opacity-[0.75] px-7 py-3 border-none rounded-lg h-[45px] font-medium text-white text-sm transition-all duration-200 cursor-pointer"
-//                     >
-//                       <DownloadIcn />
-//                       {/* <span>Download Sample File</span> */}
-//                     </a>
-//                   </Tooltip>
-//                 )}
-//                 {!allDetails?.is_single_org && (
-//                   <button
-//                     onClick={() => {
-//                       setOpenForm(true);
-//                       // exportToCSV(formattedTenants, "hellow");
-//                     }}
-//                     className="inline-flex float-end items-center gap-2 bg-bsecondary hover:opacity-[0.75] px-7 py-3 border-none rounded-lg h-[45px] font-medium text-white text-sm transition-all duration-200 cursor-pointer"
-//                   >
-//                     Bulk upload
-//                   </button>
-//                 )}
-//                 {!allDetails?.is_single_org && (
-//                   <button
-//                     onClick={() => {
-//                       navigate("/createuser");
-//                     }}
-//                     type="submit"
-//                     className="inline-flex float-end items-center gap-2 bg-bsecondary hover:opacity-[0.75] px-7 py-3 border-none rounded-lg h-[45px] font-medium text-white text-sm transition-all duration-200 cursor-pointer"
-//                   >
-//                     Create New User
-//                   </button>
-//                 )}
-//               </div>
-//             </div>

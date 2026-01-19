@@ -17,9 +17,9 @@ import {
 } from "../../../store/reducers/licenseSlice";
 import { formatUtcToIST } from "../../../utils/commonFunctions";
 
-export default function DashboardContainer() {
+export default function DashboardContainer({ navigateFunction }: any) {
   const dispatch = useDispatch<AppDispatch>();
-  const navigate = useNavigate();
+
   const host = new URL(globalThis.location.href).hostname.split(".")[0];
   const statusColorMap = {
     active: "green",
@@ -99,14 +99,14 @@ export default function DashboardContainer() {
       const data = tenants.find((e: any) => e.id == FormStatus.tenant);
 
       if (FormStatus.mode == "view") {
-        navigate("/viewtenant", {
+        navigateFunction("/viewtenant", {
           state: {
             CurrData: data,
             FormStatus: FormStatus,
           },
         });
       } else {
-        navigate("/edittenant", {
+        navigateFunction("/edittenant", {
           state: {
             CurrData: data,
             FormStatus: FormStatus,
@@ -117,7 +117,7 @@ export default function DashboardContainer() {
   }, [FormStatus, tenants]);
 
   const handleCreateTenant = () => {
-    navigate(host == "public" ? "/createtenant" : "/usermanagement");
+    navigateFunction(host == "public" ? "/createtenant" : "/usermanagement");
   };
 
   const handleViewTenant = (row: any) => {

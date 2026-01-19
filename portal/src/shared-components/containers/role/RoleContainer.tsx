@@ -14,17 +14,15 @@ import { AppDispatch, RootState } from "../../../store/store";
 import { useForm } from "react-hook-form";
 import { error_toast } from "../../../utils/toaster";
 import EditIcn from "../../../assets/svgs/EditIcn";
-import { useNavigate } from "react-router-dom";
 import { formatUtcToIST } from "../../../utils/commonFunctions";
 import { getUserDetails } from "../../../store/reducers/authSlice";
 import { RolesFile } from "../../../assets/img";
 import { DeleteIcon } from "../../../assets/svgs";
 
-export default function RoleContainer() {
-  const navigate = useNavigate();
+export default function RoleContainer({ navigateFunction }: any) {
   const dispatch = useDispatch<AppDispatch>();
   const { tenantType, user, allDetails } = useSelector(
-    (state: RootState) => state.auth
+    (state: RootState) => state.auth,
   );
   const host = new URL(globalThis.location.href).hostname.split(".")[0];
 
@@ -120,7 +118,7 @@ export default function RoleContainer() {
         role: tenantType,
         payload,
         headers: { "x-tenant-id": host },
-      })
+      }),
     )
       .unwrap()
       .then(() => {
@@ -130,7 +128,7 @@ export default function RoleContainer() {
             headers: {
               "x-tenant-id": host,
             },
-          })
+          }),
         );
         reset();
         handleModalClose();
@@ -160,7 +158,7 @@ export default function RoleContainer() {
         role: tenantType,
         payload,
         headers: { "x-tenant-id": host },
-      })
+      }),
     )
       .unwrap()
       .then(() => {
@@ -170,7 +168,7 @@ export default function RoleContainer() {
             headers: {
               "x-tenant-id": host,
             },
-          })
+          }),
         );
         setRoleForm({
           name: "",
@@ -197,7 +195,7 @@ export default function RoleContainer() {
             headers: {
               "x-tenant-id": host,
             },
-          })
+          }),
         );
       }
       if (!OpenForm) {
@@ -207,7 +205,7 @@ export default function RoleContainer() {
             headers: {
               "x-tenant-id": host,
             },
-          })
+          }),
         );
       }
 
@@ -219,7 +217,7 @@ export default function RoleContainer() {
             headers: {
               "x-tenant-id": host,
             },
-          })
+          }),
         );
       }
     }
@@ -234,7 +232,7 @@ export default function RoleContainer() {
             headers: {
               "x-tenant-id": host,
             },
-          })
+          }),
         );
       }
     }
@@ -246,7 +244,7 @@ export default function RoleContainer() {
         dispatch(
           getUserDetails({
             headers: { "x-tenant-id": host },
-          })
+          }),
         );
       }
     }
@@ -265,7 +263,7 @@ export default function RoleContainer() {
 
   const preSelectedOptions = useMemo(() => {
     return permissionOptions.filter((opt) =>
-      selectedPermissionIds.includes(opt.value)
+      selectedPermissionIds.includes(opt.value),
     );
   }, [permissionOptions, selectedPermissionIds]);
 
@@ -274,7 +272,7 @@ export default function RoleContainer() {
       allpermissionsroles.map((r) => [
         r.role_id,
         r.permissions.map((p) => p.name).join(", "),
-      ])
+      ]),
     );
   }, [allpermissionsroles, EditRole]);
 
@@ -297,7 +295,7 @@ export default function RoleContainer() {
       .sort(
         (a, b) =>
           new Date(b._updatedAtRaw).getTime() -
-          new Date(a._updatedAtRaw).getTime()
+          new Date(a._updatedAtRaw).getTime(),
       )
 
       .map(({ _updatedAtRaw, ...rest }) => rest);
@@ -311,7 +309,7 @@ export default function RoleContainer() {
     {
       title: "Home",
       onClick: () => {
-        navigate("/dashboard");
+        navigateFunction("/dashboard");
       },
     },
     {
@@ -344,7 +342,7 @@ export default function RoleContainer() {
         role: tenantType,
         roleId: row?.id,
         headers: { "x-tenant-id": host },
-      })
+      }),
     )
       .unwrap()
       .then(() => {

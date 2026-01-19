@@ -7,7 +7,7 @@ import {
   resetPassword,
 } from "../../../store/reducers/authSlice";
 import { LoginComponent } from "../../components";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useLocation } from "react-router-dom";
 import { error_toast } from "../../../utils/toaster";
 
 const normalizeEmail = (email: string) => {
@@ -21,13 +21,15 @@ const normalizeEmail = (email: string) => {
   return `${localPart.toLowerCase()}@${domainPart}`;
 };
 
-export default function LoginContainer({ token = null }) {
+export default function LoginContainer({
+  token = null,
+  navigateFunction,
+}: any) {
   const host = new URL(globalThis.location.href).hostname.split(".")[0];
   const location = useLocation();
-  const navigate = useNavigate();
   const dispatch = useDispatch<AppDispatch>();
   const { currentTenantName, loading } = useSelector(
-    (state: RootState) => state.auth
+    (state: RootState) => state.auth,
   );
 
   const [email, setEmail] = useState<string>("");
@@ -62,7 +64,7 @@ export default function LoginContainer({ token = null }) {
 
       if (currentTenantName) {
         dispatch(
-          loginUser({ currentTenantName, email: normalizedEmail, password })
+          loginUser({ currentTenantName, email: normalizedEmail, password }),
         );
       }
     } else if (location?.pathname == "/forget-password") {
@@ -78,11 +80,11 @@ export default function LoginContainer({ token = null }) {
           forgotPassword({
             payload: { email: normalizedEmail },
             headers: { "x-tenant-id": host },
-          })
+          }),
         )
           .then((res: any) => {
             if (res?.userFound) {
-              navigate("/dashboard");
+              navigateFunction("/dashboard");
             } else {
               console.log("");
             }
@@ -112,18 +114,18 @@ export default function LoginContainer({ token = null }) {
               tenant: host,
             },
             headers: { "x-tenant-id": host },
-          })
+          }),
         )
           .unwrap()
           .then((res: any) => {
-            if (res?.success) {
-              navigate("/login");
+            if (res) {
+              navigateFunction("/login");
             }
           })
           .catch(() => {});
       } else {
         error_toast("something went wrong");
-        navigate("/login");
+        navigateFunction("/login");
       }
     } else {
       console.log("");
@@ -148,7 +150,7 @@ export default function LoginContainer({ token = null }) {
     onPasswordChange,
     onLogin,
     host,
-    navigate,
+    navigateFunction,
     location,
     newPassword,
     confirmPassword,

@@ -51,9 +51,8 @@ const CreateTenantComponent: React.FC<any> = ({
   BreadCrumbItems,
   allTenantWithLicenses,
   singleOrganizationWatcher,
+  navigateFunction,
 }) => {
-  const navigate = useNavigate();
-
   return (
     <>
       {isLoading && (
@@ -72,7 +71,7 @@ const CreateTenantComponent: React.FC<any> = ({
                   if (FormStatus?.mode) {
                     handleReset(null, null);
                   } else {
-                    navigate("/dashboard");
+                    navigateFunction("/dashboard");
                   }
                 }}
               >
@@ -96,7 +95,7 @@ const CreateTenantComponent: React.FC<any> = ({
             {FormStatus?.mode === "view" && (
               <button
                 onClick={() => {
-                  navigate("/edittenant", {
+                  navigateFunction("/edittenant", {
                     state: {
                       CurrData: CurrData,
                       FormStatus: { mode: "edit", tenant: CurrData.id },

@@ -37,6 +37,7 @@ export default function CreateUserContainer({
   // CurrData = {},
   // FormStatus = { mode: null, userId: null },
   // setFormStatus,
+  navigateFunction,
   setdisplayAlert,
 }: any) {
   const location = useLocation();
@@ -51,7 +52,7 @@ export default function CreateUserContainer({
     mode: null,
     tenant: null,
   };
-  const navigate = useNavigate();
+
   const dispatch = useDispatch<AppDispatch>();
   const {
     tenantType,
@@ -147,7 +148,7 @@ export default function CreateUserContainer({
   const onDiscard = () => {
     reset();
 
-    navigate("/usermanagement", { replace: true });
+    navigateFunction("/usermanagement", { replace: true });
   };
 
   const onSubmit = async (data: UserFormValues) => {
@@ -185,14 +186,14 @@ export default function CreateUserContainer({
   };
 
   const handleReset = (mode: any, id: any) => {
-    navigate("/usermanagement");
+    navigateFunction("/usermanagement");
   };
 
   const BreadCrumbItems = [
     {
       title: "User Management",
       onClick: () => {
-        navigate("/usermanagement");
+        navigateFunction("/usermanagement");
       },
     },
     {
@@ -261,7 +262,7 @@ export default function CreateUserContainer({
           defaultUserRoleOptions={defaultUserRoleOptions}
           register={register}
           errors={errors}
-          navigate={navigate}
+          navigate={navigateFunction}
           handleSubmit={handleSubmit(onSubmit)}
           CurrData={CurrData}
           FormStatus={FormStatus}

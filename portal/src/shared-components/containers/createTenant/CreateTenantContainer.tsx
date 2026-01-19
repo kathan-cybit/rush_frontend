@@ -47,14 +47,13 @@ interface CreateTenantProps {
   // setFormStatus?: any;
 }
 
-const CreateTenantContainer: React.FC<any> = () =>
+const CreateTenantContainer: React.FC<any> = ({ navigateFunction }: any) =>
   // {
   // CurrData = {},
   // FormStatus = { mode: null, tenant: null },
   // setFormStatus,
   // }
   {
-    const navigate = useNavigate();
     const dispatch = useDispatch<AppDispatch>();
     const location = useLocation();
 
@@ -73,17 +72,17 @@ const CreateTenantContainer: React.FC<any> = () =>
     const [licenses, setLicenses] = useState<any>([]);
     const handleLicenseChange = (
       applicationId: any,
-      value: number | string
+      value: number | string,
     ) => {
       setLicenses((prev: any[]) =>
         prev.map((l) =>
-          l.application_id == applicationId ? { ...l, count: value } : l
-        )
+          l.application_id == applicationId ? { ...l, count: value } : l,
+        ),
       );
     };
 
     const { allApps, allTenantWithLicenses } = useSelector(
-      (state: RootState) => state.license
+      (state: RootState) => state.license,
     );
     const { tenantType } = useSelector((state: RootState) => state.auth);
     const { isLoading } = useSelector((state: RootState) => state.tenant);
@@ -96,13 +95,13 @@ const CreateTenantContainer: React.FC<any> = () =>
           headers: {
             "x-tenant-id": host,
           },
-        })
+        }),
       );
       if (host == "public") {
         dispatch(
           getAllTenantsWithLicenses({
             headers: { "x-tenant-id": "public" },
-          })
+          }),
         );
       }
     }, []);
@@ -146,12 +145,12 @@ const CreateTenantContainer: React.FC<any> = () =>
         setValue("phoneNumber", CurrData.phonenumber || "");
         setValue(
           "singleOrganization",
-          CurrData?.is_single_org === true ? "true" : "false"
+          CurrData?.is_single_org === true ? "true" : "false",
         );
 
         if (allApps?.length && allTenantWithLicenses?.length && CurrData?.id) {
           const tenant = allTenantWithLicenses.find(
-            (t: any) => t.tenant_id === CurrData.id
+            (t: any) => t.tenant_id === CurrData.id,
           );
 
           const initialLicenses = allApps.map((app: any) => ({
@@ -195,7 +194,7 @@ const CreateTenantContainer: React.FC<any> = () =>
               schema_name: data.domainname,
             },
             currentTenant: host,
-          })
+          }),
         )
           .unwrap()
           .then(() => {
@@ -206,7 +205,7 @@ const CreateTenantContainer: React.FC<any> = () =>
             }));
             setLicenses(initialLicenses);
             // setFormStatus?.({ mode: null, tenant: null });
-            navigate("/dashboard");
+            navigateFunction("/dashboard");
           })
           .catch(() => {});
       } else if (FormStatus?.mode === "edit" && CurrData?.id) {
@@ -228,7 +227,7 @@ const CreateTenantContainer: React.FC<any> = () =>
               })),
             },
             id: CurrData.id,
-          })
+          }),
         )
           .unwrap()
           .then(() => {
@@ -240,7 +239,7 @@ const CreateTenantContainer: React.FC<any> = () =>
             setLicenses(initialLicenses);
             // setFormStatus?.({ mode: null, tenant: null });
             dispatch(fetchTenants(host));
-            navigate("/dashboard");
+            navigateFunction("/dashboard");
           })
           .catch(() => {});
       }
@@ -279,7 +278,7 @@ const CreateTenantContainer: React.FC<any> = () =>
         CurrData?.totalusers > 1
       ) {
         error_toast(
-          "Single User Organization cannot be enabled because more than one user exists for this tenant."
+          "Single User Organization cannot be enabled because more than one user exists for this tenant.",
         );
         setValue("singleOrganization", "false");
       }
@@ -287,14 +286,14 @@ const CreateTenantContainer: React.FC<any> = () =>
 
     const onDiscard = () => {
       reset();
-      navigate("/dashboard");
+      navigateFunction("/dashboard");
     };
 
     const handleReset = (
       e: "view" | "edit" | null,
-      id: string | number | null
+      id: string | number | null,
     ) => {
-      navigate("/dashboard");
+      navigateFunction("/dashboard");
     };
 
     const BreadCrumbItems = [
@@ -302,7 +301,7 @@ const CreateTenantContainer: React.FC<any> = () =>
         title: "Tenants",
         onClick: () => {
           handleReset(null, null);
-          navigate("/dashboard");
+          navigateFunction("/dashboard");
         },
       },
       {
@@ -310,8 +309,8 @@ const CreateTenantContainer: React.FC<any> = () =>
           FormStatus?.mode == "edit"
             ? "Edit Tenant"
             : FormStatus?.mode == "view"
-            ? "View Tenant"
-            : "New Tenant",
+              ? "View Tenant"
+              : "New Tenant",
       },
     ];
 
@@ -330,6 +329,7 @@ const CreateTenantContainer: React.FC<any> = () =>
       BreadCrumbItems,
       allTenantWithLicenses,
       singleOrganizationWatcher,
+      navigateFunction,
     };
 
     return <CreateTenantComponent {...(componentProps as any)} />;

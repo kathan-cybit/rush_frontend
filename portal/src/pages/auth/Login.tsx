@@ -31,13 +31,10 @@ export default function LoginPage() {
         verifytokenPasswdLink({
           payload: { token: token, tenant: tenant },
           headers: { "x-tenant-id": tenant },
-        })
+        }),
       )
         .then((res: any) => {
-          if (
-            res?.payload?.verified == true ||
-            res?.payload?.verified == "true"
-          ) {
+          if (res?.payload == true || res?.payload == "true") {
             dispatch(setLogout());
             setIsVerified(true);
           } else {
@@ -55,6 +52,10 @@ export default function LoginPage() {
     }, 10);
   }
 
+  const navigateFunction = (url: string) => {
+    navigate(url);
+  };
+
   if (token && isVerified) return <LoginContainer token={token} />;
-  return <LoginContainer token={null} />;
+  return <LoginContainer token={null} navigateFunction={navigateFunction} />;
 }
