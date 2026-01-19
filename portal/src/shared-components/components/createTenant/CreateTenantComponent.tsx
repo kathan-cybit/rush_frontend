@@ -1,8 +1,8 @@
-import React, { useEffect } from "react";
+import React from "react";
 import { UseFormRegister, FieldErrors } from "react-hook-form";
 
 import { BackIcon, EditIcon } from "../../../assets/svgs";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { CustomBreadCrumbs, Loader } from "../../ui";
 
 interface TenantFormValues {
@@ -66,24 +66,23 @@ const CreateTenantComponent: React.FC<any> = ({
         <div className="clear-both flex justify-between items-center mb-[40px] overflow-hidden">
           <div>
             <div className="flex gap-2">
-              <div
+              <button
                 className="content-center mt-2 border border-[#828282] border-[1px] rounded-[12px] w-[32px] h-[32px] text-center cursor-pointer"
                 onClick={() => {
-                  if (!FormStatus?.mode) {
-                    navigate("/dashboard");
-                  } else {
+                  if (FormStatus?.mode) {
                     handleReset(null, null);
-                    // setFormStatus({ mode: null, tenant: null });
+                  } else {
+                    navigate("/dashboard");
                   }
                 }}
               >
                 <BackIcon className={"mx-auto"} />
-              </div>
+              </button>
               <div>
                 <h1 className="mb-0 font-fsecondary text-[32px] text-[500] leading-[140%] tracking-[0.25px]">
-                  {!FormStatus?.mode
-                    ? "Create New Tenant"
-                    : CurrData?.domain || ""}
+                  {FormStatus?.mode
+                    ? CurrData?.domain || ""
+                    : "Create New Tenant"}
                 </h1>
                 <CustomBreadCrumbs
                   separator=">"
@@ -95,7 +94,7 @@ const CreateTenantComponent: React.FC<any> = ({
           </div>
           <div>
             {FormStatus?.mode === "view" && (
-              <div
+              <button
                 onClick={() => {
                   navigate("/edittenant", {
                     state: {
@@ -110,7 +109,7 @@ const CreateTenantComponent: React.FC<any> = ({
                   <div className="mb-1">{<EditIcon />}</div>
                   <span>Edit Details</span>
                 </div>
-              </div>
+              </button>
             )}
             {FormStatus?.mode === "edit" && (
               <div className="bg-[#f3f4fc] p-[12px] rounded-[8px] text-bsecondary">
@@ -139,8 +138,7 @@ const CreateTenantComponent: React.FC<any> = ({
                 htmlFor="domainname"
                 className="mb-[8px] text-[#1f2937] text-[14px] text-[500]"
               >
-                Domain Name
-                <span className="ml-1 text-red-500">*</span>
+                Domain Name<span className="ml-1 text-red-500">*</span>
               </label>
               <input
                 autoComplete="off"
@@ -211,8 +209,7 @@ const CreateTenantComponent: React.FC<any> = ({
                   htmlFor="first_name"
                   className="mb-[8px] text-[#1f2937] text-[14px] text-[500]"
                 >
-                  First Name
-                  <span className="ml-1 text-red-500">*</span>
+                  First Name<span className="ml-1 text-red-500">*</span>
                 </label>
                 <input
                   autoComplete="off"
@@ -239,8 +236,7 @@ const CreateTenantComponent: React.FC<any> = ({
                   htmlFor="last_name"
                   className="mb-[8px] text-[#1f2937] text-[14px] text-[500]"
                 >
-                  Last Name
-                  <span className="ml-1 text-red-500">*</span>
+                  Last Name<span className="ml-1 text-red-500">*</span>
                 </label>
                 <input
                   autoComplete="off"
@@ -273,8 +269,7 @@ const CreateTenantComponent: React.FC<any> = ({
                 htmlFor="gstNumber"
                 className="mb-[8px] text-[#1f2937] text-[14px] text-[500]"
               >
-                GST Number
-                <span className="ml-1 text-red-500">*</span>
+                GST Number<span className="ml-1 text-red-500">*</span>
               </label>
               <input
                 autoComplete="off"
@@ -314,8 +309,7 @@ const CreateTenantComponent: React.FC<any> = ({
                     htmlFor="adminemail"
                     className="mb-[8px] text-[#1f2937] text-[14px] text-[500]"
                   >
-                    Admin Email
-                    <span className="ml-1 text-red-500">*</span>
+                    Admin Email<span className="ml-1 text-red-500">*</span>
                   </label>
                   <input
                     autoComplete="off"
@@ -346,8 +340,7 @@ const CreateTenantComponent: React.FC<any> = ({
                     htmlFor="password"
                     className="mb-[8px] text-[#1f2937] text-[14px] text-[500]"
                   >
-                    Password
-                    <span className="ml-1 text-red-500">*</span>
+                    Password<span className="ml-1 text-red-500">*</span>
                   </label>
                   <input
                     autoComplete="off"
@@ -388,8 +381,7 @@ const CreateTenantComponent: React.FC<any> = ({
                 htmlFor="contactperson"
                 className="mb-[8px] text-[#1f2937] text-[14px] text-[500]"
               >
-                Contact person
-                <span className="ml-1 text-red-500">*</span>
+                Contact person<span className="ml-1 text-red-500">*</span>
               </label>
               <input
                 autoComplete="off"
@@ -417,8 +409,7 @@ const CreateTenantComponent: React.FC<any> = ({
                 htmlFor="contactemail"
                 className="mb-[8px] text-[#1f2937] text-[14px] text-[500]"
               >
-                Email
-                <span className="ml-1 text-red-500">*</span>
+                Email<span className="ml-1 text-red-500">*</span>
               </label>
               <input
                 autoComplete="off"
@@ -452,8 +443,7 @@ const CreateTenantComponent: React.FC<any> = ({
                 htmlFor="phoneNumber"
                 className="mb-[8px] text-[#1f2937] text-[14px] text-[500]"
               >
-                Phone Number
-                <span className="ml-1 text-red-500">*</span>
+                Phone Number<span className="ml-1 text-red-500">*</span>
               </label>
               <input
                 autoComplete="off"
@@ -481,7 +471,7 @@ const CreateTenantComponent: React.FC<any> = ({
             </div>
             <div className="float-left mb-[24px] px-[12px] w-[50%]">
               <label className="block mb-[8px] text-[#1f2937] text-[14px] text-[500]">
-                Single User Organization
+                Single User Organization{" "}
                 <span className="ml-1 text-red-500">*</span>
               </label>
 

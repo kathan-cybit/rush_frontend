@@ -2,7 +2,7 @@ import React, { useEffect, useMemo, useState } from "react";
 import { CreateUserComponent } from "../../components";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "../../../store/store";
-import { redirect, useLocation, useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import {
   createTenantUser,
@@ -62,33 +62,32 @@ export default function CreateUserContainer({
   const allRoles = useSelector((state: any) => state.tenant.allRoles) || [];
   const loading = useSelector((state: any) => state.tenant.isLoading);
   const allUsersRoles = useSelector((state: any) => state.tenant.allUsersRoles);
-  // const allUsersRoles =
-  //   useSelector((state: any) => state.tenant.allUsersRoles) || [];
+
   const [defaultUserRoleOptions, setDefaultUserRoleOptions] = useState([]);
 
   const { allApps, allLicenseWithCounts, allLicenses } = useSelector(
-    (state: RootState) => state.license
+    (state: RootState) => state.license,
   );
 
   useEffect(() => {
-    const host = new URL(window.location.href).hostname.split(".")[0];
+    const host = new URL(globalThis.location.href).hostname.split(".")[0];
     dispatch(
       getLicenseApps({
         role: tenantType,
         headers: { "x-tenant-id": host },
-      })
+      }),
     );
     if (host != "public") {
       dispatch(
         getAllLicenses({
           headers: { "x-tenant-id": host },
-        })
+        }),
       );
 
       dispatch(
         getLicensesCount({
           headers: { "x-tenant-id": host },
-        })
+        }),
       );
     }
     dispatch(
@@ -97,7 +96,7 @@ export default function CreateUserContainer({
         headers: {
           "x-tenant-id": host,
         },
-      })
+      }),
     );
   }, []);
 
@@ -154,8 +153,6 @@ export default function CreateUserContainer({
   const onSubmit = async (data: UserFormValues) => {
     data.assigned_apps = assignedApps;
     const host = new URL(window.location.href).hostname.split(".")[0];
-    // debugger;
-    // return;
     if (!FormStatus?.mode) {
       await dispatch(createTenantUser({ payload: data, currentTenant: host }))
         .unwrap()
@@ -171,7 +168,7 @@ export default function CreateUserContainer({
           id: CurrData.id,
           payload: data,
           currentTenant: host,
-        })
+        }),
       )
         .then(() => {
           setAssignedApps([]);
@@ -179,7 +176,7 @@ export default function CreateUserContainer({
           dispatch(
             fetchUsers({
               url: `/users?tenant=${host}`,
-            })
+            }),
           );
           onDiscard();
         })
@@ -203,13 +200,13 @@ export default function CreateUserContainer({
         FormStatus?.mode === "edit"
           ? "Edit User"
           : FormStatus?.mode === "view"
-          ? "View User"
-          : "New User",
+            ? "View User"
+            : "New User",
     },
   ];
 
   useEffect(() => {
-    const host = new URL(window.location.href).hostname.split(".")[0];
+    const host = new URL(globalThis.location.href).hostname.split(".")[0];
 
     dispatch(
       getRoles({
@@ -217,7 +214,7 @@ export default function CreateUserContainer({
         headers: {
           "x-tenant-id": host,
         },
-      })
+      }),
     );
   }, []);
 
@@ -238,23 +235,13 @@ export default function CreateUserContainer({
         setDefaultUserRoleOptions(formatted);
         setValue(
           "role_ids",
-          formatted.map((x) => x.value)
+          formatted.map((x) => x.value),
         );
       }
     }
   }, [FormStatus?.mode, CurrData, allUsersRoles]);
 
-  useEffect(() => {
-    // if (allDetails?.is_single_org && allRoles?.length > 0) {
-    //   const allRoleIds = allRoles.map((r: any) => r.id);
-    //   setValue("role_ids", allRoleIds);
-    //   const formatted = allRoles.map((r: any) => ({
-    //     value: r.id,
-    //     label: r.name,
-    //   }));
-    //   setDefaultUserRoleOptions(formatted);
-    // }
-  }, [allDetails?.is_single_org, allRoles]);
+  useEffect(() => {}, [allDetails?.is_single_org, allRoles]);
 
   const roleOptions = allRoles.map((r) => ({
     value: r.id,
@@ -294,17 +281,3 @@ export default function CreateUserContainer({
     </div>
   );
 }
-// useEffect(() => {
-//   if (allDetails?.is_single_org && allRoles?.length > 0) {
-//     const allRoleIds = allRoles.map((r: any) => r.id);
-
-//     setValue("role_ids", allRoleIds);
-
-//     const formatted = allRoles.map((r: any) => ({
-//       value: r.id,
-//       label: r.name,
-//     }));
-
-//     setDefaultUserRoleOptions(formatted);
-//   }
-// }, [allDetails?.is_single_org, allRoles]);

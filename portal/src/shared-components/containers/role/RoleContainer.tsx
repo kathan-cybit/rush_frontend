@@ -3,7 +3,6 @@ import { useDispatch, useSelector } from "react-redux";
 import { RoleComponent } from "../../components";
 import {
   addPermissonRole,
-  addPermssion,
   addRole,
   deleteRole,
   getAllPermissonRole,
@@ -27,7 +26,7 @@ export default function RoleContainer() {
   const { tenantType, user, allDetails } = useSelector(
     (state: RootState) => state.auth
   );
-  const host = new URL(window.location.href).hostname.split(".")[0];
+  const host = new URL(globalThis.location.href).hostname.split(".")[0];
 
   const isLoading = useSelector((state: any) => state.tenant.isLoading);
 

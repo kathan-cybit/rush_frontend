@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   DeleteIcon,
   EditIcon,
@@ -20,17 +20,17 @@ import {
 } from "../../../store/reducers/authSlice";
 import { formatUtcToIST } from "../../../utils/commonFunctions";
 import { getLicenseApps } from "../../../store/reducers/licenseSlice";
-import { Tooltip } from "../../ui";
+
 import { USersFile } from "../../../assets/img";
 import { error_toast } from "../../../utils/toaster";
 
 export default function UserContainer() {
-  const host = new URL(window.location.href).hostname.split(".")[0];
+  const host = new URL(globalThis.location.href).hostname.split(".")[0];
 
   const navigate = useNavigate();
   const dispatch = useDispatch<AppDispatch>();
   const { users: userData, isLoading: loading } = useSelector(
-    (state: RootState) => state.tenant
+    (state: RootState) => state.tenant,
   );
 
   const {
@@ -135,7 +135,7 @@ export default function UserContainer() {
       deleteTenantUser({
         id: row?.id,
         headers: { "x-tenant-id": host },
-      })
+      }),
     )
       .unwrap()
       .then(() => {
@@ -187,20 +187,20 @@ export default function UserContainer() {
         dispatch(
           fetchUsers({
             url: `/users?tenant=${currentTenantName}`,
-          })
+          }),
         );
       }
       dispatch(
         getLicenseApps({
           role: tenantType,
           headers: { "x-tenant-id": host },
-        })
+        }),
       );
       if (host != "public") {
         dispatch(
           getUserDetails({
             headers: { "x-tenant-id": host },
-          })
+          }),
         );
       }
     }
@@ -215,11 +215,12 @@ export default function UserContainer() {
             headers: {
               "x-tenant-id": host,
             },
-          })
+          }),
         );
     }
   }, [FormStatus.mode, userData, OpenForm, ConfirmDelete]);
 
+  //formated data to feed in for table
   const formattedTenants = userData
     ?.map((e: any) => ({
       id: e?.id,
@@ -245,30 +246,28 @@ export default function UserContainer() {
       isVerified:
         (e?.is_default_admin === false || e?.is_default_admin == "false") &&
         (e?.is_verified === false || e?.is_verified == "false") ? (
-          <>
-            <button
-              onClick={() => {
-                dispatch(
-                  resenndVerifyEmail({
-                    payload: { email: e?.email || "" },
-                    headers: {
-                      "x-tenant-id": host,
-                    },
-                  })
-                )
-                  .then(() => {
-                    dispatch(
-                      fetchUsers({
-                        url: `/users?tenant=${currentTenantName}`,
-                      })
-                    );
-                  })
-                  .catch(() => {});
-              }}
-            >
-              <ResendIconSimple color={"#666"} />
-            </button>
-          </>
+          <button
+            onClick={() => {
+              dispatch(
+                resenndVerifyEmail({
+                  payload: { email: e?.email || "" },
+                  headers: {
+                    "x-tenant-id": host,
+                  },
+                }),
+              )
+                .then(() => {
+                  dispatch(
+                    fetchUsers({
+                      url: `/users?tenant=${currentTenantName}`,
+                    }),
+                  );
+                })
+                .catch(() => {});
+            }}
+          >
+            <ResendIconSimple color={"#666"} />
+          </button>
         ) : (
           "Verified"
         ),
@@ -280,11 +279,21 @@ export default function UserContainer() {
     ?.sort(
       (a: any, b: any) =>
         new Date(b._updatedAtRaw).getTime() -
-        new Date(a._updatedAtRaw).getTime()
+        new Date(a._updatedAtRaw).getTime(),
     )
     ?.map(({ _updatedAtRaw, ...rest }: any) => rest);
 
+  //this below operations are for custom tooltip displays
+  //here, we will keep the field of custom tooltip we want to be displayed in the ignoreArray.
+  //  The rest of the field's value will be kept null since being absent in the ignoreArray.|
+  // for verified text the tolltip is simply verified while for button it is click to verify
   const ignoreArray = ["isVerified"];
+
+  // the tooltipObj will thus have all keys of the columns as null values except the button's column with its value correspondingly.
+
+  //NOW, if u will see the chnages in TABLEV2 of your custom library made , if tooltipObj's key's value found null, then it will naturally take the content itself as tooltip which is  what the older version is doing.
+  //but, for the custom tootip's key , if not null it will get the value as tooltip that we provide
+  //NOTE:- PLEASE REFER THE TABLEV2 component chnages
 
   const tooltipObj = formattedTenants?.map((row) => {
     const obj = {};

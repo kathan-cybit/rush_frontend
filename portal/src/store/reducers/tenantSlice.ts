@@ -411,7 +411,7 @@ export const addUsersExcel = createAsyncThunk<unknown, any>(
       ) {
         success_toast(response?.data?.message || "users uploaded successfully");
       } else {
-        return rejectWithValue({ response: response?.data?.data });
+        return rejectWithValue({ response: response?.data });
       }
       return response?.data?.data;
     } catch (err: any) {
@@ -438,7 +438,7 @@ export const addRolesExcel = createAsyncThunk<unknown, any>(
       ) {
         success_toast(response?.data?.message || "roles uploaded successfully");
       } else {
-        return rejectWithValue({ response: response?.data?.data });
+        return rejectWithValue({ response: response?.data });
       }
       return response?.data?.data;
     } catch (err: any) {

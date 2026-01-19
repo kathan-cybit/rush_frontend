@@ -13,7 +13,6 @@ import {
   getAllTenantsWithLicenses,
   getLicenseApps,
 } from "../../../store/reducers/licenseSlice";
-import { Loader } from "../../ui";
 import { error_toast } from "../../../utils/toaster";
 
 interface TenantFormValues {
@@ -27,7 +26,7 @@ interface TenantFormValues {
   contactperson: any;
   contactemail: any;
   phoneNumber: any;
-  singleOrganization: boolean | string | any;
+  singleOrganization: any;
 }
 
 interface LicensesState {
@@ -48,299 +47,292 @@ interface CreateTenantProps {
   // setFormStatus?: any;
 }
 
-const CreateTenantContainer: React.FC<any> = (
+const CreateTenantContainer: React.FC<any> = () =>
+  // {
+  // CurrData = {},
+  // FormStatus = { mode: null, tenant: null },
+  // setFormStatus,
+  // }
   {
-    // CurrData = {},
-    // FormStatus = { mode: null, tenant: null },
-    // setFormStatus,
-  }
-) => {
-  const navigate = useNavigate();
-  const dispatch = useDispatch<AppDispatch>();
-  const location = useLocation();
-  // const { CurrData = {}, FormStatus = { mode: null, tenant: null } } =
-  //   location.state;
-  const safeState = useMemo(() => {
-    return location.state && typeof location.state === "object"
-      ? location.state
-      : {};
-  }, [location.state]);
+    const navigate = useNavigate();
+    const dispatch = useDispatch<AppDispatch>();
+    const location = useLocation();
 
-  const CurrData = safeState.CurrData ?? {};
-  const FormStatus = safeState.FormStatus ?? {
-    mode: null,
-    tenant: null,
-  };
+    const safeState = useMemo(() => {
+      return location.state && typeof location.state === "object"
+        ? location.state
+        : {};
+    }, [location.state]);
 
-  const [licenses, setLicenses] = useState<any>([]);
-  const handleLicenseChange = (
-    applicationId: any | string,
-    value: number | string
-  ) => {
-    setLicenses((prev: any[]) =>
-      prev.map((l) =>
-        l.application_id == applicationId ? { ...l, count: value } : l
-      )
+    const CurrData = safeState.CurrData ?? {};
+    const FormStatus = safeState.FormStatus ?? {
+      mode: null,
+      tenant: null,
+    };
+
+    const [licenses, setLicenses] = useState<any>([]);
+    const handleLicenseChange = (
+      applicationId: any,
+      value: number | string
+    ) => {
+      setLicenses((prev: any[]) =>
+        prev.map((l) =>
+          l.application_id == applicationId ? { ...l, count: value } : l
+        )
+      );
+    };
+
+    const { allApps, allTenantWithLicenses } = useSelector(
+      (state: RootState) => state.license
     );
-  };
+    const { tenantType } = useSelector((state: RootState) => state.auth);
+    const { isLoading } = useSelector((state: RootState) => state.tenant);
 
-  const { allApps, allLicenses, allTenantWithLicenses } = useSelector(
-    (state: RootState) => state.license
-  );
-  const { tenantType } = useSelector((state: RootState) => state.auth);
-  const { isLoading } = useSelector((state: RootState) => state.tenant);
-
-  useEffect(() => {
-    const host = new URL(window.location.href).hostname.split(".")[0];
-    dispatch(
-      getLicenseApps({
-        role: tenantType,
-        headers: {
-          "x-tenant-id": host,
-        },
-      })
-    );
-    if (host == "public") {
+    useEffect(() => {
+      const host = new URL(globalThis.location.href).hostname.split(".")[0];
       dispatch(
-        getAllTenantsWithLicenses({
-          headers: { "x-tenant-id": "public" },
+        getLicenseApps({
+          role: tenantType,
+          headers: {
+            "x-tenant-id": host,
+          },
         })
       );
-    }
-  }, []);
+      if (host == "public") {
+        dispatch(
+          getAllTenantsWithLicenses({
+            headers: { "x-tenant-id": "public" },
+          })
+        );
+      }
+    }, []);
 
-  const {
-    register,
-    handleSubmit,
-    setValue,
-    formState: { errors },
-    watch,
-    reset,
-  } = useForm<TenantFormValues>({
-    defaultValues: {
-      domainname: CurrData?.domain || "",
-      first_name: CurrData?.first_name || "",
-      last_name: CurrData?.last_name || "",
-      status: CurrData?.status || "active",
-      gstNumber: CurrData?.gst || "",
-      adminemail: "",
-      password: "",
-      contactperson: CurrData?.contactperson || "",
-      contactemail: CurrData?.contactemail || "",
-      phoneNumber: CurrData?.phonenumber || "",
-      singleOrganization: CurrData?.is_single_org === true ? "true" : "false",
-    },
-  });
-  const singleOrganizationWatcher = watch("singleOrganization");
+    const {
+      register,
+      handleSubmit,
+      setValue,
+      formState: { errors },
+      watch,
+      reset,
+    } = useForm<TenantFormValues>({
+      defaultValues: {
+        domainname: CurrData?.domain || "",
+        first_name: CurrData?.first_name || "",
+        last_name: CurrData?.last_name || "",
+        status: CurrData?.status || "active",
+        gstNumber: CurrData?.gst || "",
+        adminemail: "",
+        password: "",
+        contactperson: CurrData?.contactperson || "",
+        contactemail: CurrData?.contactemail || "",
+        phoneNumber: CurrData?.phonenumber || "",
+        singleOrganization: CurrData?.is_single_org === true ? "true" : "false",
+      },
+    });
+    const singleOrganizationWatcher = watch("singleOrganization");
 
-  useEffect(() => {
-    if (
-      (FormStatus?.mode === "edit" || FormStatus?.mode === "view") &&
-      CurrData
-    ) {
-      setValue("domainname", CurrData.domain || "");
-      setValue("first_name", CurrData.first_name || "");
-      setValue("last_name", CurrData.last_name || "");
-      setValue("status", CurrData.status || "");
-      setValue("gstNumber", CurrData.gst || "");
-      setValue("contactperson", CurrData.contactperson || "");
-      setValue("contactemail", CurrData.contactemail || "");
-      setValue("phoneNumber", CurrData.phonenumber || "");
-      setValue(
-        "singleOrganization",
-        CurrData?.is_single_org === true ? "true" : "false"
-      );
-
-      if (allApps?.length && allTenantWithLicenses?.length && CurrData?.id) {
-        const tenant = allTenantWithLicenses.find(
-          (t: any) => t.tenant_id === CurrData.id
+    useEffect(() => {
+      if (
+        (FormStatus?.mode === "edit" || FormStatus?.mode === "view") &&
+        CurrData
+      ) {
+        setValue("domainname", CurrData.domain || "");
+        setValue("first_name", CurrData.first_name || "");
+        setValue("last_name", CurrData.last_name || "");
+        setValue("status", CurrData.status || "");
+        setValue("gstNumber", CurrData.gst || "");
+        setValue("contactperson", CurrData.contactperson || "");
+        setValue("contactemail", CurrData.contactemail || "");
+        setValue("phoneNumber", CurrData.phonenumber || "");
+        setValue(
+          "singleOrganization",
+          CurrData?.is_single_org === true ? "true" : "false"
         );
 
+        if (allApps?.length && allTenantWithLicenses?.length && CurrData?.id) {
+          const tenant = allTenantWithLicenses.find(
+            (t: any) => t.tenant_id === CurrData.id
+          );
+
+          const initialLicenses = allApps.map((app: any) => ({
+            application_id: app.id,
+            count:
+              tenant?.licenses?.filter((l: any) => l.application_id == app.id)
+                ?.length || 0,
+          }));
+
+          setLicenses(initialLicenses);
+        }
+      }
+    }, [FormStatus?.mode, allApps, CurrData, setValue, allTenantWithLicenses]);
+
+    const onSubmit = async (data: TenantFormValues) => {
+      const host = new URL(window.location.href).hostname.split(".")[0];
+
+      if (!FormStatus?.mode) {
+        await dispatch(
+          createTenant({
+            payload: {
+              admin_email: data.adminemail,
+              password: data.password,
+              first_name: data.first_name,
+              last_name: data.last_name,
+              domain: data.domainname,
+              gst: data.gstNumber,
+              status: data.status,
+              phonenumber: data.phoneNumber,
+              contactperson: data.contactperson,
+              contactemail: data.contactemail,
+              singleOrganization:
+                data.singleOrganization == "true" ||
+                data.singleOrganization === true
+                  ? true
+                  : false,
+              licenses: licenses?.map((lic: any) => ({
+                ...lic,
+                count: Number(lic.count),
+              })),
+              schema_name: data.domainname,
+            },
+            currentTenant: host,
+          })
+        )
+          .unwrap()
+          .then(() => {
+            reset();
+            const initialLicenses = allApps.map((app: any) => ({
+              application_id: app.id,
+              count: 0,
+            }));
+            setLicenses(initialLicenses);
+            // setFormStatus?.({ mode: null, tenant: null });
+            navigate("/dashboard");
+          })
+          .catch(() => {});
+      } else if (FormStatus?.mode === "edit" && CurrData?.id) {
+        await dispatch(
+          updateTenant({
+            payload: {
+              updated_at: new Date(),
+              first_name: data.first_name,
+              last_name: data.last_name,
+              gst: data.gstNumber,
+              status: data.status,
+              phonenumber: data.phoneNumber,
+              contactperson: data.contactperson,
+              contactemail: data.contactemail,
+              is_single_org: data.singleOrganization == "true" ? true : false,
+              licenses: licenses?.map((lic: any) => ({
+                ...lic,
+                count: Number(lic.count),
+              })),
+            },
+            id: CurrData.id,
+          })
+        )
+          .unwrap()
+          .then(() => {
+            reset();
+            const initialLicenses = allApps.map((app: any) => ({
+              application_id: app.id,
+              count: 0,
+            }));
+            setLicenses(initialLicenses);
+            // setFormStatus?.({ mode: null, tenant: null });
+            dispatch(fetchTenants(host));
+            navigate("/dashboard");
+          })
+          .catch(() => {});
+      }
+    };
+
+    // uncomment for single org and comnet below useefcfect
+    // useEffect(() => {
+    //   if (
+    //     (allApps?.length > 0 && !FormStatus?.mode) ||
+    //     ((singleOrganizationWatcher === true ||
+    //       singleOrganizationWatcher == "true") &&
+    //       !licenses?.some((license) => Number(license.count) > 1))
+    //   ) {
+    //     const initialLicenses = allApps.map((app: any) => ({
+    //       application_id: app.id,
+    //       count: "0",
+    //     }));
+    //     setLicenses(initialLicenses);
+    //   }
+    // }, [allApps, FormStatus?.mode, singleOrganizationWatcher]);
+
+    useEffect(() => {
+      if (allApps?.length > 0 && !FormStatus?.mode) {
         const initialLicenses = allApps.map((app: any) => ({
           application_id: app.id,
-          count:
-            tenant?.licenses?.filter((l: any) => l.application_id == app.id)
-              ?.length || 0,
+          count: "0",
         }));
-
         setLicenses(initialLicenses);
       }
-    }
-  }, [FormStatus?.mode, allApps, CurrData, setValue, allTenantWithLicenses]);
+    }, [allApps, FormStatus?.mode]);
 
-  const onSubmit = async (data: TenantFormValues) => {
-    const host = new URL(window.location.href).hostname.split(".")[0];
+    useEffect(() => {
+      if (
+        (singleOrganizationWatcher == "true" ||
+          singleOrganizationWatcher === true) &&
+        CurrData?.totalusers > 1
+      ) {
+        error_toast(
+          "Single User Organization cannot be enabled because more than one user exists for this tenant."
+        );
+        setValue("singleOrganization", "false");
+      }
+    }, [singleOrganizationWatcher, CurrData?.totalusers, setValue]);
 
-    if (!FormStatus?.mode) {
-      await dispatch(
-        createTenant({
-          payload: {
-            admin_email: data.adminemail,
-            password: data.password,
-            first_name: data.first_name,
-            last_name: data.last_name,
-            domain: data.domainname,
-            gst: data.gstNumber,
-            status: data.status,
-            phonenumber: data.phoneNumber,
-            contactperson: data.contactperson,
-            contactemail: data.contactemail,
-            singleOrganization:
-              data.singleOrganization == "true" ||
-              data.singleOrganization === true
-                ? true
-                : false,
-            licenses: licenses?.map((lic: any) => ({
-              ...lic,
-              count: Number(lic.count),
-            })),
-            schema_name: data.domainname,
-          },
-          currentTenant: host,
-        })
-      )
-        .unwrap()
-        .then(() => {
-          reset();
-          const initialLicenses = allApps.map((app: any) => ({
-            application_id: app.id,
-            count: 0,
-          }));
-          setLicenses(initialLicenses);
-          // setFormStatus?.({ mode: null, tenant: null });
+    const onDiscard = () => {
+      reset();
+      navigate("/dashboard");
+    };
+
+    const handleReset = (
+      e: "view" | "edit" | null,
+      id: string | number | null
+    ) => {
+      navigate("/dashboard");
+    };
+
+    const BreadCrumbItems = [
+      {
+        title: "Tenants",
+        onClick: () => {
+          handleReset(null, null);
           navigate("/dashboard");
-        })
-        .catch(() => {});
-    } else if (FormStatus?.mode === "edit" && CurrData?.id) {
-      await dispatch(
-        updateTenant({
-          payload: {
-            updated_at: new Date(),
-            first_name: data.first_name,
-            last_name: data.last_name,
-            gst: data.gstNumber,
-            status: data.status,
-            phonenumber: data.phoneNumber,
-            contactperson: data.contactperson,
-            contactemail: data.contactemail,
-            is_single_org: data.singleOrganization == "true" ? true : false,
-            licenses: licenses?.map((lic: any) => ({
-              ...lic,
-              count: Number(lic.count),
-            })),
-          },
-          id: CurrData.id,
-        })
-      )
-        .unwrap()
-        .then(() => {
-          reset();
-          const initialLicenses = allApps.map((app: any) => ({
-            application_id: app.id,
-            count: 0,
-          }));
-          setLicenses(initialLicenses);
-          // setFormStatus?.({ mode: null, tenant: null });
-          dispatch(fetchTenants(host));
-          navigate("/dashboard");
-        })
-        .catch(() => {});
-    }
-  };
-
-  // uncomment for single org and comnet below useefcfect
-  // useEffect(() => {
-  //   if (
-  //     (allApps?.length > 0 && !FormStatus?.mode) ||
-  //     ((singleOrganizationWatcher === true ||
-  //       singleOrganizationWatcher == "true") &&
-  //       !licenses?.some((license) => Number(license.count) > 1))
-  //   ) {
-  //     const initialLicenses = allApps.map((app: any) => ({
-  //       application_id: app.id,
-  //       count: "0",
-  //     }));
-  //     setLicenses(initialLicenses);
-  //   }
-  // }, [allApps, FormStatus?.mode, singleOrganizationWatcher]);
-
-  useEffect(() => {
-    if (allApps?.length > 0 && !FormStatus?.mode) {
-      const initialLicenses = allApps.map((app: any) => ({
-        application_id: app.id,
-        count: "0",
-      }));
-      setLicenses(initialLicenses);
-    }
-  }, [allApps, FormStatus?.mode]);
-
-  useEffect(() => {
-    if (
-      (singleOrganizationWatcher == "true" ||
-        singleOrganizationWatcher === true) &&
-      CurrData?.totalusers > 1
-    ) {
-      error_toast(
-        "Single User Organization cannot be enabled because more than one user exists for this tenant."
-      );
-      setValue("singleOrganization", "false");
-    }
-  }, [singleOrganizationWatcher, CurrData?.totalusers, setValue]);
-
-  const onDiscard = () => {
-    reset();
-    // setFormStatus?.({ mode: null, tenant: null });
-    navigate("/dashboard");
-  };
-
-  const handleReset = (
-    e: "view" | "edit" | null,
-    id: string | number | null
-  ) => {
-    navigate("/dashboard");
-    // setFormStatus?.({ tenant: id, mode: e });
-  };
-
-  const BreadCrumbItems = [
-    {
-      title: "Tenants",
-      onClick: () => {
-        handleReset(null, null);
-        navigate("/dashboard");
+        },
       },
-    },
-    {
-      title:
-        FormStatus?.mode == "edit"
-          ? "Edit Tenant"
-          : FormStatus?.mode == "view"
-          ? "View Tenant"
-          : "New Tenant",
-    },
-  ];
+      {
+        title:
+          FormStatus?.mode == "edit"
+            ? "Edit Tenant"
+            : FormStatus?.mode == "view"
+            ? "View Tenant"
+            : "New Tenant",
+      },
+    ];
 
-  const componentProps = {
-    isLoading,
-    register,
-    errors,
-    licenses,
-    FormStatus,
-    allApps,
-    CurrData,
-    handleLicenseChange,
-    onDiscard,
-    handleSubmit: handleSubmit(onSubmit),
-    handleReset,
-    BreadCrumbItems,
-    allTenantWithLicenses,
-    singleOrganizationWatcher,
+    const componentProps = {
+      isLoading,
+      register,
+      errors,
+      licenses,
+      FormStatus,
+      allApps,
+      CurrData,
+      handleLicenseChange,
+      onDiscard,
+      handleSubmit: handleSubmit(onSubmit),
+      handleReset,
+      BreadCrumbItems,
+      allTenantWithLicenses,
+      singleOrganizationWatcher,
+    };
+
+    return <CreateTenantComponent {...(componentProps as any)} />;
   };
-
-  return (
-    <>
-      <CreateTenantComponent {...(componentProps as any)} />
-    </>
-  );
-};
 
 export default CreateTenantContainer;

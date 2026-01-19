@@ -1,7 +1,6 @@
 import React from "react";
 
-import { CreateTenantContainer } from "../../containers";
-import { Loader, Modal, TableV2 } from "../../ui";
+import { Loader, TableV2 } from "../../ui";
 import { AuthIcn } from "../../../assets/svgs";
 import { ICExpert, PoleExpert, SimExpert } from "../../../assets/img";
 import ConfirmDeleteModal from "../confirmDeleteModal/confirmDeleteModal";
@@ -206,18 +205,6 @@ export default function DashboardComponent({
                 </div>
               </div>
             </div>
-            {/* <div className="px-2 w-1/3">
-                  <div className="flex justify-between items-start p-[16px] border border-[#e4e5e7] border-[1.2px] rounded-[16px] h-[135px] text-center cursor-pointer">
-                    <div className="flex flex-col">
-                      <span className="font-fsecondary text-[400] text-[56px] text-textPrimary text-start">
-                        0
-                      </span>
-                      <span className="text-[#555555] text-[14px] text-[400] leading-[140%]">
-                        Renewals due next week
-                      </span>
-                    </div>
-                  </div>
-                </div> */}
           </div>
           <div className="mt-5">
             {tenants?.length > 0 && (
@@ -232,58 +219,47 @@ export default function DashboardComponent({
           </div>
         </>
       ) : (
-        //  <>
-        //       {FormStatus.mode && FormStatus.tenant && CurrData && (
-        //         <CreateTenantContainer
-        //           setFormStatus={setFormStatus}
-        //           FormStatus={FormStatus}
-        //           CurrData={CurrData}
-        //         />
-        //       )}
-        //     </>
-        <>
-          <div className="flex flex-wrap justify-center -mx-3">
-            {filteredApps?.length > 0 &&
-              allLicenses
-                .filter((item) => item.assigned_to == user?.id)
-                .map((item) => item.application_id)?.length > 0 &&
-              filteredApps
-                .filter((app: any) =>
-                  allLicenses
-                    .filter((item) => item.assigned_to == user?.id)
-                    .map((item) => item.application_id)
-                    .includes(app.id)
-                )
-                ?.map((e: any, index: number | string) => {
-                  return (
-                    <div className="px-2 w-1/4" key={index}>
-                      <a
-                        href={`${e.url}?token=${token}&domain=${host}`}
-                        target="_blank"
-                        className="flex flex-col justify-between items-center hover:shadow-[0_12px_24px_rgba(0,0,0,0.12)] px-4 pt-12 pb-6 border border-[#e4e5e7] border-[1.2px] rounded-[16px] h-[280px] text-center transition-all hover:-translate-y-1.5 duration-200 cursor-pointer"
-                      >
-                        <div className="max-w-[130px] max-h-[140px]">
-                          <img
-                            className="w-full h-full object-contain"
-                            src={
-                              e?.name == "ICXpert"
-                                ? ICExpert
-                                : e?.name == "PoleXpert"
-                                ? PoleExpert
-                                : SimExpert
-                            }
-                            alt="Teams"
-                          />
-                        </div>
-                        <h2 className="mb-0 font-fsecondary text-[24px] text-[500] leading-[140%]">
-                          {e?.name}
-                        </h2>
-                      </a>
-                    </div>
-                  );
-                })}
-          </div>
-        </>
+        <div className="flex flex-wrap justify-center -mx-3">
+          {filteredApps?.length > 0 &&
+            allLicenses
+              .filter((item) => item.assigned_to == user?.id)
+              .map((item) => item.application_id)?.length > 0 &&
+            filteredApps
+              .filter((app: any) =>
+                allLicenses
+                  .filter((item) => item.assigned_to == user?.id)
+                  .map((item) => item.application_id)
+                  .includes(app.id)
+              )
+              ?.map((e: any, index: number | string) => {
+                return (
+                  <div className="px-2 w-1/4" key={index}>
+                    <a
+                      href={`${e.url}?token=${token}&domain=${host}`}
+                      target="_blank"
+                      className="flex flex-col justify-between items-center hover:shadow-[0_12px_24px_rgba(0,0,0,0.12)] px-4 pt-12 pb-6 border border-[#e4e5e7] border-[1.2px] rounded-[16px] h-[280px] text-center transition-all hover:-translate-y-1.5 duration-200 cursor-pointer"
+                    >
+                      <div className="max-w-[130px] max-h-[140px]">
+                        <img
+                          className="w-full h-full object-contain"
+                          src={
+                            e?.name == "ICXpert"
+                              ? ICExpert
+                              : e?.name == "PoleXpert"
+                              ? PoleExpert
+                              : SimExpert
+                          }
+                          alt="Teams"
+                        />
+                      </div>
+                      <h2 className="mb-0 font-fsecondary text-[24px] text-[500] leading-[140%]">
+                        {e?.name}
+                      </h2>
+                    </a>
+                  </div>
+                );
+              })}
+        </div>
       )}
       {ConfirmDelete?.mode && (
         <ConfirmDeleteModal

@@ -89,7 +89,7 @@ const UploadExcelForm = ({
       setError("Please select a file");
       return;
     }
-    const token = localStorage.getItem("auth_token");
+
     const formData = new FormData();
     formData.append("file", file);
     if (uploader == "user") {

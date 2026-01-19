@@ -22,7 +22,7 @@ const normalizeEmail = (email: string) => {
 };
 
 export default function LoginContainer({ token = null }) {
-  const host = new URL(window.location.href).hostname.split(".")[0];
+  const host = new URL(globalThis.location.href).hostname.split(".")[0];
   const location = useLocation();
   const navigate = useNavigate();
   const dispatch = useDispatch<AppDispatch>();
@@ -84,6 +84,7 @@ export default function LoginContainer({ token = null }) {
             if (res?.userFound) {
               navigate("/dashboard");
             } else {
+              console.log("");
             }
           })
           .catch((err) => {});
@@ -125,6 +126,7 @@ export default function LoginContainer({ token = null }) {
         navigate("/login");
       }
     } else {
+      console.log("");
     }
   };
 

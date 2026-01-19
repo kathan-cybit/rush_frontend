@@ -2,19 +2,14 @@ import React, { useState } from "react";
 import { Controller } from "react-hook-form";
 import Select from "react-select";
 
-import { MultiSelect } from "../../ui"; // Your Mantine-based MultiSelect
 import {
   Alert,
   CustomBreadCrumbs,
   Dialog,
   Loader,
-  Modal,
   TableV2,
-  Tooltip,
+  MultiSelect,
 } from "../../ui";
-import { DownloadIcn } from "../../../assets/svgs";
-import { exportToCSV } from "../../../utils/exports";
-import { RolesFile } from "../../../assets/img";
 import { UploadExcelForm } from "../index";
 import ConfirmDeleteModal from "../confirmDeleteModal/confirmDeleteModal";
 
@@ -74,7 +69,7 @@ export default function RoleComponent({
   // Helper function to handle multi-select changes with "Select All" logic
   const handleMultiSelectChange = (
     selectedValues: string[],
-    onChange: (value: any[]) => void
+    onChange: (value: any[]) => void,
   ) => {
     if (!selectedValues || selectedValues.length === 0) {
       onChange([]);
@@ -95,7 +90,7 @@ export default function RoleComponent({
 
     // Normal selection - map values back to option objects
     const selected = permissionOptions.filter((opt: any) =>
-      selectedValues.includes(opt.value)
+      selectedValues.includes(opt.value),
     );
     onChange(selected);
   };
@@ -112,128 +107,118 @@ export default function RoleComponent({
           <Loader />
         </div>
       )}
-      <>
-        <div className="flex flex-col">
-          <div className="flex justify-between mb-8">
-            <div>
-              {/* <h1 className="mb-0 font-fsecondary text-[32px] text-[500] leading-[140%] tracking-[0.25px]">
+      <div className="flex flex-col">
+        <div className="flex justify-between mb-8">
+          <div>
+            {/* <h1 className="mb-0 font-fsecondary text-[32px] text-[500] leading-[140%] tracking-[0.25px]">
                 {"Hi," +
                   " " +
                   (user?.first_name || user?.username || "") +
                   " " +
                   (user?.last_name || "")}
               </h1> */}
-              <>
-                <CustomBreadCrumbs
-                  separator=">"
-                  items={BreadCrumbItems}
-                  className="font-[500] font-fsecondary text-[#adadad] text-[14px] leading-[140%] tracking-[0.25px]"
+            <CustomBreadCrumbs
+              separator=">"
+              items={BreadCrumbItems}
+              className="font-[500] font-fsecondary text-[#adadad] text-[14px] leading-[140%] tracking-[0.25px]"
+            />
+          </div>
+          <div className="flex gap-2">
+            {!allDetails?.is_single_org && (
+              <div className="w-[125px]">
+                <Select
+                  value={selectedAction}
+                  onChange={handleActionChange}
+                  options={actionOptions}
+                  placeholder="Actions"
+                  isClearable={false}
+                  isSearchable={false}
+                  menuPlacement="auto"
+                  classNamePrefix="action-dropdown"
+                  styles={{
+                    control: (base, state) => ({
+                      ...base,
+                      minHeight: "45px",
+                      borderRadius: "0.5rem",
+                      border: "none",
+                      boxShadow: "none",
+                      backgroundColor: "#14258f",
+                      paddingLeft: "12px",
+                      paddingRight: "12px",
+                      cursor: "pointer",
+                      ":hover": {
+                        opacity: 0.85,
+                      },
+                    }),
+                    singleValue: (base) => ({
+                      ...base,
+                      color: "white",
+                      fontWeight: 500,
+                    }),
+                    placeholder: (base) => ({
+                      ...base,
+                      color: "white",
+                      fontWeight: 500,
+                    }),
+                    dropdownIndicator: (base) => ({
+                      ...base,
+                      color: "white",
+                      ":hover": {
+                        color: "white",
+                      },
+                    }),
+                    indicatorSeparator: () => ({
+                      display: "none",
+                    }),
+                    menu: (base) => ({
+                      ...base,
+                      borderRadius: "0.5rem",
+                      marginTop: "6px",
+                      overflow: "hidden",
+                      zIndex: 50,
+                    }),
+                    option: (base, state) => ({
+                      ...base,
+                      cursor: "pointer",
+                      backgroundColor: state.isFocused ? "#14258f" : "white",
+                      color: !state.isFocused ? "#111827" : "#fff",
+                      ":active": {
+                        backgroundColor: "#14258fa6",
+                      },
+                    }),
+                  }}
                 />
-              </>
-            </div>
-            <>
-              <div className="flex gap-2">
-                {!allDetails?.is_single_org && (
-                  <div className="w-[125px]">
-                    <Select
-                      value={selectedAction}
-                      onChange={handleActionChange}
-                      options={actionOptions}
-                      placeholder="Actions"
-                      isClearable={false}
-                      isSearchable={false}
-                      menuPlacement="auto"
-                      classNamePrefix="action-dropdown"
-                      styles={{
-                        control: (base, state) => ({
-                          ...base,
-                          minHeight: "45px",
-                          borderRadius: "0.5rem",
-                          border: "none",
-                          boxShadow: "none",
-                          backgroundColor: "#14258f",
-                          paddingLeft: "12px",
-                          paddingRight: "12px",
-                          cursor: "pointer",
-                          ":hover": {
-                            opacity: 0.85,
-                          },
-                        }),
-                        singleValue: (base) => ({
-                          ...base,
-                          color: "white",
-                          fontWeight: 500,
-                        }),
-                        placeholder: (base) => ({
-                          ...base,
-                          color: "white",
-                          fontWeight: 500,
-                        }),
-                        dropdownIndicator: (base) => ({
-                          ...base,
-                          color: "white",
-                          ":hover": {
-                            color: "white",
-                          },
-                        }),
-                        indicatorSeparator: () => ({
-                          display: "none",
-                        }),
-                        menu: (base) => ({
-                          ...base,
-                          borderRadius: "0.5rem",
-                          marginTop: "6px",
-                          overflow: "hidden",
-                          zIndex: 50,
-                        }),
-                        option: (base, state) => ({
-                          ...base,
-                          cursor: "pointer",
-                          backgroundColor: state.isFocused
-                            ? "#14258f"
-                            : "white",
-                          color: !state.isFocused ? "#111827" : "#fff",
-                          ":active": {
-                            backgroundColor: "#14258fa6",
-                          },
-                        }),
-                      }}
-                    />
-                  </div>
-                )}
-                {(!allDetails?.is_single_org || host == "public") && (
-                  <button
-                    onClick={() => {
-                      setOpenCreateRole(true);
-                    }}
-                    type="submit"
-                    className="inline-flex float-end items-center gap-2 bg-bsecondary hover:opacity-[0.75] px-7 py-3 border-none rounded-lg h-[45px] font-medium text-white text-sm transition-all duration-200 cursor-pointer"
-                  >
-                    Create New Role
-                  </button>
-                )}
               </div>
-            </>
+            )}
+            {(!allDetails?.is_single_org || host == "public") && (
+              <button
+                onClick={() => {
+                  setOpenCreateRole(true);
+                }}
+                type="submit"
+                className="inline-flex float-end items-center gap-2 bg-bsecondary hover:opacity-[0.75] px-7 py-3 border-none rounded-lg h-[45px] font-medium text-white text-sm transition-all duration-200 cursor-pointer"
+              >
+                Create New Role
+              </button>
+            )}
           </div>
         </div>
-      </>
-      <>
-        {displayAlert && (
-          <Alert
-            withCloseButton
-            onClick={() => {
-              setdisplayAlert(false);
-            }}
-          >
-            {ErrorAlert}
-          </Alert>
-        )}
-        <TableV2
-          data={formattedRoles}
-          menuItems={menuItems}
-          statusColorMap={statusColorMap}
-        />
-      </>
+      </div>
+      {displayAlert && (
+        <Alert
+          withCloseButton
+          onClick={() => {
+            setdisplayAlert(false);
+          }}
+        >
+          {ErrorAlert}
+        </Alert>
+      )}
+      <TableV2
+        data={formattedRoles}
+        menuItems={menuItems}
+        statusColorMap={statusColorMap}
+      />
       {EditRole?.open && Object.values(CurrData)?.length > 0 && (
         <Dialog
           title="Update Role"
@@ -299,6 +284,7 @@ export default function RoleComponent({
             <form className="gap-4 grid" onSubmit={handleSubmit}>
               <div className="gap-1 grid">
                 <label className="font-medium text-sm">
+                  {" "}
                   Role Name <span className="ml-1 text-red-500">*</span>
                 </label>
                 <input
@@ -312,7 +298,7 @@ export default function RoleComponent({
               </div>
 
               <div className="gap-1 grid">
-                <label className="font-medium text-sm">Description</label>
+                <label className="font-medium text-sm"> Description</label>
                 <input
                   autoComplete="off"
                   className="px-3 py-2 border rounded"
@@ -325,6 +311,7 @@ export default function RoleComponent({
 
               <div className="gap-1 grid">
                 <label className="font-medium text-sm">
+                  {" "}
                   Select Permissions
                 </label>
 
@@ -385,37 +372,3 @@ export default function RoleComponent({
     </div>
   );
 }
-// <div className="flex gap-2">
-//   {(!allDetails?.is_single_org || host == "public") && (
-//     <Tooltip label="Download Sample File">
-//       <a
-//         href={RolesFile}
-//         className="inline-flex float-end items-center gap-2 bg-bsecondary hover:opacity-[0.75] px-7 py-3 border-none rounded-lg h-[45px] font-medium text-white text-sm transition-all duration-200 cursor-pointer"
-//       >
-//         <DownloadIcn />
-//       </a>
-//     </Tooltip>
-//   )}
-//   {(!allDetails?.is_single_org || host == "public") && (
-//     <button
-//       onClick={() => {
-//         setOpenForm(true);
-//       }}
-//       type="submit"
-//       className="inline-flex float-end items-center gap-2 bg-bsecondary hover:opacity-[0.75] px-7 py-3 border-none rounded-lg h-[45px] font-medium text-white text-sm transition-all duration-200 cursor-pointer"
-//     >
-//       Bulk upload
-//     </button>
-//   )}
-//   {(!allDetails?.is_single_org || host == "public") && (
-//     <button
-//       onClick={() => {
-//         setOpenCreateRole(true);
-//       }}
-//       type="submit"
-//       className="inline-flex float-end items-center gap-2 bg-bsecondary hover:opacity-[0.75] px-7 py-3 border-none rounded-lg h-[45px] font-medium text-white text-sm transition-all duration-200 cursor-pointer"
-//     >
-//       Create New Role
-//     </button>
-//   )}
-// </div>
