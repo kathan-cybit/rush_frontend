@@ -3,8 +3,8 @@ import { error_toast } from "./toaster";
 
 // const baseURL = process.env.REACT_APP_BACKEND_URL;
 const host = new URL(window.location.href).hostname;
-const baseURL = `http://${host}:8080/api`;
-// const baseURL = `https://${host}/api`;
+// const baseURL = `http://${host}:8080/api`;
+const baseURL = `https://${host}/api`;
 // const baseURL = "https://public.eirisapps.com/vtwo";
 
 const axiosInstance = axios.create({
