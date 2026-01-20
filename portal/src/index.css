@@ -15,7 +15,9 @@
   --color-primary: #05081b;
   --color-secondary: #2d2f39;
   --font-primary: "Inter", sans-serif;
-  --font-secondary: "Satoshi", sans-serif;
+  --font-secondary:
+    -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen", "Ubuntu",
+    "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue", sans-serif;
 }
 
 body {
