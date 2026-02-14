@@ -8,10 +8,16 @@ export default function Dashboard() {
   const navigateFunction = (url: string) => {
     navigate(url);
   };
+  const navigateFunctionWithState = (url: string, obj: any) => {
+    navigate(url, obj);
+  };
 
   return (
     <>
-      <DashboardContainer navigateFunction={navigateFunction} />
+      <DashboardContainer
+        navigateFunctionWithState={navigateFunctionWithState}
+        navigateFunction={navigateFunction}
+      />
     </>
   );
 }

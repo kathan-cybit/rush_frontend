@@ -35,6 +35,7 @@ interface FormStatus {
 
 export default function CreateUserContainer({
   navigateFunction,
+  navigateFunctionwithState,
   setdisplayAlert,
 }: any) {
   const location = useLocation();
@@ -45,7 +46,6 @@ export default function CreateUserContainer({
       ? location.state
       : {};
   }, [location.state]);
-
   const CurrData = safeState.CurrData ?? {};
   const FormStatus = safeState.FormStatus ?? {
     mode: null,
@@ -307,7 +307,8 @@ export default function CreateUserContainer({
           defaultUserRoleOptions={defaultUserRoleOptions}
           register={register}
           errors={errors}
-          navigate={navigateFunction}
+          navigateFunction={navigateFunction}
+          navigateFunctionwithState={navigateFunctionwithState}
           handleSubmit={handleSubmit(onSubmit)}
           CurrData={CurrData}
           FormStatus={FormStatus}

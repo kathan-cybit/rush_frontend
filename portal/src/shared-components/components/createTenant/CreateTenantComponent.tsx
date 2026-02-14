@@ -52,6 +52,7 @@ const CreateTenantComponent: React.FC<any> = ({
   allTenantWithLicenses,
   singleOrganizationWatcher,
   navigateFunction,
+  navigateFunctionWithState,
 }) => {
   return (
     <>
@@ -95,7 +96,7 @@ const CreateTenantComponent: React.FC<any> = ({
             {FormStatus?.mode === "view" && (
               <button
                 onClick={() => {
-                  navigateFunction("/edittenant", {
+                  navigateFunctionWithState("/edittenant", {
                     state: {
                       CurrData: CurrData,
                       FormStatus: { mode: "edit", tenant: CurrData.id },

@@ -19,7 +19,8 @@ export default function CreateUserComponent({
   allLicenseWithCounts,
   register,
   errors,
-  navigate,
+  navigateFunction,
+  navigateFunctionwithState,
   handleSubmit,
   CurrData,
   FormStatus,
@@ -69,7 +70,7 @@ export default function CreateUserComponent({
               className="content-center mt-2 border border-[#828282] border-[1px] rounded-[12px] w-[32px] h-[32px] text-center cursor-pointer"
               onClick={() => {
                 if (!FormStatus?.mode) {
-                  navigate("/usermanagement");
+                  navigateFunction("/usermanagement");
                 } else {
                   handleReset(null, null);
                   // setFormStatus({ mode: null, tenant: null });
@@ -96,7 +97,7 @@ export default function CreateUserComponent({
           {FormStatus?.mode === "view" && (
             <div
               onClick={() => {
-                navigate("/updateuser", {
+                navigateFunctionwithState("/updateuser", {
                   state: {
                     CurrData: CurrData,
                     FormStatus: { mode: "edit", tenant: CurrData.id },

@@ -47,7 +47,10 @@ interface CreateTenantProps {
   // setFormStatus?: any;
 }
 
-const CreateTenantContainer: React.FC<any> = ({ navigateFunction }: any) =>
+const CreateTenantContainer: React.FC<any> = ({
+  navigateFunction,
+  navigateFunctionWithState,
+}: any) =>
   // {
   // CurrData = {},
   // FormStatus = { mode: null, tenant: null },
@@ -373,6 +376,7 @@ const CreateTenantContainer: React.FC<any> = ({ navigateFunction }: any) =>
       allTenantWithLicenses,
       singleOrganizationWatcher,
       navigateFunction,
+      navigateFunctionWithState,
     };
 
     return <CreateTenantComponent {...(componentProps as any)} />;

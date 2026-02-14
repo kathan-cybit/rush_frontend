@@ -17,7 +17,10 @@ import {
 } from "../../../store/reducers/licenseSlice";
 import { formatUtcToIST } from "../../../utils/commonFunctions";
 
-export default function DashboardContainer({ navigateFunction }: any) {
+export default function DashboardContainer({
+  navigateFunction,
+  navigateFunctionWithState,
+}: any) {
   const dispatch = useDispatch<AppDispatch>();
 
   const host = new URL(globalThis.location.href).hostname.split(".")[0];
@@ -93,14 +96,14 @@ export default function DashboardContainer({ navigateFunction }: any) {
       const data = tenants.find((e: any) => e.id == FormStatus.tenant);
 
       if (FormStatus.mode == "view") {
-        navigateFunction("/viewtenant", {
+        navigateFunctionWithState("/viewtenant", {
           state: {
             CurrData: data,
             FormStatus: FormStatus,
           },
         });
       } else {
-        navigateFunction("/edittenant", {
+        navigateFunctionWithState("/edittenant", {
           state: {
             CurrData: data,
             FormStatus: FormStatus,

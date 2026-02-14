@@ -1,7 +1,6 @@
 import "./App.css";
 import { Route, Routes, Navigate, useLocation, Link } from "react-router-dom";
 import Layout from "./layout/Layout";
-import License from "./pages/license/License";
 import Users from "./pages/usermanagement/Users";
 import { useDispatch, useSelector } from "react-redux";
 import Login from "./pages/auth/Login";
@@ -19,6 +18,7 @@ import { AppDispatch, RootState } from "./store/store";
 import CreateUser from "./pages/usermanagement/components/CreateUser";
 import { getAllUsersRolesPermissions } from "./store/reducers/tenantSlice";
 import NotFound from "./pages/notFound/NotFound";
+import { Loader } from "./shared-components/ui";
 
 function App() {
   const location = useLocation();
@@ -70,7 +70,8 @@ function App() {
       token != undefined &&
       token != "null" ? (
         <>
-          {tenantType == "tenant" ? (
+          {tenantType == "tenant" &&
+          (hasManageOrgSettings === true || hasManageOrgSettings === false) ? (
             <Routes>
               <Route path="/" element={<Layout />}>
                 <Route
@@ -120,13 +121,19 @@ function App() {
             </>
           ) : (
             <>
-              <Routes>
-                {/* <Route path="/" element={<Navigate to="/login" replace />} /> */}
+              {/* <Routes>
                 <Route path="/login" element={<Login />} />
                 <Route path="/forget-password" element={<Login />} />
                 <Route path="/reset-password" element={<Login />} />
                 <Route path="*" element={<Navigate to="/login" replace />} />
-              </Routes>
+              </Routes> */}
+              {isLoading && (
+                <>
+                  <div className="loader-overlay">
+                    <Loader />
+                  </div>
+                </>
+              )}
             </>
           )}
         </>

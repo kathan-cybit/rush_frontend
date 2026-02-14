@@ -8,10 +8,16 @@ export default function CreateTenant() {
   const navigateFunction = (url: string) => {
     navigate(url);
   };
+  const navigateFunctionWithState = (url: string, obj: any) => {
+    navigate(url, obj);
+  };
 
   return (
     <>
-      <CreateTenantContainer navigateFunction={navigateFunction} />
+      <CreateTenantContainer
+        navigateFunction={navigateFunction}
+        navigateFunctionWithState={navigateFunctionWithState}
+      />
     </>
   );
 }

@@ -23,7 +23,10 @@ import { getLicenseApps } from "../../../store/reducers/licenseSlice";
 import { USersFile } from "../../../assets/img";
 import { error_toast } from "../../../utils/toaster";
 
-export default function UserContainer({ navigateFunction }: any) {
+export default function UserContainer({
+  navigateFunction,
+  navigateWithState,
+}: any) {
   const host = new URL(globalThis.location.href).hostname.split(".")[0];
 
   const dispatch = useDispatch<AppDispatch>();
@@ -150,14 +153,14 @@ export default function UserContainer({ navigateFunction }: any) {
       const data = userData.find((e: any) => e.id === FormStatus.userId);
 
       if (FormStatus.mode == "view") {
-        navigateFunction("/viewuser", {
+        navigateWithState("/viewuser", {
           state: {
             CurrData: data,
             FormStatus: FormStatus,
           },
         });
       } else {
-        navigateFunction("/updateuser", {
+        navigateWithState("/updateuser", {
           state: {
             CurrData: data,
             FormStatus: FormStatus,

@@ -8,9 +8,16 @@ export default function CreateUser() {
     navigate(url);
   };
 
+  const navigateFunctionwithState = (url: string, obj: any) => {
+    navigate(url, obj);
+  };
+
   return (
     <div>
-      <CreateUserContainer navigateFunction={navigateFunction} />
+      <CreateUserContainer
+        navigateFunction={navigateFunction}
+        navigateFunctionwithState={navigateFunctionwithState}
+      />
     </div>
   );
 }

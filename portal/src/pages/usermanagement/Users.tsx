@@ -6,10 +6,15 @@ export default function Users() {
   const navigateFunction = (url: string) => {
     navigate(url);
   };
-
+  const navigateWithState = (url: string, obj: any) => {
+    navigate(url, obj);
+  };
   return (
     <div>
-      <UserContainer navigateFunction={navigateFunction} />
+      <UserContainer
+        navigateFunction={navigateFunction}
+        navigateWithState={navigateWithState}
+      />
     </div>
   );
 }
