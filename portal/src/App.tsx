@@ -121,12 +121,6 @@ function App() {
             </>
           ) : (
             <>
-              {/* <Routes>
-                <Route path="/login" element={<Login />} />
-                <Route path="/forget-password" element={<Login />} />
-                <Route path="/reset-password" element={<Login />} />
-                <Route path="*" element={<Navigate to="/login" replace />} />
-              </Routes> */}
               {isLoading && (
                 <>
                   <div className="loader-overlay">
@@ -134,6 +128,12 @@ function App() {
                   </div>
                 </>
               )}
+              <Routes>
+                <Route
+                  path="*"
+                  element={<Navigate to="/dashboard" replace />}
+                />
+              </Routes>
             </>
           )}
         </>
