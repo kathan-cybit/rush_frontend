@@ -63,15 +63,6 @@ function App() {
     role.permissions?.some((perm) => perm?.slug == "manage_corporate_user"),
   );
 
-  if (hasManageOrgSettings != true && hasManageOrgSettings != false) {
-    return (
-      <>
-        <div className="loader-overlay">
-          <Loader />
-        </div>
-      </>
-    );
-  }
   return (
     <>
       {token != "undefined" &&
@@ -130,12 +121,6 @@ function App() {
             </>
           ) : (
             <>
-              {/* <Routes>
-                <Route path="/login" element={<Login />} />
-                <Route path="/forget-password" element={<Login />} />
-                <Route path="/reset-password" element={<Login />} />
-                <Route path="*" element={<Navigate to="/login" replace />} />
-              </Routes> */}
               {isLoading && (
                 <>
                   <div className="loader-overlay">
@@ -143,6 +128,12 @@ function App() {
                   </div>
                 </>
               )}
+              <Routes>
+                <Route
+                  path="*"
+                  element={<Navigate to="/dashboard" replace />}
+                />
+              </Routes>
             </>
           )}
         </>
