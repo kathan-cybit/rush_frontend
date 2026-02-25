@@ -5,7 +5,8 @@ import { error_toast } from "./toaster";
 const host = new URL(window.location.href).hostname;
 // const baseURL = `http://${host}:8080/api`;
 // const baseURL = `https://${host}/api`;
-const baseURL = "https://public.eirisapps.com/api";
+// const baseURL = "https://public.eirisapps.com/api";
+const baseURL = "https://public.eiris.com/api";
 
 const axiosInstance = axios.create({
   baseURL,
