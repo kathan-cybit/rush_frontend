@@ -7,6 +7,7 @@ const host = new URL(window.location.href).hostname;
 // const baseURL = `https://${host}/api`;
 // const baseURL = "https://public.eirisapps.com/api";
 const baseURL = "https://public.eiris.com/api";
+// const baseURL = "https://acme.eiris.com/api";
 
 const axiosInstance = axios.create({
   baseURL,
