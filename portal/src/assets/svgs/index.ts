@@ -14,6 +14,7 @@ import ResendIconSimple from "./ResendEmailIcn";
 import Dropdown from "./Dropdown";
 import XlsxIcon from "./XlsxIcon";
 import DeleteIcon from "./DeleteIcon";
+import AppsIcn from "./AppsIcn";
 
 export {
   DeleteIcon,
@@ -32,4 +33,5 @@ export {
   HomeIcn,
   BackIcon,
   DownloadIcn,
+  AppsIcn,
 };

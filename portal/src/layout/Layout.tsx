@@ -9,7 +9,7 @@ import { AppDispatch, RootState } from "../store/store";
 import { AppShell, AppShellMain } from "../shared-components/ui";
 import CustomFooter from "./footer/CustomFooter";
 import { setLogout } from "../store/reducers/authSlice";
-import { HomeIcn, RoleIcn, UserIcn } from "../assets/svgs";
+import { AppsIcn, HomeIcn, RoleIcn, UserIcn } from "../assets/svgs";
 import { useMediaQuery } from "@mantine/hooks";
 import { getAllUsersRolesPermissions } from "../store/reducers/tenantSlice";
 
@@ -66,6 +66,8 @@ const Layout: React.FC = () => {
         return "usermanagement";
       case "/roles":
         return "roles";
+      case "/apps":
+        return "apps";
       default:
         return "home";
     }
@@ -105,6 +107,11 @@ const Layout: React.FC = () => {
             key: "roles",
             label: "Role & Permissions",
             icon: RoleIcn,
+          },
+          {
+            key: "apps",
+            label: "Applications",
+            icon: AppsIcn,
           },
         ];
 

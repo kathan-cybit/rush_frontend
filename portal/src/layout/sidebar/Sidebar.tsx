@@ -18,6 +18,9 @@ export default function Sidebar({
       case "roles":
         navigate(`/roles`);
         break;
+      case "apps":
+        navigate(`/apps`);
+        break;
       default:
         navigate(`/dashboard`);
     }

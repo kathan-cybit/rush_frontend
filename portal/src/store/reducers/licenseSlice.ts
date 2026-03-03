@@ -10,7 +10,7 @@ export const getLicenseApps = createAsyncThunk<unknown, any>(
         props?.role == "admin" ? `/admin/newapp` : `/users/newapp`,
         {
           headers: { ...props.headers },
-        }
+        },
       );
       return response?.data?.data;
     } catch (err: any) {
@@ -19,7 +19,84 @@ export const getLicenseApps = createAsyncThunk<unknown, any>(
       error_toast(error);
       return rejectWithValue({ error, status: err.response?.status });
     }
-  }
+  },
+);
+
+export const updateLicenseApps = createAsyncThunk<unknown, any>(
+  "license/updateLicenseApps",
+  async (props, { rejectWithValue }) => {
+    try {
+      const response = await axiosInstance.put(
+        props?.role == "admin"
+          ? `/admin/newapp/${props.id}`
+          : `/users/newapp/${props.id}`,
+        props?.payload,
+        {
+          headers: { ...props.headers },
+        },
+      );
+      success_toast(
+        response?.data?.message || "Appliication updated successfully",
+      );
+
+      return response?.data?.data;
+    } catch (err: any) {
+      const error =
+        err.response?.data?.message || err.response?.data?.error || err.message;
+      error_toast(error);
+      return rejectWithValue({ error, status: err.response?.status });
+    }
+  },
+);
+
+export const createLicenseApps = createAsyncThunk<unknown, any>(
+  "license/createLicenseApps",
+  async (props, { rejectWithValue }) => {
+    try {
+      const response = await axiosInstance.post(
+        props?.role == "admin" ? `/admin/newapp` : `/users/newapp`,
+        props?.payload,
+        {
+          headers: { ...props.headers },
+        },
+      );
+      success_toast(
+        response?.data?.message || "Appliication created successfully",
+      );
+
+      return response?.data?.data;
+    } catch (err: any) {
+      const error =
+        err.response?.data?.message || err.response?.data?.error || err.message;
+      error_toast(error);
+      return rejectWithValue({ error, status: err.response?.status });
+    }
+  },
+);
+
+export const deleteLicenseApps = createAsyncThunk<unknown, any>(
+  "license/deleteLicenseApps",
+  async (props, { rejectWithValue }) => {
+    try {
+      const response = await axiosInstance.delete(
+        props?.role == "admin"
+          ? `/admin/newapp/${props.id}`
+          : `/users/newapp/${props.id}`,
+
+        {
+          headers: { ...props.headers },
+        },
+      );
+      success_toast(response?.data?.message || "App deleted successfully");
+
+      return response?.data?.data;
+    } catch (err: any) {
+      const error =
+        err.response?.data?.message || err.response?.data?.error || err.message;
+      error_toast(error);
+      return rejectWithValue({ error, status: err.response?.status });
+    }
+  },
 );
 
 export const getAllLicenses = createAsyncThunk<unknown, any>(
@@ -36,7 +113,7 @@ export const getAllLicenses = createAsyncThunk<unknown, any>(
       error_toast(error);
       return rejectWithValue({ error, status: err.response?.status });
     }
-  }
+  },
 );
 
 export const getLicensesCount = createAsyncThunk<unknown, any>(
@@ -53,7 +130,7 @@ export const getLicensesCount = createAsyncThunk<unknown, any>(
       error_toast(error);
       return rejectWithValue({ error, status: err.response?.status });
     }
-  }
+  },
 );
 
 export const getAllTenantsWithLicenses = createAsyncThunk<unknown, any>(
@@ -64,7 +141,7 @@ export const getAllTenantsWithLicenses = createAsyncThunk<unknown, any>(
         `/admin/getalltenantswithlicenses`,
         {
           headers: { ...props.headers },
-        }
+        },
       );
       return response?.data?.data;
     } catch (err: any) {
@@ -73,7 +150,7 @@ export const getAllTenantsWithLicenses = createAsyncThunk<unknown, any>(
       error_toast(error);
       return rejectWithValue({ error, status: err.response?.status });
     }
-  }
+  },
 );
 
 interface licenseState {
@@ -106,6 +183,33 @@ const licenseSlice = createSlice({
         state.allApps = action.payload as unknown[];
       })
       .addCase(getLicenseApps.rejected, (state) => {
+        state.loading = false;
+      })
+      .addCase(updateLicenseApps.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(updateLicenseApps.fulfilled, (state, action) => {
+        state.loading = false;
+      })
+      .addCase(updateLicenseApps.rejected, (state) => {
+        state.loading = false;
+      })
+      .addCase(createLicenseApps.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(createLicenseApps.fulfilled, (state, action) => {
+        state.loading = false;
+      })
+      .addCase(createLicenseApps.rejected, (state) => {
+        state.loading = false;
+      })
+      .addCase(deleteLicenseApps.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(deleteLicenseApps.fulfilled, (state, action) => {
+        state.loading = false;
+      })
+      .addCase(deleteLicenseApps.rejected, (state) => {
         state.loading = false;
       })
       .addCase(getAllLicenses.pending, (state) => {

@@ -19,6 +19,7 @@ import CreateUser from "./pages/usermanagement/components/CreateUser";
 import { getAllUsersRolesPermissions } from "./store/reducers/tenantSlice";
 import NotFound from "./pages/notFound/NotFound";
 import { Loader } from "./shared-components/ui";
+import ApplicationPage from "./pages/application/ApplicationPage";
 
 function App() {
   const location = useLocation();
@@ -165,6 +166,7 @@ function App() {
                 <Route path="viewtenant" element={<CreateTenant />} />
                 <Route path="edittenant" element={<CreateTenant />} />
                 <Route path="roles" element={<Roles />} />
+                <Route path="apps" element={<ApplicationPage />} />
                 <Route path="notfound" element={<NotFound />} />
                 <Route path="*" element={<Navigate to="/notfound" replace />} />
               </Route>
