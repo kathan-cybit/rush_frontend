@@ -49,6 +49,7 @@ export default function DashboardComponent({
   deleteEntry,
   modalClose,
 }: any) {
+  const redirectUrlStart = `https://${new URL(globalThis.location.href).hostname}`;
   return (
     <>
       {(isLoading || loading) && (
@@ -123,7 +124,7 @@ export default function DashboardComponent({
               return (
                 <div className="px-2 w-1/4" key={index}>
                   <a
-                    href={`${e.url}?token=${token}&domain=${host}`}
+                    href={`${redirectUrlStart}/${e.url}?token=${token}&domain=${host}`}
                     target="_blank"
                     className="flex flex-col justify-between items-center hover:shadow-[0_12px_24px_rgba(0,0,0,0.12)] px-4 pt-12 pb-6 border border-[#e4e5e7] border-[1.2px] rounded-[16px] h-[280px] text-center transition-all hover:-translate-y-1.5 duration-200 cursor-pointer"
                   >

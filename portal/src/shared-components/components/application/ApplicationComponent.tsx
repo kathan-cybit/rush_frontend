@@ -126,10 +126,10 @@ export default function ApplicationComponent({
                 <input
                   {...register("appUrl", {
                     required: "App URL is required",
-                    pattern: {
-                      value: /^(https?:\/\/)/,
-                      message: "URL must start with http:// or https://",
-                    },
+                    // pattern: {
+                    //   value: /^(https?:\/\/)/,
+                    //   message: "URL must start with http:// or https://",
+                    // },
                   })}
                   placeholder="https://tenant.eiris.com"
                   className={`w-full px-3 py-2 border border-[#ced4da] rounded-md 
